@@ -19,7 +19,8 @@ function Badge() {
 }
 
 export default function Hero() {
-  const text = "I build Full Stack Applications. Slick Modern UI, made with only the best technologies.";
+  const text =
+    "I build Full Stack Applications. Slick Modern UI, made with only the best technologies.";
 
   // Split the text into words
   const words = text.split(" ");
@@ -70,7 +71,9 @@ export default function Hero() {
                   },
                 }}
                 className={`inline-block ${
-                  word === "Full" || word === "Stack" || word === "Applications."
+                  word === "Full" ||
+                  word === "Stack" ||
+                  word === "Applications."
                     ? colorfulGradientClasses // Use the new colorful gradient
                     : "text-white" // Default text color for other words changed to white
                 }`}
