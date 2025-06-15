@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 
 const links = [
@@ -22,13 +23,13 @@ export default function Header() {
         <nav className="flex items-center justify-between h-16">
           {/* Logo/Brand */}
           <div className="flex-shrink-0">
-            <a
+            <Link
               href="/"
               className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-white transition-all duration-300"
               // Lighter gradient to pop on dark background
             >
               Ayan Osman
-            </a>
+            </Link>
           </div>
 
           {/* Navigation Links */}
