@@ -1,7 +1,5 @@
 "use client";
 
-import { Divide } from "lucide-react";
-import { motion } from "motion/react";
 import React from "react";
 import Divider from "./Divider";
 
@@ -20,11 +18,6 @@ export default function Skills() {
     "Figma",
   ];
 
-  const transition = {
-    duration: 0.8,
-    delay: 0.5,
-    ease: [1, 0.10, 0.2, 1.01],
-  }
 
   return (
     <section className="gap-4 flex justify-center items-center">
