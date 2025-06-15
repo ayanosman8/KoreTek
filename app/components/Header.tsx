@@ -34,7 +34,7 @@ export default function Header() {
 
           {/* Navigation Links */}
           <ul className="flex items-center space-x-8">
-            {links.map((link, index) => (
+            {links.map((link) => (
               <li key={link.title}>
                 <a
                   href={link.href}
