@@ -149,7 +149,7 @@ export default function Projects() {
 
         {/* Projects Section */}
         <div className="space-y-16 md:space-y-20">
-          {projects.map((project, projectIndex) => {
+          {projects.map((project, ) => {
             // Determine if it's a mobile project
             const isMobileProject = project.tech.includes("React-Native");
 
