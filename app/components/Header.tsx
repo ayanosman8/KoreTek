@@ -5,59 +5,84 @@ import React from "react";
 
 const links = [
   {
-    title: "Projects",
+    title: "Platform",
+    href: "#services",
+  },
+  {
+    title: "About",
     href: "#projects",
   },
   {
-    title: "Get in Touch",
+    title: "Contact",
     href: "#contact",
   },
 ];
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Glassmorphism background - darker */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border-b border-white/10"></div>
 
-      {/* Darker background, darker border */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex items-center justify-between h-16">
-          {/* Logo/Brand */}
-          <div className="flex-shrink-0">
-            <Link
-              href="/"
-              className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-white transition-all duration-300"
-              // Lighter gradient to pop on dark background
-            >
-              Ayan Osman
-            </Link>
+      <div className="relative w-full px-6 lg:px-12 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative">
+              <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-xl group-hover:shadow-blue-500/25 transition-all duration-300 group-hover:scale-105">
+                <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
+            </div>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold tracking-tight text-white">
+                KoreTek
+              </h1>
+              <span className="text-xs text-blue-500 font-medium uppercase tracking-wider">
+                Technology
+              </span>
+            </div>
+          </Link>
+
+          {/* Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {links.map((link) => (
+              <a
+                key={link.title}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector(link.href)?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+                className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 hover:scale-105 cursor-pointer"
+              >
+                {link.title}
+              </a>
+            ))}
           </div>
 
-          {/* Navigation Links */}
-          <ul className="flex items-center space-x-8">
-            {links.map((link) => (
-              <li key={link.title}>
-                <a
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.querySelector(link.href)?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                  }}
-                  className="relative text-slate-300 hover:text-white font-medium transition-all duration-300 group cursor-pointer"
-                  // Lighter text, white on hover
-                >
-                  <span className="relative z-10">{link.title}</span>
-                  {/* Hover effect background */}
-                  <div className="absolute inset-0 -mx-3 -my-2 bg-blue-400/20 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 ease-out"></div>
-                  {/* Underline effect */}
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400/60 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left"></div>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          {/* CTA Button */}
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector("#contact")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+              className="px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/25 hover:scale-105 cursor-pointer"
+            >
+              Get Started
+            </a>
+          </div>
+        </div>
       </div>
     </header>
   );

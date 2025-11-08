@@ -1,16 +1,17 @@
-import Hero from "./components/Hero";
-
 import Header from "./components/Header";
-import Projects from "./components/Projects";
+import Hero from "./components/HeroWrapper";
+import Services from "./components/Services";
+import Projects from "./components/ProjectsWrapper";
 import GetInTouch from "./components/GetInTouch";
 
 export default function Home() {
   return (
-
-      <><Header></Header><Hero></Hero><Projects /><GetInTouch /></>
-
-
-  
-
+    <>
+      <Header />
+      <Hero />
+      <Services />
+      <Projects />
+      <GetInTouch />
+    </>
   );
 }
