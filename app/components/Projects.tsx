@@ -41,7 +41,7 @@ export default function Projects() {
       tech: ["React Native", "Expo", "SQLite"],
       results: ["GPS verification", "Offline-first", "Real-time sync"],
       type: "mobile",
-      mockupImage: "/mobile-shot.png",
+      mockupImages: ["/mobile-shot.png", "/mobile-shot-2.png"],
       appStoreUrl: "https://apps.apple.com",
       playStoreUrl: "https://play.google.com",
     },
@@ -172,19 +172,35 @@ export default function Projects() {
                 className="group relative bg-gradient-to-br from-gray-900 to-black backdrop-blur-2xl rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/30 transition-all duration-500 shadow-2xl"
               >
                 {/* Mockup Section */}
-                <div className="relative h-80 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border-b border-white/5 flex items-center justify-center p-8">
+                <div className={`relative bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border-b border-white/5 flex items-center justify-center overflow-hidden ${study.type === 'mobile' ? 'h-[500px] py-8' : 'h-80 p-8'}`}>
                   {study.type === 'mobile' ? (
-                    /* Mobile Phone Mockup */
-                    <div className="relative">
-                      {study.mockupImage ? (
-                        <img
-                          src={study.mockupImage}
-                          alt={study.projectName}
-                          className="max-h-[500px] w-auto object-contain shadow-2xl"
-                        />
-                      ) : (
-                        <div className="text-white/40 text-sm font-light">No mockup available</div>
-                      )}
+                    /* Mobile Phone Mockup - Scrollable */
+                    <div className="relative h-full w-full overflow-hidden">
+                      <div className="flex gap-6 h-full items-center justify-start px-8 animate-scroll-mobile">
+                        {study.mockupImages && study.mockupImages.length > 0 ? (
+                          <>
+                            {study.mockupImages.map((image, imgIndex) => (
+                              <img
+                                key={imgIndex}
+                                src={image}
+                                alt={`${study.projectName} - Screen ${imgIndex + 1}`}
+                                className="h-full w-auto object-contain shadow-2xl flex-shrink-0"
+                              />
+                            ))}
+                            {/* Duplicate images for seamless loop */}
+                            {study.mockupImages.map((image, imgIndex) => (
+                              <img
+                                key={`dup-${imgIndex}`}
+                                src={image}
+                                alt={`${study.projectName} - Screen ${imgIndex + 1}`}
+                                className="h-full w-auto object-contain shadow-2xl flex-shrink-0"
+                              />
+                            ))}
+                          </>
+                        ) : (
+                          <div className="text-white/40 text-sm font-light">No mockup available</div>
+                        )}
+                      </div>
                     </div>
                   ) : (
                     /* Desktop/Web Mockup */
