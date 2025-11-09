@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import InquiryModal from "./InquiryModal";
 
 const links = [
   {
@@ -19,7 +20,11 @@ const links = [
 ];
 
 export default function Header() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
+    <>
+      <InquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Glassmorphism background - darker */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border-b border-white/10"></div>
@@ -68,15 +73,8 @@ export default function Header() {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector("#contact")?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }}
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="group relative px-6 py-2.5 text-sm font-medium text-white rounded-xl cursor-pointer overflow-hidden"
             >
               {/* Black background with glowing border (default) */}
@@ -85,10 +83,11 @@ export default function Header() {
 
               {/* Button content */}
               <span className="relative z-10">Get Started</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
     </header>
+    </>
   );
 }
