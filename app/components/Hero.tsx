@@ -25,7 +25,7 @@ export default function Hero() {
     "bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400";
 
   return (
-    <section ref={containerRef} className="pt-28 pb-20 w-full min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
+    <section ref={containerRef} className="pt-20 pb-20 w-full min-h-screen flex items-center relative overflow-hidden">
       {/* Background Effects - darker with blue accent */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
       <motion.div

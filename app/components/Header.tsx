@@ -10,6 +10,10 @@ const links = [
     href: "#services",
   },
   {
+    title: "Pricing",
+    href: "#pricing",
+  },
+  {
     title: "Projects",
     href: "#projects",
   },
@@ -24,7 +28,7 @@ export default function Header() {
 
   return (
     <>
-      <InquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <InquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} selectedPackage="" />
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Glassmorphism background - darker */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border-b border-white/10"></div>

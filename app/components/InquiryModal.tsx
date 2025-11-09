@@ -1,38 +1,38 @@
 "use client";
 
-import React, { useState } from "react";
-import { X, Send } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { X, Send, Check } from "lucide-react";
 
 interface InquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  selectedPackage?: string;
 }
 
-export default function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
+export default function InquiryModal({ isOpen, onClose, selectedPackage }: InquiryModalProps) {
   const [formData, setFormData] = useState({
+    package: "",
+    organization: "",
     name: "",
     email: "",
     phone: "",
-    services: [] as string[],
+    message: "",
   });
 
-  const serviceOptions = [
-    "Web Application",
-    "Mobile App (iOS/Android)",
-    "UI/UX Design",
-    "Full-Stack Development",
-    "API Integration",
-    "Consulting",
+  const packageOptions = [
+    "Landing Page ($1,999)",
+    "Mobile App Package ($4,000)",
+    "Full-Stack Web App ($9,999)",
+    "Enterprise Solution ($19,999+)",
+    "Not sure yet / Custom",
   ];
 
-  const handleServiceToggle = (service: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      services: prev.services.includes(service)
-        ? prev.services.filter((s) => s !== service)
-        : [...prev.services, service],
-    }));
-  };
+  // Set selected package when modal opens
+  useEffect(() => {
+    if (isOpen && selectedPackage) {
+      setFormData(prev => ({ ...prev, package: selectedPackage }));
+    }
+  }, [isOpen, selectedPackage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,10 +80,65 @@ export default function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Package Selection */}
+            <div>
+              <label className="block text-sm font-medium text-white/80 mb-2">
+                Package Interest <span className="text-white/40 font-light text-xs">(You can change this anytime)</span>
+              </label>
+              <select
+                required
+                value={formData.package}
+                onChange={(e) =>
+                  setFormData({ ...formData, package: e.target.value })
+                }
+                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 1rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '3rem',
+                }}
+              >
+                <option value="" className="bg-gray-900">Select a package...</option>
+                {packageOptions.map((pkg) => (
+                  <option key={pkg} value={pkg} className="bg-gray-900">
+                    {pkg}
+                  </option>
+                ))}
+              </select>
+              {selectedPackage && (
+                <p className="mt-2 text-xs text-blue-400 flex items-center gap-1">
+                  <Check className="w-3 h-3" />
+                  Pre-selected based on your interest
+                </p>
+              )}
+              <p className="mt-2 text-xs text-white/40 font-light italic">
+                This is just to help us understand your needs - nothing is locked in yet
+              </p>
+            </div>
+
+            {/* Organization/Company Name */}
+            <div>
+              <label className="block text-sm font-medium text-white/80 mb-2">
+                Organization / Company Name
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.organization}
+                onChange={(e) =>
+                  setFormData({ ...formData, organization: e.target.value })
+                }
+                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                placeholder="Acme Corporation"
+              />
+            </div>
+
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-white/80 mb-2">
-                Name
+                Your Name
               </label>
               <input
                 type="text"
@@ -117,7 +172,7 @@ export default function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
             {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-white/80 mb-2">
-                Phone
+                Phone <span className="text-white/40 font-light text-xs">(Optional)</span>
               </label>
               <input
                 type="tel"
@@ -130,52 +185,20 @@ export default function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
               />
             </div>
 
-            {/* Services */}
+            {/* Message */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-4">
-                Services Needed
+              <label className="block text-sm font-medium text-white/80 mb-2">
+                Tell us about your project <span className="text-white/40 font-light">(Optional)</span>
               </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {serviceOptions.map((service) => (
-                  <button
-                    key={service}
-                    type="button"
-                    onClick={() => handleServiceToggle(service)}
-                    className={`px-6 py-4 rounded-xl border transition-all duration-300 text-left ${
-                      formData.services.includes(service)
-                        ? "bg-blue-500/20 border-blue-500/40 text-white"
-                        : "bg-white/5 border-white/10 text-white/60 hover:border-white/20"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 ${
-                          formData.services.includes(service)
-                            ? "bg-blue-500 border-blue-500"
-                            : "border-white/30"
-                        }`}
-                      >
-                        {formData.services.includes(service) && (
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={3}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                      <span className="font-light">{service}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <textarea
+                value={formData.message}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
+                rows={4}
+                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
+                placeholder="Any specific features or requirements you have in mind?"
+              />
             </div>
 
             {/* Submit Button */}
