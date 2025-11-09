@@ -5,11 +5,11 @@ import React from "react";
 
 const links = [
   {
-    title: "Platform",
+    title: "Services",
     href: "#services",
   },
   {
-    title: "About",
+    title: "Projects",
     href: "#projects",
   },
   {
@@ -29,8 +29,8 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-xl group-hover:shadow-blue-500/25 transition-all duration-300 group-hover:scale-105">
-                <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="h-11 w-11 rounded-2xl border-2 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] bg-black/50 backdrop-blur-sm flex items-center justify-center transition-all duration-300">
+                <svg className="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
@@ -77,9 +77,14 @@ export default function Header() {
                   block: "start",
                 });
               }}
-              className="px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/25 hover:scale-105 cursor-pointer"
+              className="group relative px-6 py-2.5 text-sm font-medium text-white rounded-xl cursor-pointer overflow-hidden"
             >
-              Get Started
+              {/* Black background with glowing border (default) */}
+              <div className="absolute inset-0 rounded-xl border-2 border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.5)] group-hover:shadow-[0_0_30px_rgba(59,130,246,0.8)] transition-all duration-300"></div>
+              <div className="absolute inset-0.5 rounded-[10px] bg-black"></div>
+
+              {/* Button content */}
+              <span className="relative z-10">Get Started</span>
             </a>
           </div>
         </div>

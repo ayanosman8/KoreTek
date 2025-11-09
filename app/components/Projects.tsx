@@ -1,8 +1,8 @@
 "use client";
 
-import { ExternalLink, Sparkles, Zap, Target, TrendingUp, Users, Award, Rocket, ShoppingCart, BarChart3, Smartphone, Brain } from "lucide-react";
+import { Target, TrendingUp, Users, Award, Rocket, ShoppingCart, BarChart3, Smartphone, Brain } from "lucide-react";
 import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function Projects() {
   const containerRef = useRef(null);
@@ -21,84 +21,31 @@ export default function Projects() {
     { number: "100%", label: "Commitment", icon: <Award className="w-6 h-6" /> },
   ];
 
-  const products = [
+  const caseStudies = [
     {
-      name: "NexusCommerce",
-      description: "A next-generation e-commerce platform featuring AI-powered product recommendations, real-time inventory management, and seamless multi-channel integration. Built for scale with enterprise-grade security.",
-      gradient: "from-purple-600 via-pink-600 to-purple-600",
-      link: "#",
-      tech: ["Next.js 15", "PostgreSQL", "Stripe", "Redis", "GraphQL"],
-      icon: <ShoppingCart className="w-6 h-6" />,
-      features: ["AI Recommendations", "Real-time Analytics", "Multi-currency Support"],
-      metrics: [
-        { label: "Conversion Rate", value: "+45%" },
-        { label: "Page Load", value: "0.8s" },
-        { label: "Uptime", value: "99.9%" },
-      ]
+      client: "Healthcare Agency",
+      projectName: "KoreCare Web Platform",
+      category: "Healthcare SaaS",
+      description: "Next-generation Electronic Visit Verification (EVV) platform for Ohio healthcare agencies. ODM-certified solution with AI-powered claims matching, real-time compliance monitoring, and intelligent analytics.",
+      tech: ["Next.js 15", "PostgreSQL", "AI/ML"],
+      results: ["ODM Certified", "99.9% uptime", "24/7 support"],
+      type: "web",
+      link: "https://korecare.app",
+      mockupImage: "/web-shot.png",
     },
     {
-      name: "DataVista",
-      description: "Transform complex data into actionable insights with our intelligent analytics platform. Features real-time dashboards, predictive analytics, and automated reporting for data-driven decision making.",
-      gradient: "from-blue-600 via-cyan-600 to-blue-600",
-      link: "#",
-      tech: ["React", "Python", "TensorFlow", "AWS", "D3.js"],
-      icon: <BarChart3 className="w-6 h-6" />,
-      features: ["Predictive Analytics", "Custom Dashboards", "API Integration"],
-      metrics: [
-        { label: "Data Processing", value: "10M+/day" },
-        { label: "Response Time", value: "<100ms" },
-        { label: "Accuracy", value: "98.5%" },
-      ]
-    },
-    {
-      name: "MobileForge",
-      description: "Cross-platform mobile app development framework that delivers native performance with a single codebase. Includes offline-first architecture, push notifications, and seamless cloud sync.",
-      gradient: "from-orange-600 via-red-600 to-orange-600",
-      link: "#",
-      tech: ["React Native", "TypeScript", "Firebase", "WebSockets"],
-      icon: <Smartphone className="w-6 h-6" />,
-      features: ["Offline-First", "Push Notifications", "Cloud Sync"],
-      metrics: [
-        { label: "App Size", value: "12MB" },
-        { label: "Launch Time", value: "1.2s" },
-        { label: "Platforms", value: "iOS/Android" },
-      ]
-    },
-    {
-      name: "CogniFlow",
-      description: "AI-powered workflow automation platform that learns from your team's behavior to optimize processes. Features natural language processing, smart task routing, and intelligent scheduling.",
-      gradient: "from-green-600 via-emerald-600 to-green-600",
-      link: "#",
-      tech: ["Node.js", "OpenAI", "MongoDB", "Kubernetes", "Docker"],
-      icon: <Brain className="w-6 h-6" />,
-      features: ["AI Automation", "NLP Processing", "Smart Scheduling"],
-      metrics: [
-        { label: "Time Saved", value: "40hrs/mo" },
-        { label: "Accuracy", value: "96%" },
-        { label: "Tasks/day", value: "5000+" },
-      ]
+      client: "Healthcare Agency",
+      projectName: "KoreCare Mobile",
+      category: "Healthcare Mobile App",
+      description: "Native mobile companion for healthcare employees featuring GPS-verified clock-in/out, offline visit documentation, and real-time sync with the KoreCare Web platform. Streamlines field operations with intuitive EVV compliance.",
+      tech: ["React Native", "Expo", "SQLite"],
+      results: ["GPS verification", "Offline-first", "Real-time sync"],
+      type: "mobile",
+      mockupImage: "/mobile-shot.png",
+      appStoreUrl: "https://apps.apple.com",
+      playStoreUrl: "https://play.google.com",
     },
   ];
-
-  // Variants for animations
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
 
   return (
     <div
@@ -120,17 +67,17 @@ export default function Projects() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Mission Statement Section */}
         <motion.div
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           className="text-center mb-32"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm rounded-full border border-blue-400/30 mb-8 shadow-lg shadow-blue-500/10"
           >
             <Target className="w-5 h-5 text-cyan-400" />
@@ -138,10 +85,10 @@ export default function Projects() {
           </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             className="text-5xl md:text-7xl lg:text-8xl font-extralight mb-8 text-white leading-tight"
           >
             Design Doesn't Have to Be Hard
@@ -201,270 +148,161 @@ export default function Projects() {
           ))}
         </motion.div>
 
-        {/* Our Products Section */}
+        {/* Case Studies Section */}
         <div className="mb-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-block px-5 py-2.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-full border border-purple-400/30 mb-6 shadow-lg shadow-purple-500/10"
-            >
-              <span className="text-sm font-semibold text-purple-300 tracking-wide uppercase">Enterprise Solutions</span>
-            </motion.div>
+          <div>
+            <div className="inline-block px-5 py-2.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm rounded-full border border-blue-400/30 mb-6 shadow-lg shadow-blue-500/10">
+              <span className="text-sm font-semibold text-blue-300 tracking-wide uppercase">Client Success Stories</span>
+            </div>
             <h3 className="text-4xl md:text-6xl lg:text-7xl font-extralight text-white mb-6">
-              Our Products
+              Our Work
             </h3>
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed font-light">
-              Innovative solutions built with passion and precision. Explore our portfolio of cutting-edge products designed to transform your business.
+              Explore how we've helped businesses transform their digital presence with innovative solutions tailored to their unique challenges.
             </p>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Product Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12"
-        >
-          {products.map((product, index) => {
-            const productRef = useRef(null);
-            const isInView = useInView(productRef, { once: true, amount: 0.3 });
-
+        {/* Case Study Cards Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {caseStudies.map((study, index) => {
             return (
-              <motion.div
-                key={product.name}
-                ref={productRef}
-                variants={itemVariants}
-                initial={{ opacity: 0, y: 100, rotateX: 10 }}
-                animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: "easeOut" }}
-                whileHover={{ y: -15, scale: 1.02 }}
-                className="group relative bg-gradient-to-br from-gray-900 to-black backdrop-blur-2xl rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/40 transition-all duration-700 shadow-2xl hover:shadow-blue-500/10"
-                style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+              <div
+                key={index}
+                className="group relative bg-gradient-to-br from-gray-900 to-black backdrop-blur-2xl rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/30 transition-all duration-500 shadow-2xl"
               >
-
-                {/* Image Section with Animated Gradient */}
-                <div className="relative h-80 overflow-hidden">
-                  {/* Animated gradient background */}
-                  <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${product.gradient}`}
-                    initial={{ opacity: 0.6 }}
-                    whileHover={{ opacity: 0.9 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    {/* Animated mesh pattern */}
-                    <motion.div
-                      className="absolute inset-0 opacity-20"
-                      style={{
-                        backgroundImage: `
-                          linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent),
-                          linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent)
-                        `,
-                        backgroundSize: '50px 50px'
-                      }}
-                      animate={{
-                        backgroundPosition: ['0px 0px', '50px 50px'],
-                      }}
-                      transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                    ></motion.div>
-
-                    {/* Glowing orbs */}
-                    <motion.div
-                      className="absolute top-10 right-10 w-32 h-32 bg-white/20 rounded-full blur-3xl"
-                      animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.6, 0.3],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                      }}
-                    ></motion.div>
-                    <motion.div
-                      className="absolute bottom-10 left-10 w-40 h-40 bg-white/20 rounded-full blur-3xl"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.2, 0.5, 0.2],
-                      }}
-                      transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        delay: 1,
-                      }}
-                    ></motion.div>
-                  </motion.div>
-
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-
-                  {/* Animated Icon Badge */}
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={isInView ? { scale: 1, rotate: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    className={`absolute top-6 left-6 p-4 bg-gradient-to-br ${product.gradient} rounded-2xl text-white shadow-2xl`}
-                  >
-                    {product.icon}
-                  </motion.div>
-
-                  {/* Floating particles */}
-                  <motion.div
-                    className="absolute top-10 right-10 w-3 h-3 bg-white/60 rounded-full"
-                    animate={{ y: [0, -20, 0], opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                  ></motion.div>
-                  <motion.div
-                    className="absolute bottom-20 right-20 w-2 h-2 bg-white/80 rounded-full"
-                    animate={{ y: [0, -15, 0], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}
-                  ></motion.div>
-                  <motion.div
-                    className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/70 rounded-full"
-                    animate={{ y: [0, -25, 0], opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
-                  ></motion.div>
-
-                  {/* Product metrics overlay */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center"
-                  >
-                    <div className="grid grid-cols-3 gap-6 px-8">
-                      {product.metrics.map((metric, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ y: 20, opacity: 0 }}
-                          whileHover={{ y: 0, opacity: 1 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="text-center"
-                        >
-                          <div className={`text-2xl font-black bg-gradient-to-r ${product.gradient} bg-clip-text text-transparent mb-1`}>
-                            {metric.value}
-                          </div>
-                          <div className="text-xs text-slate-400">{metric.label}</div>
-                        </motion.div>
-                      ))}
+                {/* Mockup Section */}
+                <div className="relative h-80 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border-b border-white/5 flex items-center justify-center p-8">
+                  {study.type === 'mobile' ? (
+                    /* Mobile Phone Mockup */
+                    <div className="relative">
+                      {study.mockupImage ? (
+                        <img
+                          src={study.mockupImage}
+                          alt={study.projectName}
+                          className="max-h-[500px] w-auto object-contain shadow-2xl"
+                        />
+                      ) : (
+                        <div className="text-white/40 text-sm font-light">No mockup available</div>
+                      )}
                     </div>
-                  </motion.div>
+                  ) : (
+                    /* Desktop/Web Mockup */
+                    <div className="w-full max-w-lg">
+                      {study.mockupImage ? (
+                        <img
+                          src={study.mockupImage}
+                          alt={study.projectName}
+                          className="w-full h-auto object-contain shadow-2xl rounded-lg"
+                        />
+                      ) : (
+                        <div className="bg-gray-800 rounded-lg border border-white/10 overflow-hidden shadow-2xl">
+                          {/* Browser Bar */}
+                          <div className="bg-gray-900 px-4 py-3 flex items-center gap-2 border-b border-white/5">
+                            <div className="flex gap-1.5">
+                              <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                              <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                              <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+                            </div>
+                          </div>
+                          {/* Screen */}
+                          <div className="h-48 bg-gradient-to-br from-blue-600/20 to-cyan-600/20 flex items-center justify-center">
+                            <div className="text-white/40 text-sm font-light">Web Preview</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Content Section */}
-                <div className="relative p-10">
-                  <motion.h3
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.3 }}
-                    className="text-3xl font-extralight text-white mb-4 group-hover:text-blue-300 transition-colors duration-300"
-                  >
-                    {product.name}
-                  </motion.h3>
+                <div className="relative p-12">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs text-blue-400 font-medium uppercase tracking-wider">{study.category}</span>
+                    {study.type === 'mobile' && (
+                      <div className="flex gap-2">
+                        {study.appStoreUrl && (
+                          <a href={study.appStoreUrl} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white/80 transition-colors">
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                            </svg>
+                          </a>
+                        )}
+                        {study.playStoreUrl && (
+                          <a href={study.playStoreUrl} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white/80 transition-colors">
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
-                  <motion.p
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
-                    className="text-white/70 mb-6 leading-relaxed text-lg font-light"
-                  >
-                    {product.description}
-                  </motion.p>
+                  <div className="mb-2">
+                    <h3 className="text-2xl font-extralight text-white mb-4">
+                      {study.projectName}
+                    </h3>
+                  </div>
 
-                  {/* Features List */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.5 }}
-                    className="flex flex-wrap gap-2 mb-6"
-                  >
-                    {product.features.map((feature, i) => (
-                      <motion.span
-                        key={feature}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ duration: 0.4, delay: index * 0.2 + 0.6 + i * 0.1 }}
-                        className="px-4 py-1.5 bg-blue-500/10 text-blue-400 text-sm font-medium rounded-full border border-blue-500/20"
+                  <p className="text-white/60 mb-6 leading-relaxed font-light text-sm">
+                    {study.description}
+                  </p>
+
+                  {/* Results */}
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {study.results.map((result, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-blue-500/10 text-blue-400 text-xs font-medium rounded-full border border-blue-500/20"
                       >
-                        {feature}
-                      </motion.span>
+                        {result}
+                      </span>
                     ))}
-                  </motion.div>
+                  </div>
 
                   {/* Tech Stack */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.7 }}
-                    className="flex flex-wrap gap-2 mb-8"
-                  >
-                    {product.tech.map((tech, i) => (
-                      <motion.span
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {study.tech.map((tech) => (
+                      <span
                         key={tech}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ duration: 0.4, delay: index * 0.2 + 0.8 + i * 0.05 }}
-                        className="px-3 py-1 bg-white/5 text-white/60 text-xs font-light rounded-full border border-white/10"
+                        className="text-xs text-white/40 font-light"
                       >
                         {tech}
-                      </motion.span>
+                      </span>
                     ))}
-                  </motion.div>
+                  </div>
 
-                  {/* CTA Buttons */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 + 0.9 }}
-                    className="flex gap-4"
-                  >
-                    <motion.a
-                      href={product.link}
-                      whileHover={{ scale: 1.05, x: 5 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl shadow-2xl shadow-blue-500/20 transition-all duration-300 group/btn"
+                  {/* CTA */}
+                  {study.type === 'web' && study.link && (
+                    <a
+                      href={study.link}
+                      className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium"
                     >
-                      <span>View Demo</span>
-                      <motion.div
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        <ExternalLink className="w-5 h-5" />
-                      </motion.div>
-                    </motion.a>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3.5 border border-white/10 text-white/70 font-light rounded-xl hover:border-white/20 hover:text-white transition-all duration-300"
+                      Visit Site
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  )}
+                  {study.type === 'mobile' && study.appStoreUrl && (
+                    <a
+                      href={study.appStoreUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium"
                     >
-                      Details
-                    </motion.button>
-                  </motion.div>
+                      Download App
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </a>
+                  )}
                 </div>
-
-                {/* Bottom accent line */}
-                <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500"
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.5 }}
-                ></motion.div>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import { Mail, Github, Send, ArrowRight, Check } from "lucide-react";
+import { Mail, Github, ArrowRight, Check } from "lucide-react";
 
 export default function GetInTouch() {
   const contactLinks = [
@@ -34,13 +33,7 @@ export default function GetInTouch() {
 
       <div className="w-full px-8 lg:px-16 relative z-10">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
+        <div className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 text-white">
             Let's Work Together
           </h2>
@@ -48,25 +41,20 @@ export default function GetInTouch() {
           <p className="text-xl font-light max-w-2xl mx-auto leading-relaxed text-white/60">
             Have a project in mind? We'd love to hear about it. Reach out and let's create something amazing together.
           </p>
-        </motion.div>
+        </div>
 
         {/* Contact Cards - Pricing Card Style */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-5xl mx-auto">
           {contactLinks.map((link, index) => (
-            <motion.a
+            <a
               key={index}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              whileHover={{ y: -10, scale: 1.02 }}
               className="group relative rounded-3xl p-12 border backdrop-blur-xl overflow-hidden transition-all duration-500 bg-gradient-to-br from-gray-900 to-black border-white/10 hover:border-blue-500/40 shadow-2xl hover:shadow-blue-500/10"
             >
               {/* Icon */}
-              <div className="text-blue-500 mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="text-blue-500 mb-6">
                 {link.icon}
               </div>
 
@@ -89,41 +77,26 @@ export default function GetInTouch() {
                 ))}
               </div>
 
-              {/* Bottom gradient line */}
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.5 }}
-              ></motion.div>
-            </motion.a>
+            </a>
           ))}
         </div>
 
         {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-center max-w-4xl mx-auto"
-        >
+        <div className="text-center max-w-4xl mx-auto">
           <h3 className="text-4xl md:text-5xl font-extralight text-white mb-6">
             Ready to Start Your Project?
           </h3>
           <p className="text-xl font-light text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
             Whether you're looking for a complete solution or just need some expert advice, we're here to help bring your vision to life.
           </p>
-          <motion.a
+          <a
             href="mailto:akay@gmail.com"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-3 px-12 py-5 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 group"
           >
             <span className="text-lg font-medium">Send Us a Message</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </motion.a>
-        </motion.div>
+          </a>
+        </div>
       </div>
     </div>
   );

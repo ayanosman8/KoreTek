@@ -36,43 +36,13 @@ export default function Hero() {
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, 50]) }}
         className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
       ></motion.div>
-      <motion.div style={{ y, opacity }} className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
-        {/* Main heading with word animation */}
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.08,
-                delayChildren: 0.3,
-              },
-            },
-          }}
-          className="space-y-2"
-        >
-          <motion.h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-tight text-center tracking-tight">
+      <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
+        {/* Main heading */}
+        <div className="space-y-2">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-tight text-center tracking-tight">
             {words.map((word, index) => (
-              <motion.span
+              <span
                 key={index}
-                variants={{
-                  hidden: {
-                    opacity: 0,
-                    y: 20,
-                    filter: "blur(4px)",
-                  },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    filter: "blur(0px)",
-                    transition: {
-                      duration: 0.6,
-                      ease: "easeOut",
-                    },
-                  },
-                }}
                 className={`inline-block ${
                   word === "Modern" ||
                   word === "Solutions." ||
@@ -85,80 +55,48 @@ export default function Hero() {
               >
                 {word}
                 {index !== words.length - 1 && "\u00A0"}
-              </motion.span>
+              </span>
             ))}
-          </motion.h1>
-        </motion.div>
+          </h1>
+        </div>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light"
-        >
+        <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light">
           Transforming ideas into powerful digital solutions with cutting-edge
           technology and innovative design
-        </motion.p>
+        </p>
 
         {/* Trust Indicators */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-          className="flex flex-wrap justify-center gap-8 pt-4"
-        >
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="text-center"
-          >
+        <div className="flex flex-wrap justify-center gap-8 pt-4">
+          <div className="text-center">
             <div className="text-2xl md:text-3xl font-extralight text-blue-500">
               24/7
             </div>
             <div className="text-sm text-white/60 font-light uppercase tracking-wider">Support</div>
-          </motion.div>
+          </div>
           <div className="w-px h-12 bg-white/10"></div>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="text-center"
-          >
+          <div className="text-center">
             <div className="text-2xl md:text-3xl font-extralight text-blue-500">
               100%
             </div>
             <div className="text-sm text-white/60 font-light uppercase tracking-wider">Dedicated</div>
-          </motion.div>
+          </div>
           <div className="w-px h-12 bg-white/10"></div>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="text-center"
-          >
+          <div className="text-center">
             <div className="text-2xl md:text-3xl font-extralight text-blue-500">
               Fast
             </div>
             <div className="text-sm text-white/60 font-light uppercase tracking-wider">Delivery</div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
-          className="flex justify-center pt-12"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1"
-          >
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-blue-500 rounded-full"
-            ></motion.div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+        <div className="flex justify-center pt-12">
+          <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
+            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
