@@ -18,6 +18,8 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
     phone: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const packageOptions = [
     "Landing Page ($1,999)",
@@ -34,12 +36,45 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
     }
   }, [isOpen, selectedPackage]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    // You can add your form submission logic here
-    onClose();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+
+      setSubmitStatus('success');
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        setFormData({
+          package: "",
+          organization: "",
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+        setSubmitStatus('idle');
+        onClose();
+      }, 2000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -206,18 +241,41 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-8 py-4 text-white/80 border border-white/10 rounded-xl hover:bg-white/5 transition-all duration-300 font-light"
+                disabled={isSubmitting}
+                className="flex-1 px-8 py-4 text-white/80 border border-white/10 rounded-xl hover:bg-white/5 transition-all duration-300 font-light disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 px-8 py-4 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+                className="flex-1 px-8 py-4 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Send Inquiry
-                <Send className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    Sending...
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </>
+                ) : submitStatus === 'success' ? (
+                  <>
+                    Sent!
+                    <Check className="w-4 h-4" />
+                  </>
+                ) : (
+                  <>
+                    Send Inquiry
+                    <Send className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </div>
+
+            {/* Status Messages */}
+            {submitStatus === 'error' && (
+              <p className="text-red-400 text-sm text-center mt-4">
+                Failed to send inquiry. Please try again or email us directly.
+              </p>
+            )}
           </form>
         </div>
       </div>
