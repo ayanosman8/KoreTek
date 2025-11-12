@@ -3,6 +3,7 @@
 import { Target, TrendingUp, Users, Award, Rocket } from "lucide-react";
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 
 export default function Projects() {
   const containerRef = useRef(null);
@@ -179,19 +180,23 @@ export default function Projects() {
                         {study.mockupImages && study.mockupImages.length > 0 ? (
                           <>
                             {study.mockupImages.map((image, imgIndex) => (
-                              <img
+                              <Image
                                 key={imgIndex}
                                 src={image}
                                 alt={`${study.projectName} - Screen ${imgIndex + 1}`}
+                                width={300}
+                                height={600}
                                 className="h-full w-auto object-contain shadow-2xl flex-shrink-0"
                               />
                             ))}
                             {/* Duplicate images for seamless loop */}
                             {study.mockupImages.map((image, imgIndex) => (
-                              <img
+                              <Image
                                 key={`dup-${imgIndex}`}
                                 src={image}
                                 alt={`${study.projectName} - Screen ${imgIndex + 1}`}
+                                width={300}
+                                height={600}
                                 className="h-full w-auto object-contain shadow-2xl flex-shrink-0"
                               />
                             ))}
@@ -205,9 +210,11 @@ export default function Projects() {
                     /* Desktop/Web Mockup */
                     <div className="w-full max-w-lg">
                       {study.mockupImage ? (
-                        <img
+                        <Image
                           src={study.mockupImage}
                           alt={study.projectName}
+                          width={800}
+                          height={600}
                           className="w-full h-auto object-contain shadow-2xl rounded-lg"
                         />
                       ) : (
