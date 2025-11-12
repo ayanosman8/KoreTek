@@ -25,18 +25,73 @@ export async function POST(request: NextRequest) {
     // Send email using Resend
     const data = await resend.emails.send({
       from: 'onboarding@resend.dev', // Resend's test email
-      to: ['ayanosman8@gmail.com'], // Your email
+      to: ['xsonerx09@gmail.com'], // Your Resend verified email
       replyTo: email, // User's email for easy reply
-      subject: `New Inquiry: ${packageName}`,
+      subject: `🚀 New KoreTek Inquiry: ${packageName}`,
       html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Package Interest:</strong> ${packageName}</p>
-        <p><strong>Organization:</strong> ${organization}</p>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message || 'No message provided'}</p>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; }
+            .header h1 { margin: 0; font-size: 24px; font-weight: 300; }
+            .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; }
+            .field { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; border-left: 4px solid #3b82f6; }
+            .field-label { font-size: 12px; text-transform: uppercase; color: #64748b; font-weight: 600; margin-bottom: 5px; }
+            .field-value { font-size: 16px; color: #1e293b; }
+            .message-box { background: white; padding: 20px; margin-top: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+            .footer { text-align: center; margin-top: 30px; color: #64748b; font-size: 14px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>✨ New Inquiry from KoreTek Website</h1>
+            </div>
+            <div class="content">
+              <div class="field">
+                <div class="field-label">Package Interest</div>
+                <div class="field-value">${packageName}</div>
+              </div>
+
+              <div class="field">
+                <div class="field-label">Organization / Company</div>
+                <div class="field-value">${organization}</div>
+              </div>
+
+              <div class="field">
+                <div class="field-label">Contact Name</div>
+                <div class="field-value">${name}</div>
+              </div>
+
+              <div class="field">
+                <div class="field-label">Email Address</div>
+                <div class="field-value"><a href="mailto:${email}" style="color: #3b82f6; text-decoration: none;">${email}</a></div>
+              </div>
+
+              ${phone ? `
+              <div class="field">
+                <div class="field-label">Phone Number</div>
+                <div class="field-value">${phone}</div>
+              </div>
+              ` : ''}
+
+              ${message ? `
+              <div class="message-box">
+                <div class="field-label">Message</div>
+                <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${message}</div>
+              </div>
+              ` : ''}
+
+              <div class="footer">
+                <p>Reply directly to this email to respond to <strong>${name}</strong></p>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
       `,
     });
 
@@ -49,9 +104,17 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error('Error sending email:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    const errorStack = error instanceof Error ? error.stack : '';
     console.error('Error details:', errorMessage);
+    console.error('Error stack:', errorStack);
+
+    // Log full error object for debugging
+    if (typeof error === 'object' && error !== null) {
+      console.error('Full error object:', JSON.stringify(error, null, 2));
+    }
+
     return NextResponse.json(
-      { error: 'Failed to send email', details: errorMessage },
+      { error: 'Failed to send email', details: errorMessage, fullError: error },
       { status: 500 }
     );
   }

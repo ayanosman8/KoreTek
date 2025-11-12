@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { X, Send, Check } from "lucide-react";
+import { toast } from "sonner";
+import SuccessModal from "./SuccessModal";
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -20,6 +22,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const packageOptions = [
     "Landing Page ($1,999)",
@@ -56,31 +59,51 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
 
       setSubmitStatus('success');
 
-      // Reset form after successful submission
-      setTimeout(() => {
-        setFormData({
-          package: "",
-          organization: "",
-          name: "",
-          email: "",
-          phone: "",
-          message: "",
-        });
-        setSubmitStatus('idle');
-        onClose();
-      }, 2000);
+      // Show success modal
+      setShowSuccessModal(true);
+
+      // Reset form
+      setFormData({
+        package: "",
+        organization: "",
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      setSubmitStatus('idle');
+
+      // Close the inquiry form modal
+      onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
+
+      // Try to get error details from response
+      let errorDetails = 'Please try again or email us directly at ayanosman8@gmail.com';
+      if (error instanceof Error) {
+        errorDetails = error.message;
+      }
+
+      // Show error toast with details
+      toast.error('Failed to send your inquiry', {
+        description: errorDetails,
+        duration: 8000,
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) return (
+    <>
+      <SuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+    </>
+  );
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -88,37 +111,37 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
       ></div>
 
       {/* Modal */}
-      <div className="relative bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl max-w-md md:max-w-lg lg:max-w-xl w-full max-h-[92vh] overflow-y-auto modal-scrollbar">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3 rounded-3xl"></div>
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
 
         {/* Content */}
-        <div className="relative p-8 md:p-12">
+        <div className="relative p-5 md:p-6 lg:p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div>
-              <h2 className="text-4xl md:text-5xl font-extralight text-white mb-2">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-extralight text-white mb-1">
                 Get Started
               </h2>
-              <p className="text-white/60 font-light">
+              <p className="text-xs md:text-sm text-white/60 font-light">
                 Tell us about your project
               </p>
             </div>
             <button
               onClick={onClose}
-              className="p-3 rounded-xl hover:bg-white/10 transition-all duration-300 text-white/60 hover:text-white"
+              className="p-2 md:p-3 rounded-xl hover:bg-white/10 transition-all duration-300 text-white/60 hover:text-white flex-shrink-0"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 md:w-6 md:h-6" />
             </button>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
             {/* Package Selection */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
-                Package Interest <span className="text-white/40 font-light text-xs">(You can change this anytime)</span>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Package Interest <span className="text-white/40 font-light text-xs">(Optional)</span>
               </label>
               <select
                 required
@@ -126,7 +149,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, package: e.target.value })
                 }
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                   backgroundRepeat: 'no-repeat',
@@ -143,19 +166,16 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 ))}
               </select>
               {selectedPackage && (
-                <p className="mt-2 text-xs text-blue-400 flex items-center gap-1">
+                <p className="mt-1 text-[10px] md:text-xs text-blue-400 flex items-center gap-1">
                   <Check className="w-3 h-3" />
                   Pre-selected based on your interest
                 </p>
               )}
-              <p className="mt-2 text-xs text-white/40 font-light italic">
-                This is just to help us understand your needs - nothing is locked in yet
-              </p>
             </div>
 
             {/* Organization/Company Name */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
                 Organization / Company Name
               </label>
               <input
@@ -165,14 +185,14 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, organization: e.target.value })
                 }
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                 placeholder="Acme Corporation"
               />
             </div>
 
             {/* Name */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
                 Your Name
               </label>
               <input
@@ -182,14 +202,14 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                 placeholder="John Doe"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
                 Email
               </label>
               <input
@@ -199,15 +219,15 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                 placeholder="john@example.com"
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
-                Phone <span className="text-white/40 font-light text-xs">(Optional)</span>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Phone <span className="text-white/40 font-light text-[10px] md:text-xs">(Optional)</span>
               </label>
               <input
                 type="tel"
@@ -215,41 +235,41 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
                 }
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                 placeholder="(555) 123-4567"
               />
             </div>
 
             {/* Message */}
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">
-                Tell us about your project <span className="text-white/40 font-light">(Optional)</span>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Tell us about your project <span className="text-white/40 font-light text-[10px] md:text-xs">(Optional)</span>
               </label>
               <textarea
                 value={formData.message}
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                rows={4}
-                className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
+                rows={2}
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
                 placeholder="Any specific features or requirements you have in mind?"
               />
             </div>
 
             {/* Submit Button */}
-            <div className="flex gap-4 pt-4">
+            <div className="flex gap-2 md:gap-3 pt-2 md:pt-3">
               <button
                 type="button"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="flex-1 px-8 py-4 text-white/80 border border-white/10 rounded-xl hover:bg-white/5 transition-all duration-300 font-light disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2.5 md:px-6 md:py-3 text-xs md:text-sm text-white/80 border border-white/10 rounded-lg md:rounded-xl hover:bg-white/5 transition-all duration-300 font-light disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 px-8 py-4 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2.5 md:px-6 md:py-3 text-xs md:text-sm text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg md:rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -269,16 +289,11 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 )}
               </button>
             </div>
-
-            {/* Status Messages */}
-            {submitStatus === 'error' && (
-              <p className="text-red-400 text-sm text-center mt-4">
-                Failed to send inquiry. Please try again or email us directly.
-              </p>
-            )}
           </form>
         </div>
       </div>
     </div>
+    <SuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} />
+    </>
   );
 }
