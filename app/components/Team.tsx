@@ -6,18 +6,26 @@ import { Linkedin, Twitter } from "lucide-react";
 export default function Team() {
   const teamMembers = [
     {
+      name: "Ayan Osman",
+      role: "Chief Technology Officer",
+      bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
+      image: "/team/member-2.jpg", // Placeholder path
+      linkedin: "#",
+      twitter: "#",
+    },
+    {
       name: "Hayat Kore",
-      role: "Chief Executive Officer",
+      role: "",
       bio: "10+ years of experience in client success, sales, and account management driving business growth.",
       image: "/team/member-1.jpg", // Placeholder path
       linkedin: "#",
       twitter: "#",
     },
     {
-      name: "Ayan Osman",
-      role: "Chief Technology Officer",
-      bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
-      image: "/team/member-2.jpg", // Placeholder path
+      name: "Sahra Osman",
+      role: "",
+      bio: "Passionate about creating innovative solutions and delivering exceptional results.",
+      image: "/team/member-3.jpg", // Placeholder path
       linkedin: "#",
       twitter: "#",
     },
