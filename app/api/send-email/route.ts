@@ -5,8 +5,12 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('API Route called - checking API key:', process.env.RESEND_API_KEY ? 'Present' : 'Missing');
+
     const body = await request.json();
     const { package: packageName, organization, name, email, phone, message } = body;
+
+    console.log('Form data received:', { packageName, organization, name, email });
 
     // Validate required fields
     if (!packageName || !organization || !name || !email) {
@@ -16,9 +20,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('Attempting to send email via Resend...');
+
     // Send email using Resend
     const data = await resend.emails.send({
-      from: 'KoreTek Contact Form <onboarding@resend.dev>', // Change this to your verified domain
+      from: 'onboarding@resend.dev', // Resend's test email
       to: ['ayanosman8@gmail.com'], // Your email
       replyTo: email, // User's email for easy reply
       subject: `New Inquiry: ${packageName}`,
@@ -34,14 +40,17 @@ export async function POST(request: NextRequest) {
       `,
     });
 
+    console.log('Email sent successfully:', data);
+
     return NextResponse.json(
       { success: true, data },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending email:', error);
+    console.error('Error details:', error.message, error.response?.data);
     return NextResponse.json(
-      { error: 'Failed to send email' },
+      { error: 'Failed to send email', details: error.message },
       { status: 500 }
     );
   }
