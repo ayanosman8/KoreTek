@@ -73,7 +73,7 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
                   Thank you for your interest in working with KoreTek
                 </p>
                 <p className="text-white/50 font-light text-sm">
-                  We've received your inquiry and will be in touch soon.
+                  We&apos;ve received your inquiry and will be in touch soon.
                 </p>
               </motion.div>
 
