@@ -8,7 +8,25 @@ export async function POST(request: NextRequest) {
     console.log('API Route called - checking API key:', process.env.RESEND_API_KEY ? 'Present' : 'Missing');
 
     const body = await request.json();
-    const { package: packageName, organization, name, email, phone, message } = body;
+    const {
+      package: packageName,
+      organization,
+      name,
+      email,
+      phone,
+      message,
+      // Package-specific fields
+      businessDescription,
+      hasExistingBranding,
+      platforms,
+      hasDesigns,
+      integrations,
+      appType,
+      expectedUsers,
+      techStack,
+      teamSize,
+      compliance,
+    } = body;
 
     console.log('Form data received:', { packageName, organization, name, email });
 
@@ -27,7 +45,7 @@ export async function POST(request: NextRequest) {
       from: 'onboarding@resend.dev', // Resend's test email
       to: ['xsonerx09@gmail.com'], // Your Resend verified email
       replyTo: email, // User's email for easy reply
-      subject: `🚀 New KoreTek Inquiry: ${packageName}`,
+      subject: `New KoreTek Inquiry: ${packageName}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -48,7 +66,7 @@ export async function POST(request: NextRequest) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>✨ New Inquiry from KoreTek Website</h1>
+              <h1>New Inquiry from KoreTek Website</h1>
             </div>
             <div class="content">
               <div class="field">
@@ -78,9 +96,79 @@ export async function POST(request: NextRequest) {
               </div>
               ` : ''}
 
+              ${businessDescription ? `
+              <div class="field">
+                <div class="field-label">Business Description</div>
+                <div class="field-value" style="white-space: pre-wrap;">${businessDescription}</div>
+              </div>
+              ` : ''}
+
+              ${hasExistingBranding ? `
+              <div class="field">
+                <div class="field-label">Existing Branding</div>
+                <div class="field-value">${hasExistingBranding}</div>
+              </div>
+              ` : ''}
+
+              ${platforms ? `
+              <div class="field">
+                <div class="field-label">Platforms Needed</div>
+                <div class="field-value">${platforms}</div>
+              </div>
+              ` : ''}
+
+              ${hasDesigns ? `
+              <div class="field">
+                <div class="field-label">Design Status</div>
+                <div class="field-value">${hasDesigns}</div>
+              </div>
+              ` : ''}
+
+              ${appType ? `
+              <div class="field">
+                <div class="field-label">Application Type</div>
+                <div class="field-value">${appType}</div>
+              </div>
+              ` : ''}
+
+              ${expectedUsers ? `
+              <div class="field">
+                <div class="field-label">Expected Users</div>
+                <div class="field-value">${expectedUsers}</div>
+              </div>
+              ` : ''}
+
+              ${integrations ? `
+              <div class="field">
+                <div class="field-label">Integrations Needed</div>
+                <div class="field-value">${integrations}</div>
+              </div>
+              ` : ''}
+
+              ${techStack ? `
+              <div class="field">
+                <div class="field-label">Current Tech Stack</div>
+                <div class="field-value">${techStack}</div>
+              </div>
+              ` : ''}
+
+              ${teamSize ? `
+              <div class="field">
+                <div class="field-label">Team Size</div>
+                <div class="field-value">${teamSize}</div>
+              </div>
+              ` : ''}
+
+              ${compliance ? `
+              <div class="field">
+                <div class="field-label">Compliance Requirements</div>
+                <div class="field-value">${compliance}</div>
+              </div>
+              ` : ''}
+
               ${message ? `
               <div class="message-box">
-                <div class="field-label">Message</div>
+                <div class="field-label">Additional Notes</div>
                 <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${message}</div>
               </div>
               ` : ''}
