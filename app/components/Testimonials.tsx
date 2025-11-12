@@ -52,7 +52,7 @@ export default function Testimonials() {
             What Our Clients Say
           </h2>
           <p className="text-xl font-light max-w-3xl mx-auto text-white/60 leading-relaxed">
-            Don't just take our word for it. Hear from the businesses we've helped transform.
+            Don&apos;t just take our word for it. Hear from the businesses we&apos;ve helped transform.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function Testimonials() {
 
               {/* Quote */}
               <p className="text-white/80 font-light leading-relaxed mb-8 text-lg">
-                "{testimonial.quote}"
+                &quot;{testimonial.quote}&quot;
               </p>
 
               {/* Author Info */}

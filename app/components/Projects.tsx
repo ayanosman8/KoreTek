@@ -1,6 +1,6 @@
 "use client";
 
-import { Target, TrendingUp, Users, Award, Rocket, ShoppingCart, BarChart3, Smartphone, Brain } from "lucide-react";
+import { Target, TrendingUp, Users, Award, Rocket } from "lucide-react";
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -12,7 +12,6 @@ export default function Projects() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const stats = [
     { number: "Modern", label: "Tech Stack", icon: <Rocket className="w-6 h-6" /> },
@@ -91,7 +90,7 @@ export default function Projects() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-5xl md:text-7xl lg:text-8xl font-extralight mb-8 text-white leading-tight"
           >
-            Design Doesn't Have to Be Hard
+            Design Doesn&apos;t Have to Be Hard
           </motion.h2>
 
           <motion.p
@@ -158,7 +157,7 @@ export default function Projects() {
               Our Work
             </h3>
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed font-light">
-              Explore how we've helped businesses transform their digital presence with innovative solutions tailored to their unique challenges.
+              Explore how we&apos;ve helped businesses transform their digital presence with innovative solutions tailored to their unique challenges.
             </p>
           </div>
         </div>

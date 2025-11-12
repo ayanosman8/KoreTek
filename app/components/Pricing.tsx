@@ -171,7 +171,7 @@ export default function Pricing() {
           {/* Bottom CTA */}
           <div className="mt-20 text-center">
             <p className="text-white/60 font-light mb-6">
-              Need something custom? We've got you covered.
+              Need something custom? We&apos;ve got you covered.
             </p>
             <button
               onClick={() => {

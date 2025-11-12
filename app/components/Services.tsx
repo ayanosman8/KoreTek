@@ -40,7 +40,7 @@ export default function Services() {
           </h2>
 
           <p className="text-xl font-light max-w-3xl mx-auto text-white/60 leading-relaxed">
-            Full-service digital solutions tailored to your business needs. From concept to deployment, we've got you covered.
+            Full-service digital solutions tailored to your business needs. From concept to deployment, we&apos;ve got you covered.
           </p>
         </div>
 

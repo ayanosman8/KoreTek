@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Play, ArrowRight } from "lucide-react";
 
 export default function Hero() {
   const containerRef = useRef(null);
@@ -10,9 +9,6 @@ export default function Hero() {
     target: containerRef,
     offset: ["start start", "end start"]
   });
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const text =
     "Modern Solutions. Cutting-Edge Design. Unmatched Efficiency.";

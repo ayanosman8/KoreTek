@@ -35,11 +35,11 @@ export default function GetInTouch() {
         {/* Header */}
         <div className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 text-white">
-            Let's Work Together
+            Let&apos;s Work Together
           </h2>
 
           <p className="text-xl font-light max-w-2xl mx-auto leading-relaxed text-white/60">
-            Have a project in mind? We'd love to hear about it. Reach out and let's create something amazing together.
+            Have a project in mind? We&apos;d love to hear about it. Reach out and let&apos;s create something amazing together.
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export default function GetInTouch() {
             Ready to Start Your Project?
           </h3>
           <p className="text-xl font-light text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Whether you're looking for a complete solution or just need some expert advice, we're here to help bring your vision to life.
+            Whether you&apos;re looking for a complete solution or just need some expert advice, we&apos;re here to help bring your vision to life.
           </p>
           <a
             href="mailto:akay@gmail.com"
