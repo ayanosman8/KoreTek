@@ -8,7 +8,6 @@ import Projects from "./components/ProjectsWrapper";
 import Testimonials from "./components/Testimonials";
 import Team from "./components/Team";
 import GetInTouch from "./components/GetInTouch";
-import TestCheckoutButton from "./components/TestCheckoutButton";
 
 export default function Home() {
   return (
@@ -25,7 +24,6 @@ export default function Home() {
       <Testimonials />
       <Team />
       <GetInTouch />
-      <TestCheckoutButton />
     </>
   );
 }
