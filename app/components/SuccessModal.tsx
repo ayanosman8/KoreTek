@@ -70,7 +70,7 @@ export default function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
                   Thank You!
                 </h3>
                 <p className="text-white/70 font-light text-base md:text-lg mb-2">
-                  Thank you for your interest in working with KoreTek
+                  Thank you for your interest in working with KoreLnx
                 </p>
                 <p className="text-white/50 font-light text-sm">
                   We&apos;ve received your inquiry and will be in touch soon.

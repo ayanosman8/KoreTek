@@ -42,10 +42,10 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const data = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Resend's test email
-      to: ['xsonerx09@gmail.com'], // Your Resend verified email
+      from: 'info@korelnx.com', // Your verified domain email
+      to: ['aosman@korelnx.com', 'hkore@korelnx.com'], // Your Google Workspace emails
       replyTo: email, // User's email for easy reply
-      subject: `New KoreTek Inquiry: ${packageName}`,
+      subject: `New KoreLnx Inquiry: ${packageName}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>New Inquiry from KoreTek Website</h1>
+              <h1>New Inquiry from KoreLnx Website</h1>
             </div>
             <div class="content">
               <div class="field">

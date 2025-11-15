@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KoreTek - Modern Solutions",
+  title: "KoreLnx - Modern Solutions",
   description: "Smarter Tech. Better Solutions.",
 };
 

@@ -6,7 +6,7 @@ import { Quote, Star } from "lucide-react";
 export default function Testimonials() {
   const testimonials = [
     {
-      quote: "Working with KoreTek transformed our business. The e-commerce platform they built exceeded our expectations and delivered real results. Our conversion rates increased by 45% within the first month.",
+      quote: "Working with KoreLnx transformed our business. The e-commerce platform they built exceeded our expectations and delivered real results. Our conversion rates increased by 45% within the first month.",
       author: "Sarah Chen",
       role: "CEO",
       company: "TechRetail Inc.",

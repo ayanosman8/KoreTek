@@ -47,10 +47,12 @@ export default function Header() {
             </div>
             <div className="flex flex-col">
               <h1 className="text-xl font-bold tracking-tight text-white">
-                KoreTek
+                KoreLn<span className="text-3xl">x</span>
               </h1>
-              <span className="text-xs text-blue-500 font-medium uppercase tracking-wider">
-                Technology
+              <span className="text-xs font-medium tracking-wider italic">
+                <span className="text-blue-500">Your </span>
+                <span className="text-white">Vision</span>
+                <span className="text-blue-500">.Engineered.</span>
               </span>
             </div>
           </Link>
