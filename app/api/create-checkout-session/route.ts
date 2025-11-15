@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
-});
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-10-29.clover',
+    })
+  : null;
 
 export async function POST(request: NextRequest) {
+  if (!stripe) {
+    return NextResponse.json(
+      { error: 'Stripe is not configured' },
+      { status: 500 }
+    );
+  }
   try {
-    const { priceId, packageName } = await request.json();
+    const { packageName } = await request.json();
 
     // For testing, create a generic checkout session
     // You can replace this with actual product/price IDs from Stripe Dashboard later

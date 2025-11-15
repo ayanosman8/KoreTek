@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { CreditCard } from "lucide-react";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function TestCheckoutButton() {
   const [loading, setLoading] = useState(false);

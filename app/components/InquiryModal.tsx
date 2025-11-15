@@ -4,6 +4,29 @@ import React, { useState, useEffect } from "react";
 import { X, Send, Check } from "lucide-react";
 import { toast } from "sonner";
 import SuccessModal from "./SuccessModal";
+import { z } from "zod";
+
+// Zod validation schema
+const inquiryFormSchema = z.object({
+  package: z.string().min(1, "Please select a package"),
+  organization: z.string().min(2, "Organization name must be at least 2 characters"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().optional(),
+  businessType: z.string().min(1, "Please select a business type"),
+  message: z.string().optional(),
+  businessDescription: z.string().optional(),
+  hasExistingBranding: z.string().optional(),
+  platforms: z.string().optional(),
+  hasDesigns: z.string().optional(),
+  integrations: z.string().optional(),
+  appType: z.string().optional(),
+  expectedUsers: z.string().optional(),
+  techStack: z.string().optional(),
+  teamSize: z.string().optional(),
+  compliance: z.string().optional(),
+});
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -15,9 +38,11 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
   const [formData, setFormData] = useState({
     package: "",
     organization: "",
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
+    businessType: "",
     message: "",
     // Package-specific questions
     businessDescription: "",
@@ -34,6 +59,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const packageOptions = [
     "Landing Page ($1,999)",
@@ -54,14 +80,18 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setValidationErrors({});
 
     try {
+      // Validate form data with Zod
+      const validatedData = inquiryFormSchema.parse(formData);
+
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(validatedData),
       });
 
       if (!response.ok) {
@@ -77,9 +107,11 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
       setFormData({
         package: "",
         organization: "",
-        name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         phone: "",
+        businessType: "",
         message: "",
         businessDescription: "",
         hasExistingBranding: "",
@@ -98,6 +130,24 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
       onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
+
+      // Handle Zod validation errors
+      if (error instanceof z.ZodError) {
+        const errors: Record<string, string> = {};
+        error.issues.forEach((issue) => {
+          if (issue.path[0]) {
+            errors[issue.path[0].toString()] = issue.message;
+          }
+        });
+        setValidationErrors(errors);
+        toast.error('Please fix the validation errors', {
+          description: 'Check the highlighted fields',
+          duration: 5000,
+        });
+        setSubmitStatus('error');
+        return;
+      }
+
       setSubmitStatus('error');
 
       // Try to get error details from response
@@ -162,7 +212,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
             {/* Package Selection */}
             <div>
               <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                Package Interest <span className="text-white/40 font-light text-xs">(Optional)</span>
+                Package Interest
               </label>
               <select
                 required
@@ -170,7 +220,9 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, package: e.target.value })
                 }
-                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
+                className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                  validationErrors.package ? 'border-red-500' : 'border-white/10'
+                } rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer`}
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                   backgroundRepeat: 'no-repeat',
@@ -186,11 +238,14 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                   </option>
                 ))}
               </select>
-              {selectedPackage && (
+              {selectedPackage && !validationErrors.package && (
                 <p className="mt-1 text-[10px] md:text-xs text-blue-400 flex items-center gap-1">
                   <Check className="w-3 h-3" />
                   Pre-selected based on your interest
                 </p>
+              )}
+              {validationErrors.package && (
+                <p className="mt-1 text-xs text-red-400">{validationErrors.package}</p>
               )}
             </div>
 
@@ -206,26 +261,58 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, organization: e.target.value })
                 }
-                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                  validationErrors.organization ? 'border-red-500' : 'border-white/10'
+                } rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300`}
                 placeholder="Acme Corporation"
               />
+              {validationErrors.organization && (
+                <p className="mt-1 text-xs text-red-400">{validationErrors.organization}</p>
+              )}
             </div>
 
-            {/* Name */}
-            <div>
-              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                Your Name
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                placeholder="John Doe"
-              />
+            {/* Name - Split into First and Last */}
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
+              <div>
+                <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.firstName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, firstName: e.target.value })
+                  }
+                  className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                    validationErrors.firstName ? 'border-red-500' : 'border-white/10'
+                  } rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300`}
+                  placeholder="John"
+                />
+                {validationErrors.firstName && (
+                  <p className="mt-1 text-xs text-red-400">{validationErrors.firstName}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.lastName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, lastName: e.target.value })
+                  }
+                  className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                    validationErrors.lastName ? 'border-red-500' : 'border-white/10'
+                  } rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300`}
+                  placeholder="Doe"
+                />
+                {validationErrors.lastName && (
+                  <p className="mt-1 text-xs text-red-400">{validationErrors.lastName}</p>
+                )}
+              </div>
             </div>
 
             {/* Email */}
@@ -240,9 +327,14 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                  validationErrors.email ? 'border-red-500' : 'border-white/10'
+                } rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300`}
                 placeholder="john@example.com"
               />
+              {validationErrors.email && (
+                <p className="mt-1 text-xs text-red-400">{validationErrors.email}</p>
+              )}
             </div>
 
             {/* Phone */}
@@ -259,6 +351,53 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
                 placeholder="(555) 123-4567"
               />
+            </div>
+
+            {/* Business Type */}
+            <div>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Business Type / Industry
+              </label>
+              <select
+                required
+                value={formData.businessType}
+                onChange={(e) =>
+                  setFormData({ ...formData, businessType: e.target.value })
+                }
+                className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                  validationErrors.businessType ? 'border-red-500' : 'border-white/10'
+                } rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer`}
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 1rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '3rem',
+                }}
+              >
+                <option value="" className="bg-gray-900">Select your industry...</option>
+                <option value="Technology / Software" className="bg-gray-900">Technology / Software</option>
+                <option value="E-commerce / Retail" className="bg-gray-900">E-commerce / Retail</option>
+                <option value="Healthcare / Medical" className="bg-gray-900">Healthcare / Medical</option>
+                <option value="Finance / Fintech" className="bg-gray-900">Finance / Fintech</option>
+                <option value="Education / E-learning" className="bg-gray-900">Education / E-learning</option>
+                <option value="Real Estate" className="bg-gray-900">Real Estate</option>
+                <option value="Food & Beverage" className="bg-gray-900">Food & Beverage</option>
+                <option value="Hospitality / Travel" className="bg-gray-900">Hospitality / Travel</option>
+                <option value="Marketing / Advertising" className="bg-gray-900">Marketing / Advertising</option>
+                <option value="Consulting / Professional Services" className="bg-gray-900">Consulting / Professional Services</option>
+                <option value="Manufacturing / Industrial" className="bg-gray-900">Manufacturing / Industrial</option>
+                <option value="Non-Profit / NGO" className="bg-gray-900">Non-Profit / NGO</option>
+                <option value="Entertainment / Media" className="bg-gray-900">Entertainment / Media</option>
+                <option value="Fitness / Wellness" className="bg-gray-900">Fitness / Wellness</option>
+                <option value="Automotive" className="bg-gray-900">Automotive</option>
+                <option value="Agriculture" className="bg-gray-900">Agriculture</option>
+                <option value="Legal Services" className="bg-gray-900">Legal Services</option>
+                <option value="Other" className="bg-gray-900">Other</option>
+              </select>
+              {validationErrors.businessType && (
+                <p className="mt-1 text-xs text-red-400">{validationErrors.businessType}</p>
+              )}
             </div>
 
             {/* Package-Specific Questions */}

@@ -32,7 +32,7 @@ export default function CheckoutCancel() {
           {/* Info Box */}
           <div className="text-left bg-white/5 border border-white/10 rounded-xl p-4 mb-8">
             <p className="text-white/50 text-sm">
-              If you encountered any issues or have questions, please don't hesitate to contact us.
+              If you encountered any issues or have questions, please don&apos;t hesitate to contact us.
             </p>
           </div>
 

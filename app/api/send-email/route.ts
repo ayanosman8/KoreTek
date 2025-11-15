@@ -11,9 +11,11 @@ export async function POST(request: NextRequest) {
     const {
       package: packageName,
       organization,
-      name,
+      firstName,
+      lastName,
       email,
       phone,
+      businessType,
       message,
       // Package-specific fields
       businessDescription,
@@ -28,10 +30,11 @@ export async function POST(request: NextRequest) {
       compliance,
     } = body;
 
-    console.log('Form data received:', { packageName, organization, name, email });
+    const fullName = `${firstName} ${lastName}`;
+    console.log('Form data received:', { packageName, organization, fullName, email, businessType });
 
     // Validate required fields
-    if (!packageName || !organization || !name || !email) {
+    if (!packageName || !organization || !firstName || !lastName || !email || !businessType) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -81,7 +84,7 @@ export async function POST(request: NextRequest) {
 
               <div class="field">
                 <div class="field-label">Contact Name</div>
-                <div class="field-value">${name}</div>
+                <div class="field-value">${fullName}</div>
               </div>
 
               <div class="field">
@@ -95,6 +98,11 @@ export async function POST(request: NextRequest) {
                 <div class="field-value">${phone}</div>
               </div>
               ` : ''}
+
+              <div class="field">
+                <div class="field-label">Business Type / Industry</div>
+                <div class="field-value">${businessType}</div>
+              </div>
 
               ${businessDescription ? `
               <div class="field">
@@ -174,7 +182,7 @@ export async function POST(request: NextRequest) {
               ` : ''}
 
               <div class="footer">
-                <p>Reply directly to this email to respond to <strong>${name}</strong></p>
+                <p>Reply directly to this email to respond to <strong>${fullName}</strong></p>
               </div>
             </div>
           </div>
