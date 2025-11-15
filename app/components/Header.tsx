@@ -38,10 +38,12 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="h-11 w-11 rounded-2xl border-2 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] bg-black/50 backdrop-blur-sm flex items-center justify-center transition-all duration-300">
-                <svg className="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+              <div className="h-11 w-11 rounded-2xl border-2 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] bg-black/50 backdrop-blur-sm flex items-center justify-center transition-all duration-300 p-1.5">
+                <img
+                  src="/koreLnx.png"
+                  alt="KoreLnx Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
             </div>

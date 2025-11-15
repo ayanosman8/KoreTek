@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@radix-ui/react-slot": "^1.2.3",
+    "@stripe/stripe-js": "^8.4.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -26,6 +27,7 @@
     "react-dom": "^19.0.0",
     "resend": "^6.4.2",
     "sonner": "^2.0.7",
+    "stripe": "^19.3.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
