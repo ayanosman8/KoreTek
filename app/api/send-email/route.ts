@@ -16,13 +16,14 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       businessType,
-      message,
+      hasExistingWebsite,
+      websiteUrl,
+      companyDescription,
+      uploadedFiles,
       // Package-specific fields
       businessDescription,
       hasExistingBranding,
       platforms,
-      hasDesigns,
-      integrations,
       appType,
       expectedUsers,
       techStack,
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
     console.log('Form data received:', { packageName, organization, fullName, email, businessType });
 
     // Validate required fields
-    if (!packageName || !organization || !firstName || !lastName || !email || !businessType) {
+    if (!firstName || !lastName || !email) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -104,6 +105,39 @@ export async function POST(request: NextRequest) {
                 <div class="field-value">${businessType}</div>
               </div>
 
+              ${hasExistingWebsite ? `
+              <div class="field">
+                <div class="field-label">Has Existing Website</div>
+                <div class="field-value">${hasExistingWebsite}</div>
+              </div>
+              ` : ''}
+
+              ${websiteUrl ? `
+              <div class="field">
+                <div class="field-label">Current Website URL</div>
+                <div class="field-value"><a href="${websiteUrl}" style="color: #3b82f6; text-decoration: none;" target="_blank">${websiteUrl}</a></div>
+              </div>
+              ` : ''}
+
+              <div class="message-box">
+                <div class="field-label">About Company and Project Needs</div>
+                <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${companyDescription}</div>
+              </div>
+
+              ${uploadedFiles && uploadedFiles.length > 0 ? `
+              <div class="field">
+                <div class="field-label">Uploaded Files (Logo/Branding)</div>
+                <div class="field-value">
+                  <ul style="margin: 5px 0; padding-left: 20px;">
+                    ${uploadedFiles.map((file: { name: string; size: string; type: string }) =>
+                      `<li>${file.name} (${file.size}, ${file.type})</li>`
+                    ).join('')}
+                  </ul>
+                  <p style="color: #64748b; font-size: 12px; margin-top: 10px;">Note: Files were uploaded but not attached to this email. Please request them from the client if needed.</p>
+                </div>
+              </div>
+              ` : ''}
+
               ${businessDescription ? `
               <div class="field">
                 <div class="field-label">Business Description</div>
@@ -125,13 +159,6 @@ export async function POST(request: NextRequest) {
               </div>
               ` : ''}
 
-              ${hasDesigns ? `
-              <div class="field">
-                <div class="field-label">Design Status</div>
-                <div class="field-value">${hasDesigns}</div>
-              </div>
-              ` : ''}
-
               ${appType ? `
               <div class="field">
                 <div class="field-label">Application Type</div>
@@ -143,13 +170,6 @@ export async function POST(request: NextRequest) {
               <div class="field">
                 <div class="field-label">Expected Users</div>
                 <div class="field-value">${expectedUsers}</div>
-              </div>
-              ` : ''}
-
-              ${integrations ? `
-              <div class="field">
-                <div class="field-label">Integrations Needed</div>
-                <div class="field-value">${integrations}</div>
               </div>
               ` : ''}
 
@@ -171,13 +191,6 @@ export async function POST(request: NextRequest) {
               <div class="field">
                 <div class="field-label">Compliance Requirements</div>
                 <div class="field-value">${compliance}</div>
-              </div>
-              ` : ''}
-
-              ${message ? `
-              <div class="message-box">
-                <div class="field-label">Additional Notes</div>
-                <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${message}</div>
               </div>
               ` : ''}
 

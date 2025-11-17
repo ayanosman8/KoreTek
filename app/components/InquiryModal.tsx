@@ -1,26 +1,27 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Send, Check } from "lucide-react";
+import { X, Send, Check, Upload } from "lucide-react";
 import { toast } from "sonner";
 import SuccessModal from "./SuccessModal";
 import { z } from "zod";
+import { useDropzone } from "react-dropzone";
 
 // Zod validation schema
 const inquiryFormSchema = z.object({
-  package: z.string().min(1, "Please select a package"),
-  organization: z.string().min(2, "Organization name must be at least 2 characters"),
+  package: z.string().optional(),
+  organization: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().optional(),
-  businessType: z.string().min(1, "Please select a business type"),
-  message: z.string().optional(),
+  businessType: z.string().optional(),
+  hasExistingWebsite: z.string().optional(),
+  websiteUrl: z.string().optional(),
+  companyDescription: z.string().optional(),
   businessDescription: z.string().optional(),
   hasExistingBranding: z.string().optional(),
   platforms: z.string().optional(),
-  hasDesigns: z.string().optional(),
-  integrations: z.string().optional(),
   appType: z.string().optional(),
   expectedUsers: z.string().optional(),
   techStack: z.string().optional(),
@@ -43,23 +44,51 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
     email: "",
     phone: "",
     businessType: "",
-    message: "",
+    hasExistingWebsite: "",
+    websiteUrl: "",
+    companyDescription: "",
     // Package-specific questions
     businessDescription: "",
     hasExistingBranding: "",
     platforms: "",
-    hasDesigns: "",
-    integrations: "",
     appType: "",
     expectedUsers: "",
     techStack: "",
     teamSize: "",
     compliance: "",
   });
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  // Dropzone for file uploads
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.svg', '.pdf']
+    },
+    maxFiles: 3,
+    maxSize: 5242880, // 5MB
+    onDrop: (acceptedFiles) => {
+      setUploadedFiles(prev => [...prev, ...acceptedFiles].slice(0, 3));
+    },
+    onDropRejected: (rejectedFiles) => {
+      rejectedFiles.forEach(file => {
+        file.errors.forEach(err => {
+          if (err.code === 'file-too-large') {
+            toast.error('File too large', { description: 'Maximum file size is 5MB' });
+          } else if (err.code === 'too-many-files') {
+            toast.error('Too many files', { description: 'Maximum 3 files allowed' });
+          }
+        });
+      });
+    }
+  });
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+  };
 
   const packageOptions = [
     "Landing Page ($1,999)",
@@ -86,12 +115,22 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
       // Validate form data with Zod
       const validatedData = inquiryFormSchema.parse(formData);
 
+      // Add file information
+      const fileInfo = uploadedFiles.map(file => ({
+        name: file.name,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+        type: file.type
+      }));
+
       const response = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(validatedData),
+        body: JSON.stringify({
+          ...validatedData,
+          uploadedFiles: fileInfo
+        }),
       });
 
       if (!response.ok) {
@@ -112,18 +151,19 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
         email: "",
         phone: "",
         businessType: "",
-        message: "",
+        hasExistingWebsite: "",
+        websiteUrl: "",
+        companyDescription: "",
         businessDescription: "",
         hasExistingBranding: "",
         platforms: "",
-        hasDesigns: "",
-        integrations: "",
         appType: "",
         expectedUsers: "",
         techStack: "",
         teamSize: "",
         compliance: "",
       });
+      setUploadedFiles([]);
       setSubmitStatus('idle');
 
       // Close the inquiry form modal
@@ -215,7 +255,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 Package Interest
               </label>
               <select
-                required
                 value={formData.package}
                 onChange={(e) =>
                   setFormData({ ...formData, package: e.target.value })
@@ -256,7 +295,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
               </label>
               <input
                 type="text"
-                required
                 value={formData.organization}
                 onChange={(e) =>
                   setFormData({ ...formData, organization: e.target.value })
@@ -275,7 +313,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div>
                 <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                  First Name
+                  First Name <span className="text-amber-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -295,7 +333,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
               </div>
               <div>
                 <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                  Last Name
+                  Last Name <span className="text-amber-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -318,7 +356,7 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
             {/* Email */}
             <div>
               <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                Email
+                Email <span className="text-amber-400">*</span>
               </label>
               <input
                 type="email"
@@ -359,7 +397,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 Business Type / Industry
               </label>
               <select
-                required
                 value={formData.businessType}
                 onChange={(e) =>
                   setFormData({ ...formData, businessType: e.target.value })
@@ -397,6 +434,121 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
               </select>
               {validationErrors.businessType && (
                 <p className="mt-1 text-xs text-red-400">{validationErrors.businessType}</p>
+              )}
+            </div>
+
+            {/* Do you have an existing website? */}
+            <div>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Do you or your company have an existing website?
+              </label>
+              <select
+                value={formData.hasExistingWebsite}
+                onChange={(e) =>
+                  setFormData({ ...formData, hasExistingWebsite: e.target.value })
+                }
+                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 1rem center',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '3rem',
+                }}
+              >
+                <option value="" className="bg-gray-900">Select...</option>
+                <option value="Yes" className="bg-gray-900">Yes</option>
+                <option value="No" className="bg-gray-900">No</option>
+              </select>
+            </div>
+
+            {/* Website URL - Show only if they have an existing website */}
+            {formData.hasExistingWebsite === "Yes" && (
+              <div>
+                <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                  Website URL
+                </label>
+                <input
+                  type="url"
+                  value={formData.websiteUrl}
+                  onChange={(e) =>
+                    setFormData({ ...formData, websiteUrl: e.target.value })
+                  }
+                  className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+                  placeholder="https://www.example.com"
+                />
+              </div>
+            )}
+
+            {/* File Upload Dropzone for Logo/Branding */}
+            <div>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Upload existing logo or branding <span className="text-white/40 font-light text-[10px] md:text-xs">(Optional)</span>
+              </label>
+              <div
+                {...getRootProps()}
+                className={`w-full px-3 py-6 md:px-4 md:py-8 bg-white/5 border-2 border-dashed ${
+                  isDragActive ? 'border-blue-500/60 bg-blue-500/10' : 'border-white/10'
+                } rounded-lg md:rounded-xl text-white text-xs md:text-sm transition-all duration-300 cursor-pointer hover:border-blue-500/40 hover:bg-white/10`}
+              >
+                <input {...getInputProps()} />
+                <div className="flex flex-col items-center justify-center gap-2 text-center">
+                  <Upload className="w-6 h-6 md:w-8 md:h-8 text-white/40" />
+                  {isDragActive ? (
+                    <p className="text-blue-400">Drop the files here...</p>
+                  ) : (
+                    <>
+                      <p className="text-white/60">
+                        Drag &amp; drop files here, or click to select
+                      </p>
+                      <p className="text-white/40 text-[10px] md:text-xs">
+                        Max 3 files, 5MB each (PNG, JPG, SVG, PDF)
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+              {uploadedFiles.length > 0 && (
+                <div className="mt-2 space-y-2">
+                  {uploadedFiles.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between px-3 py-2 bg-white/5 border border-white/10 rounded-lg"
+                    >
+                      <span className="text-xs text-white/80 truncate flex-1">
+                        {file.name}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeFile(index)}
+                        className="ml-2 p-1 hover:bg-white/10 rounded transition-colors"
+                      >
+                        <X className="w-4 h-4 text-white/60 hover:text-white" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Open-ended question about company and needs */}
+            <div>
+              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
+                Tell us more
+              </label>
+              <textarea
+                value={formData.companyDescription}
+                onChange={(e) =>
+                  setFormData({ ...formData, companyDescription: e.target.value })
+                }
+                rows={4}
+                className={`w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border ${
+                  validationErrors.companyDescription ? 'border-red-500' : 'border-white/10'
+                } rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none`}
+                placeholder="Describe your company, target audience, main goals, key features you need, and any specific requirements or challenges you're facing..."
+              />
+              {validationErrors.companyDescription && (
+                <p className="mt-1 text-xs text-red-400">{validationErrors.companyDescription}</p>
               )}
             </div>
 
@@ -480,45 +632,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                    Do you have designs or wireframes ready?
-                  </label>
-                  <select
-                    value={formData.hasDesigns}
-                    onChange={(e) =>
-                      setFormData({ ...formData, hasDesigns: e.target.value })
-                    }
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 0.5rem center',
-                      backgroundSize: '1.25em 1.25em',
-                      paddingRight: '2.5rem',
-                    }}
-                  >
-                    <option value="" className="bg-gray-900">Select...</option>
-                    <option value="Yes - complete designs" className="bg-gray-900">Yes - I have complete designs</option>
-                    <option value="Partial - rough mockups" className="bg-gray-900">Partial - I have rough mockups/wireframes</option>
-                    <option value="No - need design help" className="bg-gray-900">No - I need help with design</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                    Any integrations needed? <span className="text-white/40 font-light text-[10px] md:text-xs">(Optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.integrations}
-                    onChange={(e) =>
-                      setFormData({ ...formData, integrations: e.target.value })
-                    }
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                    placeholder="e.g., payment processing, maps, social login"
-                  />
-                </div>
               </>
             )}
 
@@ -582,20 +695,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                    Any specific integrations or APIs? <span className="text-white/40 font-light text-[10px] md:text-xs">(Optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.integrations}
-                    onChange={(e) =>
-                      setFormData({ ...formData, integrations: e.target.value })
-                    }
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                    placeholder="e.g., Stripe, AWS, third-party APIs"
-                  />
-                </div>
               </>
             )}
 
@@ -662,22 +761,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                 </div>
               </>
             )}
-
-            {/* General Message */}
-            <div>
-              <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                Additional notes <span className="text-white/40 font-light text-[10px] md:text-xs">(Optional)</span>
-              </label>
-              <textarea
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
-                }
-                rows={2}
-                className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
-                placeholder="Anything else we should know?"
-              />
-            </div>
 
             {/* Submit Button */}
             <div className="flex gap-2 md:gap-3 pt-2 md:pt-3">
