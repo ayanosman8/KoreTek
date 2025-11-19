@@ -45,6 +45,17 @@ export default function Projects() {
       appStoreUrl: "https://apps.apple.com",
       playStoreUrl: "https://play.google.com",
     },
+    {
+      client: "Developer Tools",
+      projectName: "DevOptimal",
+      category: "Developer SaaS Platform",
+      description: "Beautiful code snippet library for developers to store, organize, and share their code. Features syntax highlighting for 50+ languages, secure encrypted storage, and seamless public/private snippet management with discover feed.",
+      tech: ["Next.js", "Firebase Auth", "TypeScript"],
+      results: ["50+ Languages", "Secure Storage", "Public Discovery"],
+      type: "web",
+      link: "https://dev-optimal-umber.vercel.app/",
+      mockupImage: "/dev2.png",
+    },
   ];
 
   return (

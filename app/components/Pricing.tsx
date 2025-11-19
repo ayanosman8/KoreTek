@@ -11,62 +11,62 @@ export default function Pricing() {
   const pricingTiers = [
     {
       name: "Landing Page",
-      price: "$1,999",
+      price: "$2,000",
       originalPrice: "$5,000",
-      description: "Perfect for businesses needing a strong online presence",
+      description: "Establish your digital presence with a stunning, high-converting landing page",
       features: [
-        "Single page responsive design",
-        "Contact form integration",
-        "SEO optimization",
-        "2 rounds of revisions",
-        "2 week delivery",
+        "Single-page responsive design",
+        "Custom animations & interactions",
+        "Contact form with email integration",
+        "SEO optimization & meta tags",
+        "Performance optimization",
       ],
       popular: false,
     },
     {
-      name: "Mobile App Package",
-      price: "$4,000",
-      originalPrice: "$10,000",
+      name: "Mobile App",
+      price: "$5,000",
+      originalPrice: "$12,500",
       description: "Cross-platform mobile app for iOS and Android",
       features: [
         "iOS & Android apps (React Native)",
-        "Up to 5 core screens",
-        "Backend API & database",
-        "App store submission (both platforms)",
-        "Push notifications",
-        "4-6 week delivery",
+        "Up to 6 core screens",
+        "Custom UI/UX design",
+        "Basic API integration",
+        "App store submission assistance",
+      ],
+      popular: false,
+    },
+    {
+      name: "Web Platform",
+      price: "$10,000",
+      originalPrice: "$25,000",
+      description: "Full-featured web application with backend and database",
+      features: [
+        "Multi-page web application",
+        "User authentication & authorization",
+        "Database architecture & setup",
+        "Admin dashboard",
+        "RESTful API development",
+        "Cloud hosting & deployment",
       ],
       popular: true,
     },
     {
-      name: "Full-Stack Web App",
-      price: "$9,999",
-      originalPrice: "$25,000",
-      description: "Complete web application with backend infrastructure",
+      name: "Complete Platform",
+      price: "$35,000",
+      originalPrice: "$87,500",
+      description: "End-to-end digital ecosystem with web and mobile applications",
       features: [
-        "Custom web application",
-        "Database integration",
-        "User authentication",
-        "Admin dashboard",
-        "API development",
-        "Cloud deployment",
-        "6-8 week delivery",
-      ],
-      popular: false,
-    },
-    {
-      name: "Enterprise Solution",
-      price: "Starting at $19,999",
-      originalPrice: "$50,000+",
-      description: "Comprehensive platform with mobile and web",
-      features: [
-        "Custom mobile + web platform",
-        "Advanced integrations",
-        "Scalable cloud architecture",
-        "Real-time features",
-        "Ongoing support included",
-        "Dedicated project manager",
-        "8-12 week delivery",
+        "Full web application + backend",
+        "iOS & Android apps (React Native)",
+        "Up to 10 core mobile screens",
+        "Advanced API architecture",
+        "Real-time data synchronization",
+        "Push notifications",
+        "Scalable cloud infrastructure",
+        "App store submission assistance",
+        "Comprehensive testing & QA",
       ],
       popular: false,
     },
@@ -98,9 +98,14 @@ export default function Pricing() {
             <p className="text-xl font-light max-w-3xl mx-auto text-white/60 leading-relaxed mb-4">
               Get enterprise quality at startup prices.
             </p>
-            <p className="text-sm text-blue-400 font-medium">
+            <p className="text-sm text-blue-400 font-medium mb-4">
               Limited spots available - Lock in these rates today
             </p>
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 backdrop-blur-sm rounded-lg border border-blue-400/20">
+              <span className="text-sm text-white/80 font-light">
+                <span className="font-medium text-blue-400">Payment terms:</span> 50% upfront, 50% upon completion
+              </span>
+            </div>
           </div>
 
           {/* Pricing Grid */}

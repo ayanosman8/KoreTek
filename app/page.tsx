@@ -5,7 +5,7 @@ import Services from "./components/Services";
 import Pricing from "./components/Pricing";
 import Projects from "./components/ProjectsWrapper";
 // import ClientLogos from "./components/ClientLogos";
-import Testimonials from "./components/Testimonials";
+// import Testimonials from "./components/Testimonials";
 import Team from "./components/Team";
 import GetInTouch from "./components/GetInTouch";
 
@@ -21,7 +21,7 @@ export default function Home() {
       <Pricing />
       <Projects />
       {/* <ClientLogos /> */}
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Team />
       <GetInTouch />
     </>
