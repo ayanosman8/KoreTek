@@ -29,6 +29,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
     projectType: "", // "personal" or "company"
     company: "",
     phone: "",
+    budget: "",
+    timeline: "",
     message: "",
   });
 
@@ -36,7 +38,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const totalQuestions = 5;
+  const totalQuestions = 6;
 
   const updateField = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -74,14 +76,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         }
         break;
       case 2:
-        const firstNameError = validateField("firstName", formData.firstName);
-        const lastNameError = validateField("lastName", formData.lastName);
-        const emailError = validateField("email", formData.email);
-        if (firstNameError) newErrors.firstName = firstNameError;
-        if (lastNameError) newErrors.lastName = lastNameError;
-        if (emailError) newErrors.email = emailError;
-        break;
-      case 3:
         if (!formData.projectType.trim()) {
           newErrors.projectType = "Please select project type";
         } else if (formData.projectType === "company") {
@@ -89,13 +83,29 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
           if (companyError) newErrors.company = companyError;
         }
         break;
-      case 4:
-        const phoneError = validateField("phone", formData.phone);
-        if (phoneError) newErrors.phone = phoneError;
-        break;
-      case 5:
+      case 3:
         const messageError = validateField("message", formData.message);
         if (messageError) newErrors.message = messageError;
+        break;
+      case 4:
+        if (!formData.timeline.trim()) {
+          newErrors.timeline = "Please select a timeline";
+        }
+        break;
+      case 5:
+        if (!formData.budget.trim()) {
+          newErrors.budget = "Please select a budget range";
+        }
+        break;
+      case 6:
+        const firstNameError = validateField("firstName", formData.firstName);
+        const lastNameError = validateField("lastName", formData.lastName);
+        const emailError = validateField("email", formData.email);
+        const phoneError = validateField("phone", formData.phone);
+        if (firstNameError) newErrors.firstName = firstNameError;
+        if (lastNameError) newErrors.lastName = lastNameError;
+        if (emailError) newErrors.email = emailError;
+        if (phoneError) newErrors.phone = phoneError;
         break;
     }
 
@@ -132,6 +142,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
           company: formData.projectType === "company" ? formData.company : "Personal Project",
           phone: formData.phone,
           package: formData.package,
+          budget: formData.budget,
+          timeline: formData.timeline,
           message: formData.message,
         }),
       });
@@ -159,6 +171,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
       projectType: "",
       company: "",
       phone: "",
+      budget: "",
+      timeline: "",
       message: "",
     });
     setErrors({});
@@ -171,23 +185,27 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
       case 1:
         return formData.package.trim() !== "";
       case 2:
-        return (
-          formData.firstName.trim() !== "" &&
-          formData.lastName.trim() !== "" &&
-          formData.email.trim() !== "" &&
-          validateField("email", formData.email) === ""
-        );
-      case 3:
         if (formData.projectType === "personal") {
           return true;
         } else if (formData.projectType === "company") {
           return formData.company.trim() !== "";
         }
         return false;
-      case 4:
-        return formData.phone.trim() !== "" && validateField("phone", formData.phone) === "";
-      case 5:
+      case 3:
         return formData.message.trim() !== "";
+      case 4:
+        return formData.timeline.trim() !== "";
+      case 5:
+        return formData.budget.trim() !== "";
+      case 6:
+        return (
+          formData.firstName.trim() !== "" &&
+          formData.lastName.trim() !== "" &&
+          formData.email.trim() !== "" &&
+          validateField("email", formData.email) === "" &&
+          formData.phone.trim() !== "" &&
+          validateField("phone", formData.phone) === ""
+        );
       default:
         return false;
     }
@@ -196,15 +214,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black">
-      {/* Close Button */}
-      <button
-        onClick={handleClose}
-        className="absolute top-8 right-8 z-50 p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 group"
-      >
-        <X className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
-      </button>
-
+    <div className="fixed inset-0 z-50 bg-black overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
@@ -230,28 +240,33 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   >
                     <div>
                       <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
-                        Let&apos;s get to know you
+                        What do you need help with?
                       </h1>
                       <p className="text-base md:text-lg text-white/50 font-light">
                         Choose what best fits your needs
                       </p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {["Landing Page", "Mobile App", "Web Platform", "Complete Platform", "Not sure yet"].map(
                         (pkg) => (
-                          <button
+                          <div
                             key={pkg}
                             onClick={() => {
-                              updateField("package", pkg);
+                              setFormData({ ...formData, package: pkg });
+                              if (errors.package) {
+                                setErrors({ ...errors, package: "" });
+                              }
                             }}
-                            className={`p-5 rounded-xl border-2 transition-all duration-300 text-left group hover:scale-105 ${
+                            className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
                               formData.package === pkg
                                 ? "border-blue-500 bg-blue-500/10"
-                                : "border-white/10 bg-white/5 hover:border-blue-500/50 hover:bg-blue-500/5"
+                                : "border-white/10 bg-white/5 hover:bg-white/10"
                             }`}
                           >
-                            <div className="text-lg md:text-xl font-light text-white group-hover:text-blue-400 transition-colors">{pkg}</div>
-                          </button>
+                            <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                              formData.package === pkg ? "text-blue-400" : "text-white"
+                            }`}>{pkg}</div>
+                          </div>
                         )
                       )}
                     </div>
@@ -259,6 +274,220 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                 )}
 
                 {currentQuestion === 2 && (
+                  <motion.div
+                    key="q3"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-6"
+                  >
+                    <div>
+                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
+                        Is this a personal or company project?
+                      </h1>
+                      <p className="text-base md:text-lg text-white/50 font-light">
+                        Help us understand your needs better
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, projectType: "personal", company: "" });
+                          if (errors.projectType) {
+                            setErrors({ ...errors, projectType: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.projectType === "personal"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.projectType === "personal" ? "text-blue-400" : "text-white"
+                        }`}>
+                          Personal Project
+                        </div>
+                        <p className="text-sm text-white/40 mt-1 pointer-events-none">For myself or a side project</p>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, projectType: "company" });
+                          if (errors.projectType) {
+                            setErrors({ ...errors, projectType: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.projectType === "company"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.projectType === "company" ? "text-blue-400" : "text-white"
+                        }`}>
+                          Company Project
+                        </div>
+                        <p className="text-sm text-white/40 mt-1 pointer-events-none">For my business or organization</p>
+                      </div>
+                    </div>
+
+                    {formData.projectType === "company" && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <input
+                          type="text"
+                          value={formData.company}
+                          onChange={(e) => updateField("company", e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && canContinue() && nextQuestion()}
+                          placeholder="Company name"
+                          className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.company ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light`}
+                          autoFocus
+                        />
+                        {errors.company && (
+                          <p className="text-red-400 text-sm mt-2">{errors.company}</p>
+                        )}
+                      </motion.div>
+                    )}
+                  </motion.div>
+                )}
+
+                {currentQuestion === 3 && (
+                  <motion.div
+                    key="q5"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-6"
+                  >
+                    <div>
+                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white leading-tight">
+                        Briefly describe your project
+                      </h1>
+                    </div>
+                    <div>
+                      <textarea
+                        value={formData.message}
+                        onChange={(e) => updateField("message", e.target.value)}
+                        placeholder="Share your vision or any specific features you have in mind..."
+                        rows={6}
+                        className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.message ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light resize-none`}
+                        autoFocus
+                      />
+                      {errors.message && (
+                        <p className="text-red-400 text-sm mt-2">{errors.message}</p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
+                {currentQuestion === 4 && (
+                  <motion.div
+                    key="q4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-6"
+                  >
+                    <div>
+                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
+                        What&apos;s your timeline?
+                      </h1>
+                      <p className="text-base md:text-lg text-white/50 font-light">
+                        When would you like to get started?
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {["ASAP", "1-2 weeks", "2-4 weeks", "1-2 months", "2-3 months", "Just exploring"].map(
+                        (timelineOption) => (
+                          <div
+                            key={timelineOption}
+                            onClick={() => {
+                              setFormData({ ...formData, timeline: timelineOption });
+                              if (errors.timeline) {
+                                setErrors({ ...errors, timeline: "" });
+                              }
+                            }}
+                            className={`p-4 rounded-xl border-2 transition-all duration-200 text-center cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                              formData.timeline === timelineOption
+                                ? "border-blue-500 bg-blue-500/10"
+                                : "border-white/10 bg-white/5 hover:bg-white/10"
+                            }`}
+                          >
+                            <div className={`text-sm md:text-base font-light transition-colors pointer-events-none ${
+                              formData.timeline === timelineOption ? "text-blue-400" : "text-white"
+                            }`}>
+                              {timelineOption}
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    {errors.timeline && (
+                      <p className="text-red-400 text-sm mt-2">{errors.timeline}</p>
+                    )}
+                  </motion.div>
+                )}
+
+                {currentQuestion === 5 && (
+                  <motion.div
+                    key="q5"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-6"
+                  >
+                    <div>
+                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
+                        What&apos;s your budget range?
+                      </h1>
+                      <p className="text-base md:text-lg text-white/50 font-light">
+                        This helps us recommend the right solution
+                      </p>
+                    </div>
+
+                    <div>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {["Under $5k", "$5k - $10k", "$10k - $25k", "$25k - $50k", "$50k+", "Not sure yet"].map(
+                          (budgetOption) => (
+                            <div
+                              key={budgetOption}
+                              onClick={() => {
+                                setFormData({ ...formData, budget: budgetOption });
+                                if (errors.budget) {
+                                  setErrors({ ...errors, budget: "" });
+                                }
+                              }}
+                              className={`p-4 rounded-xl border-2 transition-all duration-200 text-center cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                                formData.budget === budgetOption
+                                  ? "border-blue-500 bg-blue-500/10"
+                                  : "border-white/10 bg-white/5 hover:bg-white/10"
+                              }`}
+                            >
+                              <div className={`text-sm md:text-base font-light transition-colors pointer-events-none ${
+                                formData.budget === budgetOption ? "text-blue-400" : "text-white"
+                              }`}>
+                                {budgetOption}
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                      {errors.budget && (
+                        <p className="text-red-400 text-sm mt-2">{errors.budget}</p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+
+                {currentQuestion === 6 && (
                   <motion.div
                     key="q2"
                     initial={{ opacity: 0, y: 20 }}
@@ -269,7 +498,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   >
                     <div>
                       <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white leading-tight">
-                        Nice to meet you!
+                        Great! How can we contact you?
                       </h1>
                     </div>
                     <div className="space-y-4">
@@ -305,7 +534,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                           type="email"
                           value={formData.email}
                           onChange={(e) => updateField("email", e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && canContinue() && nextQuestion()}
                           placeholder="Email address"
                           className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.email ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light`}
                         />
@@ -313,139 +541,18 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                           <p className="text-red-400 text-sm mt-2">{errors.email}</p>
                         )}
                       </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {currentQuestion === 3 && (
-                  <motion.div
-                    key="q3"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-6"
-                  >
-                    <div>
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
-                        Is this a personal or company project?
-                      </h1>
-                      <p className="text-base md:text-lg text-white/50 font-light">
-                        Help us understand your needs better
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <button
-                        onClick={() => {
-                          updateField("projectType", "personal");
-                          updateField("company", ""); // Clear company name if switching to personal
-                        }}
-                        className={`p-5 rounded-xl border-2 transition-all duration-300 text-left group hover:scale-105 ${
-                          formData.projectType === "personal"
-                            ? "border-blue-500 bg-blue-500/10"
-                            : "border-white/10 bg-white/5 hover:border-blue-500/50 hover:bg-blue-500/5"
-                        }`}
-                      >
-                        <div className="text-lg md:text-xl font-light text-white group-hover:text-blue-400 transition-colors">
-                          Personal Project
-                        </div>
-                        <p className="text-sm text-white/40 mt-1">For myself or a side project</p>
-                      </button>
-                      <button
-                        onClick={() => updateField("projectType", "company")}
-                        className={`p-5 rounded-xl border-2 transition-all duration-300 text-left group hover:scale-105 ${
-                          formData.projectType === "company"
-                            ? "border-blue-500 bg-blue-500/10"
-                            : "border-white/10 bg-white/5 hover:border-blue-500/50 hover:bg-blue-500/5"
-                        }`}
-                      >
-                        <div className="text-lg md:text-xl font-light text-white group-hover:text-blue-400 transition-colors">
-                          Company Project
-                        </div>
-                        <p className="text-sm text-white/40 mt-1">For my business or organization</p>
-                      </button>
-                    </div>
-
-                    {formData.projectType === "company" && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
+                      <div>
                         <input
-                          type="text"
-                          value={formData.company}
-                          onChange={(e) => updateField("company", e.target.value)}
-                          onKeyDown={(e) => e.key === "Enter" && canContinue() && nextQuestion()}
-                          placeholder="Company name"
-                          className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.company ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light`}
-                          autoFocus
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => updateField("phone", e.target.value)}
+                          placeholder="Phone number"
+                          className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.phone ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light`}
                         />
-                        {errors.company && (
-                          <p className="text-red-400 text-sm mt-2">{errors.company}</p>
+                        {errors.phone && (
+                          <p className="text-red-400 text-sm mt-2">{errors.phone}</p>
                         )}
-                      </motion.div>
-                    )}
-                  </motion.div>
-                )}
-
-                {currentQuestion === 4 && (
-                  <motion.div
-                    key="q4"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-6"
-                  >
-                    <div>
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white leading-tight">
-                        Best number to reach you?
-                      </h1>
-                    </div>
-                    <div>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => updateField("phone", e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && canContinue() && nextQuestion()}
-                        placeholder="+1 (555) 123-4567"
-                        className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.phone ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light`}
-                        autoFocus
-                      />
-                      {errors.phone && (
-                        <p className="text-red-400 text-sm mt-2">{errors.phone}</p>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-
-                {currentQuestion === 5 && (
-                  <motion.div
-                    key="q5"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-6"
-                  >
-                    <div>
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white leading-tight">
-                        Tell us about your project
-                      </h1>
-                    </div>
-                    <div>
-                      <textarea
-                        value={formData.message}
-                        onChange={(e) => updateField("message", e.target.value)}
-                        placeholder="Share your vision, timeline, budget, or any specific features..."
-                        rows={6}
-                        className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.message ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light resize-none`}
-                        autoFocus
-                      />
-                      {errors.message && (
-                        <p className="text-red-400 text-sm mt-2">{errors.message}</p>
-                      )}
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -479,18 +586,29 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
             <div className="w-full max-w-4xl mx-auto">
               {/* Navigation Buttons */}
               <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={prevQuestion}
-                  disabled={currentQuestion === 1}
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 ${
-                    currentQuestion === 1
-                      ? "opacity-0 pointer-events-none"
-                      : "text-white/60 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                  <span className="font-light">Back</span>
-                </button>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={prevQuestion}
+                    disabled={currentQuestion === 1}
+                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 ${
+                      currentQuestion === 1
+                        ? "opacity-0 pointer-events-none"
+                        : "text-white/60 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    <span className="font-light">Back</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/30 hover:border-red-500/50 transition-all duration-300"
+                  >
+                    <X className="w-5 h-5" />
+                    <span className="font-light">Exit</span>
+                  </button>
+                </div>
 
                 {currentQuestion < totalQuestions ? (
                   <button

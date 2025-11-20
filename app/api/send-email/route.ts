@@ -10,17 +10,22 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       package: packageName,
+      name,
+      email,
+      company,
+      phone,
+      budget,
+      timeline,
+      message,
+      // Legacy fields for backwards compatibility
       organization,
       firstName,
       lastName,
-      email,
-      phone,
       businessType,
       hasExistingWebsite,
       websiteUrl,
       companyDescription,
       uploadedFiles,
-      // Package-specific fields
       businessDescription,
       hasExistingBranding,
       platforms,
@@ -31,11 +36,14 @@ export async function POST(request: NextRequest) {
       compliance,
     } = body;
 
-    const fullName = `${firstName} ${lastName}`;
-    console.log('Form data received:', { packageName, organization, fullName, email, businessType });
+    const fullName = name || `${firstName || ''} ${lastName || ''}`.trim();
+    const companyName = company || organization || 'Not provided';
+    const projectMessage = message || companyDescription || 'Not provided';
+
+    console.log('Form data received:', { packageName, fullName, email, company: companyName, budget, timeline });
 
     // Validate required fields
-    if (!firstName || !lastName || !email) {
+    if (!email || !fullName) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -79,11 +87,6 @@ export async function POST(request: NextRequest) {
               </div>
 
               <div class="field">
-                <div class="field-label">Organization / Company</div>
-                <div class="field-value">${organization}</div>
-              </div>
-
-              <div class="field">
                 <div class="field-label">Contact Name</div>
                 <div class="field-value">${fullName}</div>
               </div>
@@ -101,9 +104,30 @@ export async function POST(request: NextRequest) {
               ` : ''}
 
               <div class="field">
+                <div class="field-label">Company / Project Type</div>
+                <div class="field-value">${companyName}</div>
+              </div>
+
+              ${budget ? `
+              <div class="field">
+                <div class="field-label">Budget Range</div>
+                <div class="field-value">${budget}</div>
+              </div>
+              ` : ''}
+
+              ${timeline ? `
+              <div class="field">
+                <div class="field-label">Timeline</div>
+                <div class="field-value">${timeline}</div>
+              </div>
+              ` : ''}
+
+              ${businessType ? `
+              <div class="field">
                 <div class="field-label">Business Type / Industry</div>
                 <div class="field-value">${businessType}</div>
               </div>
+              ` : ''}
 
               ${hasExistingWebsite ? `
               <div class="field">
@@ -120,8 +144,8 @@ export async function POST(request: NextRequest) {
               ` : ''}
 
               <div class="message-box">
-                <div class="field-label">About Company and Project Needs</div>
-                <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${companyDescription}</div>
+                <div class="field-label">Project Description</div>
+                <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${projectMessage}</div>
               </div>
 
               ${uploadedFiles && uploadedFiles.length > 0 ? `
