@@ -30,6 +30,14 @@ export const metadata: Metadata = {
   authors: [{ name: "KoreLnx" }],
   creator: "KoreLnx",
   publisher: "KoreLnx",
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-icon.svg', type: 'image/svg+xml' },
+    ],
+  },
   formatDetection: {
     email: false,
     address: false,

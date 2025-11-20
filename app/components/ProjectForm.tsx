@@ -397,10 +397,10 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   >
                     <div>
                       <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
-                        What&apos;s your timeline?
+                        When do you need this ready?
                       </h1>
                       <p className="text-base md:text-lg text-white/50 font-light">
-                        When would you like to get started?
+                        Help us understand your deadline
                       </p>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -455,7 +455,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
 
                     <div>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {["Under $5k", "$5k - $10k", "$10k - $25k", "$25k - $50k", "$50k+", "Not sure yet"].map(
+                        {["$2k - $5k", "$5k - $12k", "$12k - $35k", "$35k+", "Custom budget", "Not sure yet"].map(
                           (budgetOption) => (
                             <div
                               key={budgetOption}

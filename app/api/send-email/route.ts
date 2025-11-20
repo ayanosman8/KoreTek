@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { supabase } from '@/lib/supabase';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -229,6 +230,34 @@ export async function POST(request: NextRequest) {
     });
 
     console.log('Email sent successfully:', data);
+
+    // Save to Supabase database
+    try {
+      const { error: dbError } = await supabase
+        .from('form_submissions')
+        .insert({
+          package: packageName,
+          first_name: name ? name.split(' ')[0] : firstName,
+          last_name: name ? name.split(' ').slice(1).join(' ') : lastName,
+          email: email,
+          company: companyName,
+          phone: phone || null,
+          budget: budget || null,
+          timeline: timeline || null,
+          message: projectMessage,
+          submitted_at: new Date().toISOString(),
+        });
+
+      if (dbError) {
+        console.error('Error saving to database:', dbError);
+        // Don't fail the request if database save fails, email already sent
+      } else {
+        console.log('Successfully saved to database');
+      }
+    } catch (dbError) {
+      console.error('Database error:', dbError);
+      // Continue - email was sent successfully
+    }
 
     return NextResponse.json(
       { success: true, data },

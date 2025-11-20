@@ -1,0 +1,10 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="#000000"/>
+
+  <!-- Lightning bolt - larger and centered -->
+  <path d="M95 25L45 100h40v55l50-80H95V25z" fill="#3B82F6" stroke="#3B82F6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Glow effect -->
+  <path d="M95 25L45 100h40v55l50-80H95V25z" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+</svg>
