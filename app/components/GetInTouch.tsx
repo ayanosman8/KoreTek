@@ -2,16 +2,16 @@
 
 import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import InquiryModal from "./InquiryModal";
+import ProjectForm from "./ProjectForm";
 
 export default function GetInTouch() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
     <>
-      <InquiryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+      <ProjectForm
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
       />
       <div
         className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden"
@@ -36,7 +36,7 @@ export default function GetInTouch() {
             {/* CTA Button */}
             <div>
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsFormOpen(true)}
                 className="inline-flex items-center gap-3 px-12 py-5 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 group"
               >
                 <span className="text-lg font-medium">Get in Touch</span>

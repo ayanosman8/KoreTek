@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
-import InquiryModal from "./InquiryModal";
+import ProjectForm from "./ProjectForm";
 
 const links = [
   {
@@ -24,11 +24,11 @@ const links = [
 ];
 
 export default function Header() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
     <>
-      <InquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} selectedPackage="" />
+      <ProjectForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} selectedPackage="" />
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Glassmorphism background - darker */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border-b border-white/10"></div>
@@ -48,7 +48,7 @@ export default function Header() {
             </div>
             <div className="flex flex-col">
               <h1 className="text-xl font-bold tracking-tight text-white">
-                KoreLn<span className="text-3xl">x</span>
+                KoreLnx
               </h1>
               <span className="text-xs font-medium tracking-wider italic">
                 <span className="text-blue-500">Your </span>
@@ -81,7 +81,7 @@ export default function Header() {
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-3">
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => setIsFormOpen(true)}
               className="group relative px-6 py-2.5 text-sm font-medium text-white rounded-xl cursor-pointer overflow-hidden"
             >
               {/* Black background with glowing border (default) */}

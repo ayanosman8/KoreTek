@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Check, Zap, ArrowRight } from "lucide-react";
-import InquiryModal from "./InquiryModal";
+import ProjectForm from "./ProjectForm";
 
 export default function Pricing() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<string>("");
 
   const pricingTiers = [
@@ -74,9 +74,9 @@ export default function Pricing() {
 
   return (
     <>
-      <InquiryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+      <ProjectForm
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
         selectedPackage={selectedPackage}
       />
       <div id="pricing" className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden">
@@ -162,7 +162,7 @@ export default function Pricing() {
                 <button
                   onClick={() => {
                     setSelectedPackage(`${tier.name} (${tier.price})`);
-                    setIsModalOpen(true);
+                    setIsFormOpen(true);
                   }}
                   className="w-full px-6 py-3 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 group"
                 >
@@ -181,7 +181,7 @@ export default function Pricing() {
             <button
               onClick={() => {
                 setSelectedPackage("Not sure yet / Custom");
-                setIsModalOpen(true);
+                setIsFormOpen(true);
               }}
               className="px-10 py-4 text-white border border-white/20 rounded-xl hover:bg-white/5 transition-all duration-300 font-light inline-flex items-center gap-2"
             >
