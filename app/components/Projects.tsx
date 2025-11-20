@@ -163,13 +163,13 @@ export default function Projects() {
         <div className="mb-20 text-center">
           <div>
             <div className="inline-block px-5 py-2.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm rounded-full border border-blue-400/30 mb-6 shadow-lg shadow-blue-500/10">
-              <span className="text-sm font-semibold text-blue-300 tracking-wide uppercase">Client Success Stories</span>
+              <span className="text-sm font-semibold text-blue-300 tracking-wide uppercase">Featured Projects</span>
             </div>
             <h3 className="text-4xl md:text-6xl lg:text-7xl font-extralight text-white mb-6">
               Our Work
             </h3>
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed font-light">
-              Explore how we&apos;ve helped businesses transform their digital presence with innovative solutions tailored to their unique challenges.
+              Explore how we&apos;ve transformed digital experiences with innovative solutions tailored to unique challenges.
             </p>
           </div>
         </div>

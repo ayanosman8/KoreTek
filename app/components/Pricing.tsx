@@ -172,23 +172,6 @@ export default function Pricing() {
               </div>
             ))}
           </div>
-
-          {/* Bottom CTA */}
-          <div className="mt-20 text-center">
-            <p className="text-white/60 font-light mb-6">
-              Need something custom? We&apos;ve got you covered.
-            </p>
-            <button
-              onClick={() => {
-                setSelectedPackage("Not sure yet / Custom");
-                setIsFormOpen(true);
-              }}
-              className="px-10 py-4 text-white border border-white/20 rounded-xl hover:bg-white/5 transition-all duration-300 font-light inline-flex items-center gap-2"
-            >
-              Request Custom Quote
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </div>
     </>
