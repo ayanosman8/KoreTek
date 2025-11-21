@@ -10,6 +10,10 @@ const links = [
     href: "#services",
   },
   {
+    title: "About",
+    href: "#about",
+  },
+  {
     title: "Pricing",
     href: "#pricing",
   },

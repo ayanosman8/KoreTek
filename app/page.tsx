@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import PromoBanner from "./components/PromoBanner";
 import Hero from "./components/HeroWrapper";
 import Services from "./components/Services";
+import AboutUs from "./components/AboutUs";
 import Pricing from "./components/Pricing";
 import Projects from "./components/ProjectsWrapper";
 // import ClientLogos from "./components/ClientLogos";
@@ -18,6 +19,7 @@ export default function Home() {
         <Hero />
       </div>
       <Services />
+      <AboutUs />
       <Pricing />
       <Projects />
       {/* <ClientLogos /> */}

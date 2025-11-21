@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, Check, Globe, Smartphone, Layers } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
 
@@ -99,8 +99,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         }
         break;
       case 5:
-        const messageError = validateField("message", formData.message);
-        if (messageError) newErrors.message = messageError;
+        // Message is optional, no validation needed
         break;
       case 6:
         const firstNameError = validateField("firstName", formData.firstName);
@@ -143,14 +142,13 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           email: formData.email,
           company: formData.projectType === "company" ? formData.company : "Personal Project",
           phone: formData.phone,
           package: formData.package,
           message: formData.message,
-          industry: formData.industry,
-          websiteUrl: formData.hasWebsite === "yes" ? formData.websiteUrl : "No existing website",
         }),
       });
 
@@ -206,7 +204,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         }
         return formData.hasWebsite.trim() !== "";
       case 5:
-        return formData.message.trim() !== "";
+        return true; // Message is optional
       case 6:
         return (
           formData.firstName.trim() !== "" &&
@@ -256,29 +254,70 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                         Choose what best fits your needs
                       </p>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {["Landing Page", "Mobile App", "Web Platform", "Complete Platform", "Not sure yet"].map(
-                        (pkg) => (
-                          <div
-                            key={pkg}
-                            onClick={() => {
-                              setFormData({ ...formData, package: pkg });
-                              if (errors.package) {
-                                setErrors({ ...errors, package: "" });
-                              }
-                            }}
-                            className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
-                              formData.package === pkg
-                                ? "border-blue-500 bg-blue-500/10"
-                                : "border-white/10 bg-white/5 hover:bg-white/10"
-                            }`}
-                          >
-                            <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
-                              formData.package === pkg ? "text-blue-400" : "text-white"
-                            }`}>{pkg}</div>
-                          </div>
-                        )
-                      )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, package: "Website" });
+                          if (errors.package) {
+                            setErrors({ ...errors, package: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.package === "Website"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <Globe className={`w-8 h-8 mb-3 pointer-events-none ${
+                          formData.package === "Website" ? "text-blue-400" : "text-white/60"
+                        }`} />
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.package === "Website" ? "text-blue-400" : "text-white"
+                        }`}>Website</div>
+                        <p className="text-sm text-white/40 mt-1 pointer-events-none">Web app or landing page</p>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, package: "Mobile App" });
+                          if (errors.package) {
+                            setErrors({ ...errors, package: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.package === "Mobile App"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <Smartphone className={`w-8 h-8 mb-3 pointer-events-none ${
+                          formData.package === "Mobile App" ? "text-blue-400" : "text-white/60"
+                        }`} />
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.package === "Mobile App" ? "text-blue-400" : "text-white"
+                        }`}>Mobile App</div>
+                        <p className="text-sm text-white/40 mt-1 pointer-events-none">iOS and Android app</p>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, package: "Both" });
+                          if (errors.package) {
+                            setErrors({ ...errors, package: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.package === "Both"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <Layers className={`w-8 h-8 mb-3 pointer-events-none ${
+                          formData.package === "Both" ? "text-blue-400" : "text-white/60"
+                        }`} />
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.package === "Both" ? "text-blue-400" : "text-white"
+                        }`}>Both</div>
+                        <p className="text-sm text-white/40 mt-1 pointer-events-none">Website + Mobile app</p>
+                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -522,14 +561,17 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   >
                     <div>
                       <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white leading-tight">
-                        Briefly describe your project
+                        Anything else you&apos;d like to share?
                       </h1>
+                      <p className="text-base md:text-lg text-white/50 font-light mt-2">
+                        Optional
+                      </p>
                     </div>
                     <div>
                       <textarea
                         value={formData.message}
                         onChange={(e) => updateField("message", e.target.value)}
-                        placeholder="Share your vision or any specific features you have in mind..."
+                        placeholder="Tell us about your project, goals, or timeline..."
                         rows={6}
                         className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.message ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light resize-none`}
                         autoFocus

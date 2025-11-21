@@ -13,15 +13,15 @@ export default function Services() {
     },
     {
       icon: <Palette className="w-12 h-12" />,
-      title: "UI/UX Design",
-      description: "Beautiful, intuitive interfaces that delight users and drive engagement.",
-      features: ["User Testing & Research", "Interactive Prototypes", "Scalable Design Systems"],
+      title: "Product Design",
+      description: "Intuitive interfaces crafted as part of every project we build.",
+      features: ["Wireframes & Mockups", "Responsive Layouts", "User Flow Optimization"],
     },
     {
       icon: <Smartphone className="w-12 h-12" />,
       title: "Mobile Apps",
       description: "Cross-platform mobile solutions that reach users wherever they are.",
-      features: ["iOS & Android", "React Native", "Offline Support"],
+      features: ["iOS & Android", "React Native", "Production-Ready Features"],
     },
   ];
 

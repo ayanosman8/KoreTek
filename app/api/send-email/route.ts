@@ -11,52 +11,47 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       package: packageName,
-      name,
+      firstName,
+      lastName,
       email,
       company,
       phone,
-      industry,
-      websiteUrl,
       message,
     } = body;
 
-    const fullName = name || 'Not provided';
+    const fullName = `${firstName || ''} ${lastName || ''}`.trim() || 'Not provided';
     const companyName = company || 'Not provided';
     const projectMessage = message || 'Not provided';
-    const industryType = industry || 'Not provided';
-    const currentWebsite = websiteUrl || 'No existing website';
 
-    console.log('Form data received:', { packageName, fullName, email, company: companyName, industry: industryType, websiteUrl: currentWebsite });
+    console.log('Form data received:', { packageName, fullName, email, company: companyName });
 
     // Validate required fields
-    if (!email || !fullName) {
+    if (!email || !firstName) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Insert into Supabase
+    // Insert into Supabase - matches your table columns exactly
     console.log('Inserting data into Supabase...');
     const { data: supabaseData, error: supabaseError } = await supabase
       .from('form_submissions')
-      .insert([
-        {
-          package: packageName,
-          name: fullName,
-          email: email,
-          company: companyName,
-          phone: phone || null,
-          industry: industryType,
-          website_url: currentWebsite,
-          message: projectMessage,
-        }
-      ])
+      .insert({
+        package: packageName,
+        first_name: firstName,
+        last_name: lastName || null,
+        email: email,
+        company: companyName,
+        phone: phone || null,
+        budget: null,
+        timeline: null,
+        message: projectMessage,
+      })
       .select();
 
     if (supabaseError) {
       console.error('Supabase error:', supabaseError);
-      // Continue with email even if Supabase fails
     } else {
       console.log('Successfully inserted into Supabase:', supabaseData);
     }
@@ -65,9 +60,10 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const data = await resend.emails.send({
-      from: 'info@korelnx.com', // Your verified domain email
-      to: ['aosman@korelnx.com', 'hkore@korelnx.com'], // Your Google Workspace emails
-      replyTo: email, // User's email for easy reply
+      from: 'info@korelnx.com',
+      // to: ['aosman@korelnx.com', 'hkore@korelnx.com'], // Production emails
+      to: ['akaythe4th@gmail.com'], // Testing email
+      replyTo: email,
       subject: `New KoreLnx Inquiry: ${packageName}`,
       html: `
         <!DOCTYPE html>
@@ -119,21 +115,6 @@ export async function POST(request: NextRequest) {
                 <div class="field-value">${companyName}</div>
               </div>
 
-              <div class="field">
-                <div class="field-label">Industry</div>
-                <div class="field-value">${industryType}</div>
-              </div>
-
-              <div class="field">
-                <div class="field-label">Current Website</div>
-                <div class="field-value">
-                  ${currentWebsite !== 'No existing website'
-                    ? `<a href="${currentWebsite}" style="color: #3b82f6; text-decoration: none;" target="_blank">${currentWebsite}</a>`
-                    : currentWebsite
-                  }
-                </div>
-              </div>
-
               <div class="message-box">
                 <div class="field-label">Project Description</div>
                 <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${projectMessage}</div>
@@ -151,34 +132,6 @@ export async function POST(request: NextRequest) {
 
     console.log('Email sent successfully:', data);
 
-    // Save to Supabase database
-    try {
-      const { error: dbError } = await supabase
-        .from('form_submissions')
-        .insert({
-          package: packageName,
-          first_name: name ? name.split(' ')[0] : firstName,
-          last_name: name ? name.split(' ').slice(1).join(' ') : lastName,
-          email: email,
-          company: companyName,
-          phone: phone || null,
-          budget: budget || null,
-          timeline: timeline || null,
-          message: projectMessage,
-          submitted_at: new Date().toISOString(),
-        });
-
-      if (dbError) {
-        console.error('Error saving to database:', dbError);
-        // Don't fail the request if database save fails, email already sent
-      } else {
-        console.log('Successfully saved to database');
-      }
-    } catch (dbError) {
-      console.error('Database error:', dbError);
-      // Continue - email was sent successfully
-    }
-
     return NextResponse.json(
       { success: true, data },
       { status: 200 }
@@ -186,17 +139,9 @@ export async function POST(request: NextRequest) {
   } catch (error: unknown) {
     console.error('Error sending email:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    const errorStack = error instanceof Error ? error.stack : '';
-    console.error('Error details:', errorMessage);
-    console.error('Error stack:', errorStack);
-
-    // Log full error object for debugging
-    if (typeof error === 'object' && error !== null) {
-      console.error('Full error object:', JSON.stringify(error, null, 2));
-    }
 
     return NextResponse.json(
-      { error: 'Failed to send email', details: errorMessage, fullError: error },
+      { error: 'Failed to send email', details: errorMessage },
       { status: 500 }
     );
   }
