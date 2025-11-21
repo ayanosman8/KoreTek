@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { supabase } from '@/lib/supabase';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -33,6 +34,32 @@ export async function POST(request: NextRequest) {
         { error: 'Missing required fields' },
         { status: 400 }
       );
+    }
+
+    // Insert into Supabase
+    console.log('Inserting data into Supabase...');
+    const { data: supabaseData, error: supabaseError } = await supabase
+      .from('inquiries')
+      .insert([
+        {
+          package: packageName,
+          name: fullName,
+          email: email,
+          company: companyName,
+          phone: phone || null,
+          industry: industryType,
+          website_url: currentWebsite,
+          message: projectMessage,
+          created_at: new Date().toISOString(),
+        }
+      ])
+      .select();
+
+    if (supabaseError) {
+      console.error('Supabase error:', supabaseError);
+      // Continue with email even if Supabase fails
+    } else {
+      console.log('Successfully inserted into Supabase:', supabaseData);
     }
 
     console.log('Attempting to send email via Resend...');

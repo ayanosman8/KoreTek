@@ -103,7 +103,7 @@ export default function Pricing() {
             </p>
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 backdrop-blur-sm rounded-lg border border-blue-400/20">
               <span className="text-sm text-white/80 font-light">
-                <span className="font-medium text-blue-400">Payment terms:</span> 50% upfront, 50% upon completion
+                <span className="font-medium text-blue-400">Payment terms:</span> We require 50% upfront to begin your project, with the remaining 50% due upon project approval.
               </span>
             </div>
           </div>
