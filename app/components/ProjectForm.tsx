@@ -41,7 +41,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const totalQuestions = skipPackageQuestion ? 5 : 6;
+  const totalQuestions = 6; // Always 6 questions, even when package is pre-selected
 
   const updateField = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });

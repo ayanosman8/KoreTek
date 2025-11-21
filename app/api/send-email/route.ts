@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -39,9 +39,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert into Supabase
+    // Insert into Supabase (using admin client to bypass RLS)
     console.log('Inserting data into Supabase...');
-    const { data: supabaseData, error: supabaseError } = await supabase
+    const { data: supabaseData, error: supabaseError } = await supabaseAdmin
       .from('form_submissions')
       .insert({
         package: packageName,
