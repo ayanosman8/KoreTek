@@ -103,7 +103,7 @@ export default function Pricing() {
             </p>
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 backdrop-blur-sm rounded-lg border border-blue-400/20">
               <span className="text-sm text-white/80 font-light">
-                <span className="font-medium text-blue-400">Payment terms:</span> 50% upfront, 50% upon completion
+                <span className="font-medium text-blue-400">Payment terms:</span> We require 50% upfront to begin your project, with the remaining 50% due upon project approval.
               </span>
             </div>
           </div>
@@ -166,28 +166,11 @@ export default function Pricing() {
                   }}
                   className="w-full px-6 py-3 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 group"
                 >
-                  Get Started
+                  Choose This Package
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             ))}
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="mt-20 text-center">
-            <p className="text-white/60 font-light mb-6">
-              Need something custom? We&apos;ve got you covered.
-            </p>
-            <button
-              onClick={() => {
-                setSelectedPackage("Not sure yet / Custom");
-                setIsFormOpen(true);
-              }}
-              className="px-10 py-4 text-white border border-white/20 rounded-xl hover:bg-white/5 transition-all duration-300 font-light inline-flex items-center gap-2"
-            >
-              Request Custom Quote
-              <ArrowRight className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </div>

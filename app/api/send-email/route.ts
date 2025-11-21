@@ -15,33 +15,18 @@ export async function POST(request: NextRequest) {
       email,
       company,
       phone,
-      budget,
-      timeline,
-      message,
-      // Legacy fields for backwards compatibility
-      organization,
-      firstName,
-      lastName,
-      businessType,
-      hasExistingWebsite,
+      industry,
       websiteUrl,
-      companyDescription,
-      uploadedFiles,
-      businessDescription,
-      hasExistingBranding,
-      platforms,
-      appType,
-      expectedUsers,
-      techStack,
-      teamSize,
-      compliance,
+      message,
     } = body;
 
-    const fullName = name || `${firstName || ''} ${lastName || ''}`.trim();
-    const companyName = company || organization || 'Not provided';
-    const projectMessage = message || companyDescription || 'Not provided';
+    const fullName = name || 'Not provided';
+    const companyName = company || 'Not provided';
+    const projectMessage = message || 'Not provided';
+    const industryType = industry || 'Not provided';
+    const currentWebsite = websiteUrl || 'No existing website';
 
-    console.log('Form data received:', { packageName, fullName, email, company: companyName, budget, timeline });
+    console.log('Form data received:', { packageName, fullName, email, company: companyName, industry: industryType, websiteUrl: currentWebsite });
 
     // Validate required fields
     if (!email || !fullName) {
@@ -49,6 +34,31 @@ export async function POST(request: NextRequest) {
         { error: 'Missing required fields' },
         { status: 400 }
       );
+    }
+
+    // Insert into Supabase
+    console.log('Inserting data into Supabase...');
+    const { data: supabaseData, error: supabaseError } = await supabase
+      .from('form_submissions')
+      .insert([
+        {
+          package: packageName,
+          name: fullName,
+          email: email,
+          company: companyName,
+          phone: phone || null,
+          industry: industryType,
+          website_url: currentWebsite,
+          message: projectMessage,
+        }
+      ])
+      .select();
+
+    if (supabaseError) {
+      console.error('Supabase error:', supabaseError);
+      // Continue with email even if Supabase fails
+    } else {
+      console.log('Successfully inserted into Supabase:', supabaseData);
     }
 
     console.log('Attempting to send email via Resend...');
@@ -109,115 +119,25 @@ export async function POST(request: NextRequest) {
                 <div class="field-value">${companyName}</div>
               </div>
 
-              ${budget ? `
               <div class="field">
-                <div class="field-label">Budget Range</div>
-                <div class="field-value">${budget}</div>
+                <div class="field-label">Industry</div>
+                <div class="field-value">${industryType}</div>
               </div>
-              ` : ''}
 
-              ${timeline ? `
               <div class="field">
-                <div class="field-label">Timeline</div>
-                <div class="field-value">${timeline}</div>
+                <div class="field-label">Current Website</div>
+                <div class="field-value">
+                  ${currentWebsite !== 'No existing website'
+                    ? `<a href="${currentWebsite}" style="color: #3b82f6; text-decoration: none;" target="_blank">${currentWebsite}</a>`
+                    : currentWebsite
+                  }
+                </div>
               </div>
-              ` : ''}
-
-              ${businessType ? `
-              <div class="field">
-                <div class="field-label">Business Type / Industry</div>
-                <div class="field-value">${businessType}</div>
-              </div>
-              ` : ''}
-
-              ${hasExistingWebsite ? `
-              <div class="field">
-                <div class="field-label">Has Existing Website</div>
-                <div class="field-value">${hasExistingWebsite}</div>
-              </div>
-              ` : ''}
-
-              ${websiteUrl ? `
-              <div class="field">
-                <div class="field-label">Current Website URL</div>
-                <div class="field-value"><a href="${websiteUrl}" style="color: #3b82f6; text-decoration: none;" target="_blank">${websiteUrl}</a></div>
-              </div>
-              ` : ''}
 
               <div class="message-box">
                 <div class="field-label">Project Description</div>
                 <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${projectMessage}</div>
               </div>
-
-              ${uploadedFiles && uploadedFiles.length > 0 ? `
-              <div class="field">
-                <div class="field-label">Uploaded Files (Logo/Branding)</div>
-                <div class="field-value">
-                  <ul style="margin: 5px 0; padding-left: 20px;">
-                    ${uploadedFiles.map((file: { name: string; size: string; type: string }) =>
-                      `<li>${file.name} (${file.size}, ${file.type})</li>`
-                    ).join('')}
-                  </ul>
-                  <p style="color: #64748b; font-size: 12px; margin-top: 10px;">Note: Files were uploaded but not attached to this email. Please request them from the client if needed.</p>
-                </div>
-              </div>
-              ` : ''}
-
-              ${businessDescription ? `
-              <div class="field">
-                <div class="field-label">Business Description</div>
-                <div class="field-value" style="white-space: pre-wrap;">${businessDescription}</div>
-              </div>
-              ` : ''}
-
-              ${hasExistingBranding ? `
-              <div class="field">
-                <div class="field-label">Existing Branding</div>
-                <div class="field-value">${hasExistingBranding}</div>
-              </div>
-              ` : ''}
-
-              ${platforms ? `
-              <div class="field">
-                <div class="field-label">Platforms Needed</div>
-                <div class="field-value">${platforms}</div>
-              </div>
-              ` : ''}
-
-              ${appType ? `
-              <div class="field">
-                <div class="field-label">Application Type</div>
-                <div class="field-value">${appType}</div>
-              </div>
-              ` : ''}
-
-              ${expectedUsers ? `
-              <div class="field">
-                <div class="field-label">Expected Users</div>
-                <div class="field-value">${expectedUsers}</div>
-              </div>
-              ` : ''}
-
-              ${techStack ? `
-              <div class="field">
-                <div class="field-label">Current Tech Stack</div>
-                <div class="field-value">${techStack}</div>
-              </div>
-              ` : ''}
-
-              ${teamSize ? `
-              <div class="field">
-                <div class="field-label">Team Size</div>
-                <div class="field-value">${teamSize}</div>
-              </div>
-              ` : ''}
-
-              ${compliance ? `
-              <div class="field">
-                <div class="field-label">Compliance Requirements</div>
-                <div class="field-value">${compliance}</div>
-              </div>
-              ` : ''}
 
               <div class="footer">
                 <p>Reply directly to this email to respond to <strong>${fullName}</strong></p>
