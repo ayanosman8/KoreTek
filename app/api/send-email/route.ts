@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     // Insert into Supabase
     console.log('Inserting data into Supabase...');
     const { data: supabaseData, error: supabaseError } = await supabase
-      .from('inquiries')
+      .from('form_submissions')
       .insert([
         {
           package: packageName,
@@ -50,7 +50,6 @@ export async function POST(request: NextRequest) {
           industry: industryType,
           website_url: currentWebsite,
           message: projectMessage,
-          created_at: new Date().toISOString(),
         }
       ])
       .select();
