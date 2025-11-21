@@ -20,7 +20,9 @@ const phoneSchema = z.string().min(10, "Phone number must be at least 10 digits"
 const requiredSchema = z.string().min(1, "This field is required");
 
 export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: ProjectFormProps) {
-  const [currentQuestion, setCurrentQuestion] = useState(1);
+  // If package is pre-selected, skip question 1
+  const skipPackageQuestion = selectedPackage.trim() !== "";
+  const [currentQuestion, setCurrentQuestion] = useState(skipPackageQuestion ? 2 : 1);
   const [formData, setFormData] = useState({
     package: selectedPackage,
     firstName: "",
@@ -32,13 +34,16 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
     budget: "",
     timeline: "",
     message: "",
+    hasWebsite: "", // "yes" or "no"
+    websiteUrl: "",
+    industry: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const totalQuestions = 6;
+  const totalQuestions = skipPackageQuestion ? 7 : 8;
 
   const updateField = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -84,20 +89,32 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         }
         break;
       case 3:
+        if (!formData.industry.trim()) {
+          newErrors.industry = "Please select an industry";
+        }
+        break;
+      case 4:
+        if (!formData.hasWebsite.trim()) {
+          newErrors.hasWebsite = "Please select an option";
+        } else if (formData.hasWebsite === "yes" && !formData.websiteUrl.trim()) {
+          newErrors.websiteUrl = "Please enter your website URL";
+        }
+        break;
+      case 5:
         const messageError = validateField("message", formData.message);
         if (messageError) newErrors.message = messageError;
         break;
-      case 4:
+      case 6:
         if (!formData.timeline.trim()) {
           newErrors.timeline = "Please select a timeline";
         }
         break;
-      case 5:
+      case 7:
         if (!formData.budget.trim()) {
           newErrors.budget = "Please select a budget range";
         }
         break;
-      case 6:
+      case 8:
         const firstNameError = validateField("firstName", formData.firstName);
         const lastNameError = validateField("lastName", formData.lastName);
         const emailError = validateField("email", formData.email);
@@ -120,7 +137,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   };
 
   const prevQuestion = () => {
-    if (currentQuestion > 1) {
+    const minQuestion = skipPackageQuestion ? 2 : 1;
+    if (currentQuestion > minQuestion) {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
@@ -145,6 +163,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
           budget: formData.budget,
           timeline: formData.timeline,
           message: formData.message,
+          industry: formData.industry,
+          websiteUrl: formData.hasWebsite === "yes" ? formData.websiteUrl : "No existing website",
         }),
       });
 
@@ -162,9 +182,9 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   };
 
   const handleClose = () => {
-    setCurrentQuestion(1);
+    setCurrentQuestion(skipPackageQuestion ? 2 : 1);
     setFormData({
-      package: "",
+      package: selectedPackage,
       firstName: "",
       lastName: "",
       email: "",
@@ -174,6 +194,9 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
       budget: "",
       timeline: "",
       message: "",
+      hasWebsite: "",
+      websiteUrl: "",
+      industry: "",
     });
     setErrors({});
     setSubmitSuccess(false);
@@ -192,12 +215,19 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         }
         return false;
       case 3:
-        return formData.message.trim() !== "";
+        return formData.industry.trim() !== "";
       case 4:
-        return formData.timeline.trim() !== "";
+        if (formData.hasWebsite === "yes") {
+          return formData.websiteUrl.trim() !== "";
+        }
+        return formData.hasWebsite.trim() !== "";
       case 5:
-        return formData.budget.trim() !== "";
+        return formData.message.trim() !== "";
       case 6:
+        return formData.timeline.trim() !== "";
+      case 7:
+        return formData.budget.trim() !== "";
+      case 8:
         return (
           formData.firstName.trim() !== "" &&
           formData.lastName.trim() !== "" &&
@@ -358,6 +388,151 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
 
                 {currentQuestion === 3 && (
                   <motion.div
+                    key="q3"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-6"
+                  >
+                    <div>
+                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
+                        What industry are you in?
+                      </h1>
+                      <p className="text-base md:text-lg text-white/50 font-light">
+                        This helps us tailor the right solution
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {[
+                        "E-commerce",
+                        "Healthcare",
+                        "Finance",
+                        "Education",
+                        "Real Estate",
+                        "Food & Beverage",
+                        "Technology",
+                        "Entertainment",
+                        "Professional Services",
+                        "Non-Profit",
+                        "Manufacturing",
+                        "Other"
+                      ].map((industryOption) => (
+                        <div
+                          key={industryOption}
+                          onClick={() => {
+                            setFormData({ ...formData, industry: industryOption });
+                            if (errors.industry) {
+                              setErrors({ ...errors, industry: "" });
+                            }
+                          }}
+                          className={`p-4 rounded-xl border-2 transition-all duration-200 text-center cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                            formData.industry === industryOption
+                              ? "border-blue-500 bg-blue-500/10"
+                              : "border-white/10 bg-white/5 hover:bg-white/10"
+                          }`}
+                        >
+                          <div className={`text-sm md:text-base font-light transition-colors pointer-events-none ${
+                            formData.industry === industryOption ? "text-blue-400" : "text-white"
+                          }`}>
+                            {industryOption}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {errors.industry && (
+                      <p className="text-red-400 text-sm mt-2">{errors.industry}</p>
+                    )}
+                  </motion.div>
+                )}
+
+                {currentQuestion === 4 && (
+                  <motion.div
+                    key="q4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-6"
+                  >
+                    <div>
+                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
+                        Do you have an existing website?
+                      </h1>
+                      <p className="text-base md:text-lg text-white/50 font-light">
+                        We&apos;d love to see what you&apos;re working with
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, hasWebsite: "yes" });
+                          if (errors.hasWebsite) {
+                            setErrors({ ...errors, hasWebsite: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.hasWebsite === "yes"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.hasWebsite === "yes" ? "text-blue-400" : "text-white"
+                        }`}>
+                          Yes, I have a website
+                        </div>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFormData({ ...formData, hasWebsite: "no", websiteUrl: "" });
+                          if (errors.hasWebsite) {
+                            setErrors({ ...errors, hasWebsite: "" });
+                          }
+                        }}
+                        className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
+                          formData.hasWebsite === "no"
+                            ? "border-blue-500 bg-blue-500/10"
+                            : "border-white/10 bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <div className={`text-lg md:text-xl font-light transition-colors pointer-events-none ${
+                          formData.hasWebsite === "no" ? "text-blue-400" : "text-white"
+                        }`}>
+                          No, starting fresh
+                        </div>
+                      </div>
+                    </div>
+
+                    {formData.hasWebsite === "yes" && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <input
+                          type="url"
+                          value={formData.websiteUrl}
+                          onChange={(e) => updateField("websiteUrl", e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && canContinue() && nextQuestion()}
+                          placeholder="https://yourwebsite.com"
+                          className={`w-full px-4 py-4 bg-white/5 border-2 ${errors.websiteUrl ? "border-red-500" : "border-white/10"} rounded-xl text-white text-lg md:text-xl placeholder-white/30 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all duration-300 font-light`}
+                          autoFocus
+                        />
+                        {errors.websiteUrl && (
+                          <p className="text-red-400 text-sm mt-2">{errors.websiteUrl}</p>
+                        )}
+                      </motion.div>
+                    )}
+
+                    {errors.hasWebsite && (
+                      <p className="text-red-400 text-sm mt-2">{errors.hasWebsite}</p>
+                    )}
+                  </motion.div>
+                )}
+
+                {currentQuestion === 5 && (
+                  <motion.div
                     key="q5"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -386,9 +561,9 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   </motion.div>
                 )}
 
-                {currentQuestion === 4 && (
+                {currentQuestion === 6 && (
                   <motion.div
-                    key="q4"
+                    key="q6"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
@@ -435,9 +610,9 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   </motion.div>
                 )}
 
-                {currentQuestion === 5 && (
+                {currentQuestion === 7 && (
                   <motion.div
-                    key="q5"
+                    key="q7"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
@@ -452,7 +627,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                         This helps us recommend the right solution
                       </p>
                     </div>
-
                     <div>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {["Under $5k", "$5k - $10k", "$10k - $25k", "$25k - $50k", "$50k+", "Not sure yet"].map(
@@ -487,9 +661,9 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   </motion.div>
                 )}
 
-                {currentQuestion === 6 && (
+                {currentQuestion === 8 && (
                   <motion.div
-                    key="q2"
+                    key="q8"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
@@ -589,9 +763,9 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                 <div className="flex items-center gap-4">
                   <button
                     onClick={prevQuestion}
-                    disabled={currentQuestion === 1}
+                    disabled={currentQuestion === (skipPackageQuestion ? 2 : 1)}
                     className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 ${
-                      currentQuestion === 1
+                      currentQuestion === (skipPackageQuestion ? 2 : 1)
                         ? "opacity-0 pointer-events-none"
                         : "text-white/60 hover:text-white hover:bg-white/5"
                     }`}
