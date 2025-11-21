@@ -618,17 +618,22 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                 key="success"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center h-full text-center"
+                className="flex flex-col items-center justify-center h-full text-center px-4"
               >
-                <div className="w-20 h-20 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mx-auto mb-6">
-                  <Check className="w-10 h-10 text-green-500" />
+                <div className="max-w-2xl w-full bg-black border border-white/10 rounded-2xl p-12 shadow-2xl">
+                  <div className="w-20 h-20 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mx-auto mb-6">
+                    <Check className="w-10 h-10 text-green-500" />
+                  </div>
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-4">
+                    You&apos;re all set!
+                  </h1>
+                  <p className="text-lg md:text-xl text-white/60 font-light mb-2">
+                    Thank you for your interest in KoreLynx
+                  </p>
+                  <p className="text-base md:text-lg text-white/50 font-light">
+                    We&apos;ll reach out to you shortly
+                  </p>
                 </div>
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-4">
-                  You&apos;re all set! 🎉
-                </h1>
-                <p className="text-lg md:text-xl text-white/60 font-light">
-                  We&apos;ll reach out within 24 hours
-                </p>
               </motion.div>
             )}
           </AnimatePresence>
