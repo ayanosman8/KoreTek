@@ -44,12 +44,12 @@ export default function Services() {
           </p>
         </div>
 
-        {/* Services Grid - Pricing Card Style */}
+        {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
               key={index}
-              className="group relative rounded-3xl p-12 border backdrop-blur-xl overflow-hidden transition-all duration-500 bg-gradient-to-br from-gray-900 to-black border-white/10 hover:border-blue-500/40 shadow-2xl hover:shadow-blue-500/10"
+              className="group relative rounded-3xl p-12 border backdrop-blur-xl overflow-hidden bg-gradient-to-br from-gray-900 to-black border-white/10 hover:border-blue-500/40 shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:scale-[1.02]"
             >
               {/* Icon */}
               <div className="text-blue-500 mb-6">
