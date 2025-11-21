@@ -161,7 +161,14 @@ export default function Pricing() {
                 {/* CTA Button */}
                 <button
                   onClick={() => {
-                    setSelectedPackage(`${tier.name} (${tier.price})`);
+                    // Map pricing tier to form package option
+                    const packageMap: Record<string, string> = {
+                      "Landing Page": "Website",
+                      "Web Platform": "Website",
+                      "Mobile App": "Mobile App",
+                      "Complete Platform": "Both",
+                    };
+                    setSelectedPackage(packageMap[tier.name] || tier.name);
                     setIsFormOpen(true);
                   }}
                   className="w-full px-6 py-3 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 group"

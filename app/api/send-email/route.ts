@@ -14,16 +14,22 @@ export async function POST(request: NextRequest) {
       firstName,
       lastName,
       email,
+      projectType,
       company,
       phone,
+      industry,
+      hasWebsite,
+      websiteUrl,
       message,
     } = body;
 
     const fullName = `${firstName || ''} ${lastName || ''}`.trim() || 'Not provided';
-    const companyName = company || 'Not provided';
-    const projectMessage = message || 'Not provided';
+    const companyName = company || null;
+    const projectMessage = message || null;
+    const industryType = industry || null;
+    const currentWebsite = websiteUrl || null;
 
-    console.log('Form data received:', { packageName, fullName, email, company: companyName });
+    console.log('Form data received:', { packageName, fullName, email, projectType, company: companyName, industry: industryType });
 
     // Validate required fields
     if (!email || !firstName) {
@@ -33,7 +39,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert into Supabase - matches your table columns exactly
+    // Insert into Supabase
     console.log('Inserting data into Supabase...');
     const { data: supabaseData, error: supabaseError } = await supabase
       .from('form_submissions')
@@ -89,7 +95,7 @@ export async function POST(request: NextRequest) {
             </div>
             <div class="content">
               <div class="field">
-                <div class="field-label">Package Interest</div>
+                <div class="field-label">Service Needed</div>
                 <div class="field-value">${packageName}</div>
               </div>
 
@@ -111,14 +117,42 @@ export async function POST(request: NextRequest) {
               ` : ''}
 
               <div class="field">
-                <div class="field-label">Company / Project Type</div>
-                <div class="field-value">${companyName}</div>
+                <div class="field-label">Project Type</div>
+                <div class="field-value">${projectType === 'personal' ? 'Personal Project' : 'Company Project'}</div>
               </div>
 
+              ${companyName ? `
+              <div class="field">
+                <div class="field-label">Company Name</div>
+                <div class="field-value">${companyName}</div>
+              </div>
+              ` : ''}
+
+              ${industryType ? `
+              <div class="field">
+                <div class="field-label">Industry</div>
+                <div class="field-value">${industryType}</div>
+              </div>
+              ` : ''}
+
+              <div class="field">
+                <div class="field-label">Has Existing Website</div>
+                <div class="field-value">${hasWebsite === 'yes' ? 'Yes' : 'No'}</div>
+              </div>
+
+              ${currentWebsite ? `
+              <div class="field">
+                <div class="field-label">Current Website</div>
+                <div class="field-value"><a href="${currentWebsite}" style="color: #3b82f6; text-decoration: none;" target="_blank">${currentWebsite}</a></div>
+              </div>
+              ` : ''}
+
+              ${projectMessage ? `
               <div class="message-box">
-                <div class="field-label">Project Description</div>
+                <div class="field-label">Additional Notes</div>
                 <div class="field-value" style="margin-top: 10px; white-space: pre-wrap;">${projectMessage}</div>
               </div>
+              ` : ''}
 
               <div class="footer">
                 <p>Reply directly to this email to respond to <strong>${fullName}</strong></p>
