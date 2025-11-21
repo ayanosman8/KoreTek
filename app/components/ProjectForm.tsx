@@ -31,8 +31,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
     projectType: "", // "personal" or "company"
     company: "",
     phone: "",
-    budget: "",
-    timeline: "",
     message: "",
     hasWebsite: "", // "yes" or "no"
     websiteUrl: "",
@@ -43,7 +41,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const totalQuestions = skipPackageQuestion ? 7 : 8;
+  const totalQuestions = skipPackageQuestion ? 5 : 6;
 
   const updateField = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -105,16 +103,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
         if (messageError) newErrors.message = messageError;
         break;
       case 6:
-        if (!formData.timeline.trim()) {
-          newErrors.timeline = "Please select a timeline";
-        }
-        break;
-      case 7:
-        if (!formData.budget.trim()) {
-          newErrors.budget = "Please select a budget range";
-        }
-        break;
-      case 8:
         const firstNameError = validateField("firstName", formData.firstName);
         const lastNameError = validateField("lastName", formData.lastName);
         const emailError = validateField("email", formData.email);
@@ -160,8 +148,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
           company: formData.projectType === "company" ? formData.company : "Personal Project",
           phone: formData.phone,
           package: formData.package,
-          budget: formData.budget,
-          timeline: formData.timeline,
           message: formData.message,
           industry: formData.industry,
           websiteUrl: formData.hasWebsite === "yes" ? formData.websiteUrl : "No existing website",
@@ -191,8 +177,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
       projectType: "",
       company: "",
       phone: "",
-      budget: "",
-      timeline: "",
       message: "",
       hasWebsite: "",
       websiteUrl: "",
@@ -224,10 +208,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
       case 5:
         return formData.message.trim() !== "";
       case 6:
-        return formData.timeline.trim() !== "";
-      case 7:
-        return formData.budget.trim() !== "";
-      case 8:
         return (
           formData.firstName.trim() !== "" &&
           formData.lastName.trim() !== "" &&
@@ -564,106 +544,6 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                 {currentQuestion === 6 && (
                   <motion.div
                     key="q6"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-6"
-                  >
-                    <div>
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
-                        What&apos;s your timeline?
-                      </h1>
-                      <p className="text-base md:text-lg text-white/50 font-light">
-                        When would you like to get started?
-                      </p>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {["ASAP", "1-2 weeks", "2-4 weeks", "1-2 months", "2-3 months", "Just exploring"].map(
-                        (timelineOption) => (
-                          <div
-                            key={timelineOption}
-                            onClick={() => {
-                              setFormData({ ...formData, timeline: timelineOption });
-                              if (errors.timeline) {
-                                setErrors({ ...errors, timeline: "" });
-                              }
-                            }}
-                            className={`p-4 rounded-xl border-2 transition-all duration-200 text-center cursor-pointer hover:border-blue-500/70 active:scale-95 ${
-                              formData.timeline === timelineOption
-                                ? "border-blue-500 bg-blue-500/10"
-                                : "border-white/10 bg-white/5 hover:bg-white/10"
-                            }`}
-                          >
-                            <div className={`text-sm md:text-base font-light transition-colors pointer-events-none ${
-                              formData.timeline === timelineOption ? "text-blue-400" : "text-white"
-                            }`}>
-                              {timelineOption}
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
-                    {errors.timeline && (
-                      <p className="text-red-400 text-sm mt-2">{errors.timeline}</p>
-                    )}
-                  </motion.div>
-                )}
-
-                {currentQuestion === 7 && (
-                  <motion.div
-                    key="q7"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-6"
-                  >
-                    <div>
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-2 leading-tight">
-                        What&apos;s your budget range?
-                      </h1>
-                      <p className="text-base md:text-lg text-white/50 font-light">
-                        This helps us recommend the right solution
-                      </p>
-                    </div>
-                    <div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {["Under $5k", "$5k - $10k", "$10k - $25k", "$25k - $50k", "$50k+", "Not sure yet"].map(
-                          (budgetOption) => (
-                            <div
-                              key={budgetOption}
-                              onClick={() => {
-                                setFormData({ ...formData, budget: budgetOption });
-                                if (errors.budget) {
-                                  setErrors({ ...errors, budget: "" });
-                                }
-                              }}
-                              className={`p-4 rounded-xl border-2 transition-all duration-200 text-center cursor-pointer hover:border-blue-500/70 active:scale-95 ${
-                                formData.budget === budgetOption
-                                  ? "border-blue-500 bg-blue-500/10"
-                                  : "border-white/10 bg-white/5 hover:bg-white/10"
-                              }`}
-                            >
-                              <div className={`text-sm md:text-base font-light transition-colors pointer-events-none ${
-                                formData.budget === budgetOption ? "text-blue-400" : "text-white"
-                              }`}>
-                                {budgetOption}
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                      {errors.budget && (
-                        <p className="text-red-400 text-sm mt-2">{errors.budget}</p>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-
-                {currentQuestion === 8 && (
-                  <motion.div
-                    key="q8"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
