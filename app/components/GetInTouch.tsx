@@ -1,18 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
-import ProjectForm from "./ProjectForm";
+import React from "react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 
 export default function GetInTouch() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
   const contactInfo = [
     {
       icon: <Mail className="w-6 h-6" />,
       label: "Email",
-      value: "hello@korelnx.com",
-      href: "mailto:hello@korelnx.com",
+      value: "info@korelnx.com",
+      href: "mailto:info@korelnx.com",
     },
     {
       icon: <Phone className="w-6 h-6" />,
@@ -20,24 +17,13 @@ export default function GetInTouch() {
       value: "+1 (555) 123-4567",
       href: "tel:+15551234567",
     },
-    {
-      icon: <MapPin className="w-6 h-6" />,
-      label: "Location",
-      value: "Columbus, Ohio",
-      href: null,
-    },
   ];
 
   return (
-    <>
-      <ProjectForm
-        isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-      />
-      <div
-        className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden"
-        id="contact"
-      >
+    <div
+      className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden"
+      id="contact"
+    >
         {/* Background decorative elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl"></div>
@@ -54,17 +40,9 @@ export default function GetInTouch() {
                   <span className="block text-blue-500">Touch</span>
                 </h2>
 
-                <p className="text-xl font-light text-white/60 mb-10 leading-relaxed max-w-md">
+                <p className="text-xl font-light text-white/60 leading-relaxed max-w-md">
                   Have a project in mind? We&apos;d love to hear about it. Let&apos;s create something amazing together.
                 </p>
-
-                <button
-                  onClick={() => setIsFormOpen(true)}
-                  className="inline-flex items-center gap-3 px-10 py-4 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 group"
-                >
-                  <span className="text-lg font-medium">Start a Project</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
               </div>
 
               {/* Right - Contact Info Cards */}
@@ -117,7 +95,6 @@ export default function GetInTouch() {
             </div>
           </div>
         </div>
-      </div>
-    </>
+    </div>
   );
 }

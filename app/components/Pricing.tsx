@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Zap, ArrowRight } from "lucide-react";
+import { Check, Zap, ArrowRight, Bolt, Crown } from "lucide-react";
 import ProjectForm from "./ProjectForm";
 
 export default function Pricing() {
@@ -10,63 +10,53 @@ export default function Pricing() {
 
   const pricingTiers = [
     {
-      name: "Landing Page",
+      name: "Lightning",
+      icon: <Zap className="w-4 h-4 text-cyan-400" />,
       price: "$2,000",
       originalPrice: "$5,000",
-      description: "Establish your digital presence with a stunning, high-converting landing page",
+      description: "Perfect for startups and small businesses needing a polished mobile or web app",
       features: [
-        "Single-page responsive design",
-        "Custom animations & interactions",
-        "Contact form with email integration",
-        "SEO optimization & meta tags",
-        "Performance optimization",
-      ],
-      popular: false,
-    },
-    {
-      name: "Mobile App",
-      price: "$5,000",
-      originalPrice: "$12,500",
-      description: "Cross-platform mobile app for iOS and Android",
-      features: [
-        "iOS & Android apps (React Native)",
-        "Up to 6 core screens",
+        "Landing pages & small web apps",
+        "Simple mobile apps (iOS or Android)",
         "Custom UI/UX design",
-        "Basic API integration",
-        "App store submission assistance",
+        "Responsive design",
+        "Basic integrations",
+        "2-4 week delivery",
       ],
       popular: false,
     },
     {
-      name: "Web Platform",
-      price: "$10,000",
-      originalPrice: "$25,000",
-      description: "Full-featured web application with backend and database",
+      name: "Bolt",
+      icon: <Bolt className="w-4 h-4 text-cyan-400" />,
+      price: "$8,000",
+      originalPrice: "$20,000",
+      description: "For growing businesses that need robust, feature-rich applications",
       features: [
-        "Multi-page web application",
+        "Full web applications with backend",
+        "Cross-platform mobile apps (iOS & Android)",
         "User authentication & authorization",
-        "Database architecture & setup",
+        "Database architecture & API development",
         "Admin dashboard",
-        "RESTful API development",
-        "Cloud hosting & deployment",
+        "Third-party integrations",
+        "4-8 week delivery",
       ],
       popular: true,
     },
     {
-      name: "Complete Platform",
-      price: "$35,000",
-      originalPrice: "$87,500",
-      description: "End-to-end digital ecosystem with web and mobile applications",
+      name: "Alpha",
+      icon: <Crown className="w-4 h-4 text-cyan-400" />,
+      price: "$30,000",
+      originalPrice: "$75,000",
+      description: "Enterprise-grade solutions for complex business requirements",
       features: [
-        "Full web application + backend",
-        "iOS & Android apps (React Native)",
-        "Up to 10 core mobile screens",
+        "Complete web + mobile ecosystem",
         "Advanced API architecture",
         "Real-time data synchronization",
-        "Push notifications",
         "Scalable cloud infrastructure",
-        "App store submission assistance",
-        "Comprehensive testing & QA",
+        "Custom integrations & workflows",
+        "Dedicated support & maintenance",
+        "Security & compliance features",
+        "Ongoing partnership & iteration",
       ],
       popular: false,
     },
@@ -109,7 +99,7 @@ export default function Pricing() {
           </div>
 
           {/* Pricing Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {pricingTiers.map((tier, index) => (
               <div
                 key={index}
@@ -127,9 +117,14 @@ export default function Pricing() {
                 )}
 
                 {/* Tier Name */}
-                <h3 className={`text-2xl font-extralight text-white mb-2 ${tier.popular ? 'pr-24' : ''}`}>
-                  {tier.name}
-                </h3>
+                <div className={`mb-4 ${tier.popular ? 'pr-24' : ''}`}>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full border border-blue-400/30">
+                    {tier.icon}
+                    <span className="text-sm font-semibold text-cyan-300 tracking-wide uppercase">
+                      {tier.name}
+                    </span>
+                  </div>
+                </div>
 
                 {/* Price */}
                 <div className="mb-4">
@@ -161,14 +156,7 @@ export default function Pricing() {
                 {/* CTA Button */}
                 <button
                   onClick={() => {
-                    // Map pricing tier to form package option
-                    const packageMap: Record<string, string> = {
-                      "Landing Page": "Website",
-                      "Web Platform": "Website",
-                      "Mobile App": "Mobile App",
-                      "Complete Platform": "Both",
-                    };
-                    setSelectedPackage(packageMap[tier.name] || tier.name);
+                    setSelectedPackage(tier.name);
                     setIsFormOpen(true);
                   }}
                   className="w-full px-6 py-3 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 font-medium inline-flex items-center justify-center gap-2 group"
