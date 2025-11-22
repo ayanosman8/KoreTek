@@ -2,12 +2,8 @@ import Header from "./components/Header";
 import PromoBanner from "./components/PromoBanner";
 import Hero from "./components/HeroWrapper";
 import Services from "./components/Services";
-import AboutUs from "./components/AboutUs";
 import Pricing from "./components/Pricing";
 import Projects from "./components/ProjectsWrapper";
-// import ClientLogos from "./components/ClientLogos";
-// import Testimonials from "./components/Testimonials";
-import Team from "./components/Team";
 import GetInTouch from "./components/GetInTouch";
 
 export default function Home() {
@@ -19,12 +15,8 @@ export default function Home() {
         <Hero />
       </div>
       <Services />
-      <AboutUs />
       <Pricing />
       <Projects />
-      {/* <ClientLogos /> */}
-      {/* <Testimonials /> */}
-      <Team />
       <GetInTouch />
     </>
   );

@@ -1,20 +1,46 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
 
 export default function Hero() {
   const containerRef = useRef(null);
+  const wordRef = useRef<HTMLSpanElement>(null);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
   });
 
-  const text =
-    "Modern Solutions. Cutting-Edge Design. Unmatched Efficiency.";
+  const rotatingWords = ["Modern", "Scalable", "Powerful", "Innovative", "Premium"];
 
-  // Split the text into words
-  const words = text.split(" ");
+  // Word rotation animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (wordRef.current) {
+        // Animate out
+        gsap.to(wordRef.current, {
+          y: -20,
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in",
+          onComplete: () => {
+            setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
+            // Animate in
+            gsap.fromTo(
+              wordRef.current,
+              { y: 20, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
+            );
+          },
+        });
+      }
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [rotatingWords.length]);
 
   // Define gradient for the highlighted text on a dark background
   const colorfulGradientClasses =
@@ -39,23 +65,28 @@ export default function Hero() {
             Your Vision. Engineered.
           </p>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-tight text-center tracking-tight">
-            {words.map((word, index) => (
-              <span
-                key={index}
-                className={`inline-block ${
-                  word === "Modern" ||
-                  word === "Solutions." ||
-                  word === "Cutting-Edge" ||
-                  word === "Design." ||
-                  word === "Efficiency."
-                    ? colorfulGradientClasses
-                    : "text-white"
-                }`}
-              >
-                {word}
-                {index !== words.length - 1 && "\u00A0"}
-              </span>
-            ))}
+            <span
+              ref={wordRef}
+              className={`inline-block ${colorfulGradientClasses} border-b-2 border-blue-500 pb-1`}
+            >
+              {rotatingWords[currentWordIndex]}
+            </span>
+            <span className={`inline-block ${colorfulGradientClasses}`}>
+              &nbsp;Solutions.
+            </span>
+            <br className="hidden md:block" />
+            <span className={`inline-block ${colorfulGradientClasses}`}>
+              Cutting-Edge
+            </span>
+            <span className="text-white">&nbsp;</span>
+            <span className={`inline-block ${colorfulGradientClasses}`}>
+              Design.
+            </span>
+            <br className="hidden md:block" />
+            <span className="text-white">Unmatched&nbsp;</span>
+            <span className={`inline-block ${colorfulGradientClasses}`}>
+              Efficiency.
+            </span>
           </h1>
         </div>
 

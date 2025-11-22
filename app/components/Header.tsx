@@ -12,7 +12,7 @@ const links = [
   },
   {
     title: "About",
-    href: "#about",
+    href: "/about",
   },
   {
     title: "Pricing",
@@ -75,20 +75,30 @@ export default function Header() {
           {/* Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
-              <a
-                key={link.title}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector(link.href)?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
-                }}
-                className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 hover:scale-105 cursor-pointer"
-              >
-                {link.title}
-              </a>
+              link.href.startsWith("/") ? (
+                <Link
+                  key={link.title}
+                  href={link.href}
+                  className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 hover:scale-105 cursor-pointer"
+                >
+                  {link.title}
+                </Link>
+              ) : (
+                <a
+                  key={link.title}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector(link.href)?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }}
+                  className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 hover:scale-105 cursor-pointer"
+                >
+                  {link.title}
+                </a>
+              )
             ))}
           </div>
 
