@@ -1,11 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail, Phone, MapPin } from "lucide-react";
 import ProjectForm from "./ProjectForm";
 
 export default function GetInTouch() {
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const contactInfo = [
+    {
+      icon: <Mail className="w-6 h-6" />,
+      label: "Email",
+      value: "hello@korelnx.com",
+      href: "mailto:hello@korelnx.com",
+    },
+    {
+      icon: <Phone className="w-6 h-6" />,
+      label: "Phone",
+      value: "+1 (555) 123-4567",
+      href: "tel:+15551234567",
+    },
+    {
+      icon: <MapPin className="w-6 h-6" />,
+      label: "Location",
+      value: "Columbus, Ohio",
+      href: null,
+    },
+  ];
 
   return (
     <>
@@ -17,31 +38,82 @@ export default function GetInTouch() {
         className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden"
         id="contact"
       >
-        {/* Background decorative elements - darker with blue accent */}
+        {/* Background decorative elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="absolute top-20 right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
 
         <div className="w-full px-8 lg:px-16 relative z-10">
-          {/* Main Content */}
-          <div className="text-center max-w-4xl mx-auto">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extralight tracking-tight mb-8 text-white">
-              Let&apos;s Work Together
-            </h2>
+          <div className="max-w-6xl mx-auto">
+            {/* Two Column Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+              {/* Left - Heading & CTA */}
+              <div>
+                <h2 className="text-6xl md:text-7xl lg:text-8xl font-extralight tracking-tight text-white leading-none mb-8">
+                  <span className="block">Get in</span>
+                  <span className="block text-blue-500">Touch</span>
+                </h2>
 
-            <p className="text-xl font-light text-white/60 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Have a project in mind? We&apos;d love to hear about it. Reach out and let&apos;s create something amazing together.
-            </p>
+                <p className="text-xl font-light text-white/60 mb-10 leading-relaxed max-w-md">
+                  Have a project in mind? We&apos;d love to hear about it. Let&apos;s create something amazing together.
+                </p>
 
-            {/* CTA Button */}
-            <div>
-              <button
-                onClick={() => setIsFormOpen(true)}
-                className="inline-flex items-center gap-3 px-12 py-5 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 group"
-              >
-                <span className="text-lg font-medium">Get in Touch</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+                <button
+                  onClick={() => setIsFormOpen(true)}
+                  className="inline-flex items-center gap-3 px-10 py-4 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/30 group"
+                >
+                  <span className="text-lg font-medium">Start a Project</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+
+              {/* Right - Contact Info Cards */}
+              <div className="space-y-6">
+                {contactInfo.map((item, index) => (
+                  <div
+                    key={index}
+                    className="group relative"
+                  >
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        className="block p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm hover:border-blue-500/40 hover:bg-blue-500/5 transition-all duration-300"
+                      >
+                        <div className="flex items-center gap-6">
+                          <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
+                            {item.icon}
+                          </div>
+                          <div>
+                            <div className="text-sm text-white/40 uppercase tracking-wider font-medium mb-1">
+                              {item.label}
+                            </div>
+                            <div className="text-xl font-light text-white group-hover:text-blue-400 transition-colors">
+                              {item.value}
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/20 group-hover:text-blue-500 group-hover:translate-x-2 transition-all duration-300 ml-auto" />
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="block p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm">
+                        <div className="flex items-center gap-6">
+                          <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500">
+                            {item.icon}
+                          </div>
+                          <div>
+                            <div className="text-sm text-white/40 uppercase tracking-wider font-medium mb-1">
+                              {item.label}
+                            </div>
+                            <div className="text-xl font-light text-white">
+                              {item.value}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

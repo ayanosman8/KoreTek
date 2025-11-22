@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Code2, Palette, Smartphone, Check } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Services() {
   const services = [
@@ -25,6 +26,43 @@ export default function Services() {
     },
   ];
 
+  // Animation variants
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
     <div id="services" className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden">
       {/* Background effects - darker with blue accent */}
@@ -34,7 +72,13 @@ export default function Services() {
 
       <div className="w-full px-8 lg:px-16 relative z-10">
         {/* Header */}
-        <div className="text-center mb-20">
+        <motion.div
+          className="text-center mb-20"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={headerVariants}
+        >
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-extralight tracking-tight mb-6 text-white">
             Our Capabilities
           </h2>
@@ -42,13 +86,20 @@ export default function Services() {
           <p className="text-xl font-light max-w-3xl mx-auto text-white/60 leading-relaxed">
             Full-service digital solutions tailored to your business needs. From concept to deployment, we&apos;ve got you covered.
           </p>
-        </div>
+        </motion.div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={containerVariants}
+        >
           {services.map((service, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={cardVariants}
               className="group relative rounded-3xl p-12 border backdrop-blur-xl overflow-hidden bg-gradient-to-br from-gray-900 to-black border-white/10 hover:border-blue-500/40 shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:scale-[1.02]"
             >
               {/* Icon */}
@@ -75,9 +126,9 @@ export default function Services() {
                 ))}
               </div>
 
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

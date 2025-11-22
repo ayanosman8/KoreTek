@@ -13,6 +13,7 @@ export default function Projects() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
 
   const stats = [
     { number: "Modern", label: "Tech Stack", icon: <Rocket className="w-6 h-6" /> },
@@ -71,7 +72,7 @@ export default function Projects() {
         className="absolute top-20 left-10 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl"
       ></motion.div>
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], [-100, 100]) }}
+        style={{ y: y2 }}
         className="absolute bottom-20 right-10 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-3xl"
       ></motion.div>
 
