@@ -14,8 +14,8 @@ export default function GetInTouch() {
     {
       icon: <Phone className="w-6 h-6" />,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "(614) 804-0905",
+      href: "tel:+16148040905",
     },
   ];
 

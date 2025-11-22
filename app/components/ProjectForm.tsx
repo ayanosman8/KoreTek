@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Check, Globe, Smartphone, Layers, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
@@ -38,6 +38,13 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Update pricingPackage when selectedPackage prop changes
+  useEffect(() => {
+    if (selectedPackage) {
+      setFormData(prev => ({ ...prev, pricingPackage: selectedPackage }));
+    }
+  }, [selectedPackage]);
 
   const updateField = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });

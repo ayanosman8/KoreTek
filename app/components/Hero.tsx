@@ -35,6 +35,9 @@ export default function Hero() {
       <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
         {/* Main heading */}
         <div className="space-y-2">
+          <p className="text-lg md:text-xl text-white/60 font-light tracking-wide">
+            Your Vision. Engineered.
+          </p>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-tight text-center tracking-tight">
             {words.map((word, index) => (
               <span
