@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Check, Globe, Smartphone, Layers, Send } from "lucide-react";
+import { X, Check, Smartphone, Layers, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
 
@@ -244,8 +244,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   }`}
                 >
                   <div className={`text-lg font-semibold ${formData.pricingPackage === "Lightning" ? "text-blue-400" : "text-white"}`}>Lightning</div>
-                  <p className="text-2xl font-light text-blue-400 mt-1">$2,000</p>
-                  <p className="text-sm text-white/40 mt-2">Small apps & landing pages</p>
+                  <p className="text-2xl font-light text-blue-400 mt-1">$8,000</p>
+                  <p className="text-sm text-white/40 mt-2">Feature-rich mobile apps</p>
                 </div>
                 <div
                   onClick={() => updateField("pricingPackage", "Bolt")}
@@ -256,8 +256,8 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   }`}
                 >
                   <div className={`text-lg font-semibold ${formData.pricingPackage === "Bolt" ? "text-blue-400" : "text-white"}`}>Bolt</div>
-                  <p className="text-2xl font-light text-blue-400 mt-1">$8,000</p>
-                  <p className="text-sm text-white/40 mt-2">Full-featured applications</p>
+                  <p className="text-2xl font-light text-blue-400 mt-1">$14,000</p>
+                  <p className="text-sm text-white/40 mt-2">Advanced mobile solutions</p>
                 </div>
                 <div
                   onClick={() => updateField("pricingPackage", "Alpha")}
@@ -269,7 +269,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                 >
                   <div className={`text-lg font-semibold ${formData.pricingPackage === "Alpha" ? "text-blue-400" : "text-white"}`}>Alpha</div>
                   <p className="text-2xl font-light text-blue-400 mt-1">$30,000</p>
-                  <p className="text-sm text-white/40 mt-2">Enterprise solutions</p>
+                  <p className="text-sm text-white/40 mt-2">Enterprise mobile ecosystems</p>
                 </div>
               </div>
               {errors.pricingPackage && <p className="text-red-400 text-sm">{errors.pricingPackage}</p>}
@@ -278,42 +278,30 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
             {/* Section 2: What do you need? */}
             <div className="space-y-4">
               <h2 className="text-xl font-light text-white">What do you need?</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div
-                  onClick={() => updateField("package", "Website")}
+                  onClick={() => updateField("package", "Mobile app")}
                   className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
-                    formData.package === "Website"
+                    formData.package === "Mobile app"
                       ? "border-blue-500 bg-blue-500/10"
                       : "border-white/10 bg-white/5 hover:bg-white/10"
                   }`}
                 >
-                  <Globe className={`w-8 h-8 mb-3 ${formData.package === "Website" ? "text-blue-400" : "text-white/60"}`} />
-                  <div className={`text-lg font-light ${formData.package === "Website" ? "text-blue-400" : "text-white"}`}>Website</div>
-                  <p className="text-sm text-white/40 mt-1">Web app or landing page</p>
-                </div>
-                <div
-                  onClick={() => updateField("package", "Mobile App")}
-                  className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
-                    formData.package === "Mobile App"
-                      ? "border-blue-500 bg-blue-500/10"
-                      : "border-white/10 bg-white/5 hover:bg-white/10"
-                  }`}
-                >
-                  <Smartphone className={`w-8 h-8 mb-3 ${formData.package === "Mobile App" ? "text-blue-400" : "text-white/60"}`} />
-                  <div className={`text-lg font-light ${formData.package === "Mobile App" ? "text-blue-400" : "text-white"}`}>Mobile App</div>
+                  <Smartphone className={`w-8 h-8 mb-3 ${formData.package === "Mobile app" ? "text-blue-400" : "text-white/60"}`} />
+                  <div className={`text-lg font-light ${formData.package === "Mobile app" ? "text-blue-400" : "text-white"}`}>Mobile app</div>
                   <p className="text-sm text-white/40 mt-1">iOS and Android app</p>
                 </div>
                 <div
-                  onClick={() => updateField("package", "Both")}
+                  onClick={() => updateField("package", "Mobile app and website")}
                   className={`p-5 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer hover:border-blue-500/70 active:scale-95 ${
-                    formData.package === "Both"
+                    formData.package === "Mobile app and website"
                       ? "border-blue-500 bg-blue-500/10"
                       : "border-white/10 bg-white/5 hover:bg-white/10"
                   }`}
                 >
-                  <Layers className={`w-8 h-8 mb-3 ${formData.package === "Both" ? "text-blue-400" : "text-white/60"}`} />
-                  <div className={`text-lg font-light ${formData.package === "Both" ? "text-blue-400" : "text-white"}`}>Both</div>
-                  <p className="text-sm text-white/40 mt-1">Website + Mobile app</p>
+                  <Layers className={`w-8 h-8 mb-3 ${formData.package === "Mobile app and website" ? "text-blue-400" : "text-white/60"}`} />
+                  <div className={`text-lg font-light ${formData.package === "Mobile app and website" ? "text-blue-400" : "text-white"}`}>Mobile app and website</div>
+                  <p className="text-sm text-white/40 mt-1">Full mobile and web solution</p>
                 </div>
               </div>
               {errors.package && <p className="text-red-400 text-sm">{errors.package}</p>}
