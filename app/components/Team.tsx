@@ -16,7 +16,7 @@ export default function Team() {
     {
       name: "Hayat Kore",
       role: "Chief Executive Officer",
-      bio: "10+ years of extensive experience across client success, analytics, account management, and sales with a focus on bringing a customer-centric approach to strategic decision-making and business growth.",
+      bio: "10+ years of extensive experience across client success, analytics, account management, and sales with a focus on bringing a customer-centric approach to decision-making and driving business growth.",
       image: "/hayat2.JPEG",
       linkedin: "#",
       twitter: "#",
@@ -24,7 +24,7 @@ export default function Team() {
     {
       name: "Sahra Osman",
       role: "Chief Operating Officer",
-      bio: "Strategic and results-driven leader with a strong background in operations, logistics, and streamlining workflows to maximize efficiency and drive business growth.",
+      bio: "Strategic and results-driven leader with a strong background in operations, logistics, and streamlining workflows to maximize efficiency.",
       image: "/sahra.JPG",
       linkedin: "#",
       twitter: "#",
