@@ -16,7 +16,7 @@ export default function Team() {
     {
       name: "Hayat Kore",
       role: "Chief Executive Officer",
-      bio: "10+ years of experience in client success, sales, and account management driving business growth.",
+      bio: "10+ years of extensive experience across client success, analytics, account management, and sales with a focus on bringing a customer-centric approach to strategic decision-making and business growth.",
       image: "/hayat2.JPEG",
       linkedin: "#",
       twitter: "#",
