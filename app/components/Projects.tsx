@@ -64,7 +64,7 @@ export default function Projects() {
     <div
       ref={containerRef}
       id="projects"
-      className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-4 md:py-32 relative overflow-hidden"
+      className="bg-gradient-to-br from-black via-gray-900 to-black py-20 px-6 md:px-8 lg:px-4 md:py-32 relative overflow-hidden"
     >
       {/* Animated background decorative elements - darker with blue accent */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
@@ -102,7 +102,7 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-extralight mb-8 text-white leading-tight"
+            className="text-4xl md:text-7xl lg:text-8xl font-extralight mb-8 text-white leading-tight"
           >
             Design Doesn&apos;t Have to Be Hard
           </motion.h2>
@@ -112,7 +112,7 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-2xl md:text-3xl text-white/70 max-w-5xl mx-auto leading-relaxed mb-6 font-light"
+            className="text-xl md:text-3xl text-white/70 max-w-5xl mx-auto leading-relaxed mb-6 font-light"
           >
             We believe in making technology accessible and beautiful for everyone.
           </motion.p>
@@ -121,10 +121,10 @@ export default function Projects() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="text-lg md:text-xl text-white/60 max-w-4xl mx-auto leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-lg md:text-xl text-white/60 max-w-4xl mx-auto leading-relaxed mt-6"
           >
-            In a world where complexity often overshadows simplicity, we craft enterprise-grade solutions that are intuitive, powerful, and designed with you in mind. Every product we build is a testament to our commitment to excellence and user-centric design.
+            At <span className="text-blue-400">KoreLnx</span>, we build tailored digital solutions by combining cutting-edge technology with bold design and practical functionality. Beyond creating exceptional products, we pride ourselves on providing excellent customer service by working closely with each client to ensure a smooth, personalized experience from start to finish. Our goal is to help businesses operate smarter, grow faster, and stand out with confidence—so you can focus on what matters most: delivering exceptional value to your clients.
           </motion.p>
         </motion.div>
 
