@@ -12,7 +12,7 @@ export default function Pricing() {
     {
       name: "Lightning",
       icon: <Zap className="w-4 h-4 text-cyan-400" />,
-      price: "$8,000",
+      price: "$10,000",
       originalPrice: "$20,000",
       description: "Perfect for startups needing a robust, feature-rich mobile application",
       features: [
@@ -28,7 +28,7 @@ export default function Pricing() {
     {
       name: "Bolt",
       icon: <Bolt className="w-4 h-4 text-cyan-400" />,
-      price: "$14,000",
+      price: "$17,500",
       originalPrice: "$35,000",
       description: "For growing businesses that need advanced mobile features and backend infrastructure",
       features: [
@@ -46,7 +46,7 @@ export default function Pricing() {
     {
       name: "Alpha",
       icon: <Crown className="w-4 h-4 text-cyan-400" />,
-      price: "$30,000",
+      price: "$37,500",
       originalPrice: "$75,000",
       description: "Enterprise-grade mobile solutions for complex business requirements",
       features: [

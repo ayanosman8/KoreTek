@@ -9,23 +9,23 @@ export default function Team() {
       name: "Ayan Osman",
       role: "Chief Technology Officer",
       bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
-      image: "/team/member-2.jpg", // Placeholder path
+      image: "/ayan2.JPEG",
       linkedin: "#",
       twitter: "#",
     },
     {
       name: "Hayat Kore",
-      role: "",
+      role: "Chief Executive Officer",
       bio: "10+ years of experience in client success, sales, and account management driving business growth.",
-      image: "/team/member-1.jpg", // Placeholder path
+      image: "/hayat2.JPEG",
       linkedin: "#",
       twitter: "#",
     },
     {
       name: "Sahra Osman",
-      role: "",
-      bio: "Passionate about creating innovative solutions and delivering exceptional results.",
-      image: "/team/member-3.jpg", // Placeholder path
+      role: "Chief Operating Officer",
+      bio: "Strategic and results-driven leader with a strong background in operations, logistics, and streamlining workflows to maximize efficiency and drive business growth.",
+      image: "/sahra.JPG",
       linkedin: "#",
       twitter: "#",
     },
@@ -63,10 +63,11 @@ export default function Team() {
               <div className="flex flex-col items-center mb-8">
                 <div className="relative mb-6">
                   <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border-2 border-blue-500/30 flex items-center justify-center overflow-hidden">
-                    {/* Placeholder - user can replace with actual image */}
-                    <div className="text-6xl font-extralight text-blue-500">
-                      {member.name.charAt(0)}
-                    </div>
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   {/* Online indicator */}
                   <div className="absolute bottom-2 right-2 w-4 h-4 bg-emerald-500 rounded-full border-2 border-gray-900"></div>

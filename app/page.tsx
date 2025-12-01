@@ -3,6 +3,7 @@ import PromoBanner from "./components/PromoBanner";
 import Hero from "./components/HeroWrapper";
 import Services from "./components/Services";
 import Pricing from "./components/Pricing";
+import Team from "./components/Team";
 import Projects from "./components/ProjectsWrapper";
 import GetInTouch from "./components/GetInTouch";
 
@@ -16,6 +17,7 @@ export default function Home() {
       </div>
       <Services />
       <Pricing />
+      <Team />
       <Projects />
       <GetInTouch />
     </>

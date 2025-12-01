@@ -29,12 +29,12 @@ export default function PromoBanner() {
                   <span className="bg-gradient-to-r from-blue-200 via-cyan-200 to-blue-200 bg-clip-text text-transparent">
                     Launch Special
                   </span>
-                  {" "}— November & December Only
+                  {" "}— December & January Only
                 </h3>
 
                 <p className="text-lg md:text-xl text-white/80 font-light max-w-3xl mx-auto leading-relaxed">
                   Get premium development services at exclusive startup rates—
-                  <span className="text-cyan-300 font-medium"> up to 60% off standard pricing.</span>
+                  <span className="text-cyan-300 font-medium"> 50% off standard pricing.</span>
                 </p>
               </div>
             </div>
