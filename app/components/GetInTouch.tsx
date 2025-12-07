@@ -1,9 +1,47 @@
 "use client";
 
-import React from "react";
-import { ArrowRight, Mail, Phone } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowRight, Mail, Phone, Send, Check } from "lucide-react";
 
 export default function GetInTouch() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.name,
+          email: formData.email,
+          message: formData.message,
+          package: "Quick Contact",
+          projectType: "contact",
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitSuccess(false), 5000);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const contactInfo = [
     {
       icon: <Mail className="w-6 h-6" />,
@@ -91,6 +129,58 @@ export default function GetInTouch() {
                     )}
                   </div>
                 ))}
+
+                {/* Quick Contact Form */}
+                <form onSubmit={handleSubmit} className="mt-8 p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm space-y-4">
+                  <h3 className="text-lg font-light text-white mb-4">Send us a message</h3>
+
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 transition-all"
+                    required
+                  />
+
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 transition-all"
+                    required
+                  />
+
+                  <textarea
+                    placeholder="Your message"
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-blue-500/50 transition-all resize-none"
+                    required
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || submitSuccess}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
+                  >
+                    {submitSuccess ? (
+                      <>
+                        <Check className="w-5 h-5" />
+                        Message Sent!
+                      </>
+                    ) : isSubmitting ? (
+                      "Sending..."
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </form>
               </div>
             </div>
           </div>

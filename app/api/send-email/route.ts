@@ -39,27 +39,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert into Supabase (using admin client to bypass RLS)
-    console.log('Inserting data into Supabase...');
-    const { data: supabaseData, error: supabaseError } = await supabaseAdmin
-      .from('form_submissions')
-      .insert({
-        package: packageName,
-        first_name: firstName,
-        last_name: lastName || null,
-        email: email,
-        company: companyName,
-        phone: phone || null,
-        budget: null,
-        timeline: null,
-        message: projectMessage,
-      })
-      .select();
+    // Insert into Supabase (using admin client to bypass RLS) - only if configured
+    if (supabaseAdmin) {
+      console.log('Inserting data into Supabase...');
+      const { data: supabaseData, error: supabaseError } = await supabaseAdmin
+        .from('form_submissions')
+        .insert({
+          package: packageName,
+          first_name: firstName,
+          last_name: lastName || null,
+          email: email,
+          company: companyName,
+          phone: phone || null,
+          budget: null,
+          timeline: null,
+          message: projectMessage,
+        })
+        .select();
 
-    if (supabaseError) {
-      console.error('Supabase error:', supabaseError);
+      if (supabaseError) {
+        console.error('Supabase error:', supabaseError);
+      } else {
+        console.log('Successfully inserted into Supabase:', supabaseData);
+      }
     } else {
-      console.log('Successfully inserted into Supabase:', supabaseData);
+      console.log('Supabase not configured, skipping database insert');
     }
 
     console.log('Attempting to send email via Resend...');
@@ -67,8 +71,7 @@ export async function POST(request: NextRequest) {
     // Send email using Resend
     const data = await resend.emails.send({
       from: 'info@korelnx.com',
-      // to: ['aosman@korelnx.com', 'hkore@korelnx.com'], // Production emails
-      to: ['akaythe4th@gmail.com'], // Testing email
+      to: ['info@korelnx.com'],
       replyTo: email,
       subject: `New KoreLnx Inquiry: ${packageName}`,
       html: `

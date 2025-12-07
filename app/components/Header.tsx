@@ -45,11 +45,12 @@ export default function Header() {
             <div className="relative">
               {/* Custom logo */}
               <Image
-                src="/icon10.png"
+                src="/logo.png"
                 alt="KoreLnx Logo"
-                width={32}
-                height={32}
+                width={300}
+                height={185}
                 className="rounded-xl"
+                style={{ height: '60px', width: 'auto' }}
               />
               {/* Old lightning bolt icon - commented out
               <div className="h-11 w-11 rounded-2xl border-2 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:shadow-[0_0_25px_rgba(59,130,246,0.7)] bg-black/50 backdrop-blur-sm flex items-center justify-center transition-all duration-300 p-1.5">

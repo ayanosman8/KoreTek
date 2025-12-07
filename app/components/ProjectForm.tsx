@@ -244,7 +244,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   }`}
                 >
                   <div className={`text-lg font-semibold ${formData.pricingPackage === "Lightning" ? "text-blue-400" : "text-white"}`}>Lightning</div>
-                  <p className="text-2xl font-light text-blue-400 mt-1">$8,000</p>
+                  <p className="text-2xl font-light text-blue-400 mt-1">$10,000</p>
                   <p className="text-sm text-white/40 mt-2">Feature-rich mobile apps</p>
                 </div>
                 <div
@@ -256,7 +256,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   }`}
                 >
                   <div className={`text-lg font-semibold ${formData.pricingPackage === "Bolt" ? "text-blue-400" : "text-white"}`}>Bolt</div>
-                  <p className="text-2xl font-light text-blue-400 mt-1">$14,000</p>
+                  <p className="text-2xl font-light text-blue-400 mt-1">$17,500</p>
                   <p className="text-sm text-white/40 mt-2">Advanced mobile solutions</p>
                 </div>
                 <div
@@ -268,7 +268,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
                   }`}
                 >
                   <div className={`text-lg font-semibold ${formData.pricingPackage === "Alpha" ? "text-blue-400" : "text-white"}`}>Alpha</div>
-                  <p className="text-2xl font-light text-blue-400 mt-1">$30,000</p>
+                  <p className="text-2xl font-light text-blue-400 mt-1">$37,500</p>
                   <p className="text-sm text-white/40 mt-2">Enterprise mobile ecosystems</p>
                 </div>
               </div>
