@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Send email using Resend
     const data = await resend.emails.send({
       from: 'info@korelnx.com',
-      to: ['info@korelnx.com'],
+      to: ['aosman@korelnx.com', 'hkore@korelnx.com'],
       replyTo: email,
       subject: `New KoreLnx Inquiry: ${packageName}`,
       html: `
