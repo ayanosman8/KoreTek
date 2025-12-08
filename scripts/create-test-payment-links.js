@@ -13,9 +13,9 @@ const stripe = new Stripe(testKey, {
 });
 
 const packages = [
-  { name: 'Lightning', fullPrice: 2000 },
-  { name: 'Bolt', fullPrice: 8000 },
-  { name: 'Alpha', fullPrice: 30000 },
+  { name: 'Lightning', fullPrice: 10000 },
+  { name: 'Bolt', fullPrice: 17500 },
+  { name: 'Alpha', fullPrice: 37500 },
 ];
 
 async function createTestPaymentLinks() {
