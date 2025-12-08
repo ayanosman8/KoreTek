@@ -63,6 +63,16 @@ export default function AboutUs() {
           </div>
         </div>
 
+        {/* Mission Statement */}
+        <div className="max-w-4xl mx-auto mb-20 text-center">
+          <h3 className="text-3xl md:text-5xl font-extralight mb-6 text-white">
+            Design Doesn&apos;t Have to Be Hard
+          </h3>
+          <p className="text-lg md:text-xl text-white/60 leading-relaxed font-light">
+            We believe in making technology accessible and beautiful for everyone.
+          </p>
+        </div>
+
         {/* Values Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {values.map((value, index) => (

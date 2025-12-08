@@ -1,6 +1,6 @@
 "use client";
 
-import { Target, TrendingUp, Users, Award, Rocket } from "lucide-react";
+import { TrendingUp, Users, Award, Rocket } from "lucide-react";
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
@@ -78,56 +78,6 @@ export default function Projects() {
       ></motion.div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Mission Statement Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="text-center mb-32"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-sm rounded-full border border-blue-400/30 mb-8 shadow-lg shadow-blue-500/10"
-          >
-            <Target className="w-5 h-5 text-cyan-400" />
-            <span className="text-sm font-semibold text-cyan-300 tracking-wide uppercase">Our Mission</span>
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl md:text-7xl lg:text-8xl font-extralight mb-8 text-white leading-tight"
-          >
-            Design Doesn&apos;t Have to Be Hard
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-xl md:text-3xl text-white/70 max-w-5xl mx-auto leading-relaxed mb-6 font-light"
-          >
-            We believe in making technology accessible and beautiful for everyone.
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="text-lg md:text-xl text-white/60 max-w-4xl mx-auto leading-relaxed mt-6"
-          >
-            At <span className="text-blue-400">KoreLnx</span>, we build tailored digital solutions by combining cutting-edge technology with bold design and practical functionality. Beyond creating exceptional products, we pride ourselves on providing excellent customer service by working closely with each client to ensure a smooth, personalized experience from start to finish. Our goal is to help businesses operate smarter, grow faster, and stand out with confidence—so you can focus on what matters most: delivering exceptional value to your clients.
-          </motion.p>
-        </motion.div>
-
         {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
