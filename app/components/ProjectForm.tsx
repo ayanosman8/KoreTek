@@ -486,7 +486,7 @@ export default function ProjectForm({ isOpen, onClose, selectedPackage = "" }: P
             {/* Section 6: Message (Optional) */}
             <div className="space-y-4">
               <h2 className="text-xl font-light text-white">
-                Tell us about your business and design needs <span className="text-white/40">(Optional)</span>
+                Tell us about your business and design needs
               </h2>
               <p className="text-sm text-white/40">
                 Describe your brand, target audience, and the goals you are aiming to achieve

@@ -16,7 +16,7 @@ export default function Team() {
       name: "Ayan Osman",
       role: "Chief Technology Officer",
       bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
-      image: "/ayan2.JPEG",
+      image: "/ayan3.JPG",
       linkedin: "#",
     },
     {
