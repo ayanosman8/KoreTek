@@ -12,7 +12,7 @@ const links = [
   },
   {
     title: "About",
-    href: "/about",
+    href: "#about",
   },
   {
     title: "Pricing",
@@ -60,16 +60,6 @@ export default function Header() {
               </div>
               <div className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
               */}
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-xl font-bold tracking-tight text-white">
-                KoreLnx
-              </h1>
-              {/* <span className="text-xs font-medium tracking-wider italic">
-                <span className="text-blue-500">Your </span>
-                <span className="text-white">Vision</span>
-                <span className="text-blue-500">.Engineered.</span>
-              </span> */}
             </div>
           </Link>
 
