@@ -17,7 +17,7 @@ export default function Team() {
       role: "Chief Technology Officer",
       bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
       image: "/ayan3.JPG",
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/ayan-osman-001580399/",
     },
     {
       name: "Sahra Osman",

@@ -39,7 +39,7 @@ export default function Projects() {
       projectName: "KoreCare Mobile",
       category: "Healthcare Mobile App",
       description: "Native mobile companion for healthcare employees featuring GPS-verified clock-in/out, offline visit documentation, and real-time sync with the KoreCare Web platform. Streamlines field operations with intuitive EVV compliance.",
-      tech: ["React Native", "Expo", "SQLite"],
+      tech: ["React Native", "Expo", "PostgreSQL"],
       results: ["Clock in/out", "Call off", "Reporting"],
       type: "mobile",
       mockupImages: ["/mobile-shot.png", "/mobile-shot-2.png"],
