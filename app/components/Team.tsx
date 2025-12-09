@@ -24,7 +24,7 @@ export default function Team() {
       role: "Chief Operating Officer",
       bio: "Strategic and results-driven leader with a strong background in operations, logistics, and streamlining workflows to maximize efficiency.",
       image: "/sahra.JPG",
-      linkedin: "#",
+      // linkedin: "",
     },
   ];
 
