@@ -1,33 +1,30 @@
 "use client";
 
 import React from "react";
-import { Linkedin, Twitter } from "lucide-react";
+import { Linkedin } from "lucide-react";
 
 export default function Team() {
   const teamMembers = [
-    {
-      name: "Ayan Osman",
-      role: "Chief Technology Officer",
-      bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
-      image: "/ayan2.JPEG",
-      linkedin: "#",
-      twitter: "#",
-    },
     {
       name: "Hayat Kore",
       role: "Chief Executive Officer",
       bio: "10+ years of extensive experience across client success, analytics, account management, and sales with a focus on bringing a customer-centric approach to decision-making and driving business growth.",
       image: "/hayat2.JPEG",
-      linkedin: "#",
-      twitter: "#",
+      linkedin: "https://www.linkedin.com/in/hayat-kore-885480399",
+    },
+    {
+      name: "Ayan Osman",
+      role: "Chief Technology Officer",
+      bio: "10+ years building scalable web and mobile applications. Expert in React, Node.js, and cloud architecture.",
+      image: "/ayan3.JPG",
+      linkedin: "https://www.linkedin.com/in/ayan-osman-001580399/",
     },
     {
       name: "Sahra Osman",
       role: "Chief Operating Officer",
       bio: "Strategic and results-driven leader with a strong background in operations, logistics, and streamlining workflows to maximize efficiency.",
       image: "/sahra.JPG",
-      linkedin: "#",
-      twitter: "#",
+      // linkedin: "",
     },
   ];
 
@@ -96,14 +93,6 @@ export default function Team() {
                   className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-blue-500/40 hover:bg-blue-500/10 transition-all duration-300 text-white/60 hover:text-blue-400"
                 >
                   <Linkedin className="w-5 h-5" />
-                </a>
-                <a
-                  href={member.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-xl bg-white/5 border border-white/10 hover:border-blue-500/40 hover:bg-blue-500/10 transition-all duration-300 text-white/60 hover:text-blue-400"
-                >
-                  <Twitter className="w-5 h-5" />
                 </a>
               </div>
             </div>

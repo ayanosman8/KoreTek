@@ -91,10 +91,9 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
   };
 
   const packageOptions = [
-    "Landing Page ($1,999)",
-    "Mobile App Package ($4,000)",
-    "Full-Stack Web App ($9,999)",
-    "Enterprise Solution ($19,999+)",
+    "Lightning Package ($10,000)",
+    "Bolt Package ($17,500)",
+    "Alpha Package ($37,500)",
     "Not sure yet / Custom",
   ];
 
@@ -552,59 +551,11 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
               )}
             </div>
 
-            {/* Package-Specific Questions */}
-            {formData.package.includes("Landing Page") && (
+            {/* Package-Specific Questions - Show for all packages since they're all mobile app packages */}
+            {(formData.package.includes("Lightning") || formData.package.includes("Bolt") || formData.package.includes("Alpha")) && (
               <>
                 <div className="pt-2 border-t border-white/10">
-                  <p className="text-xs md:text-sm text-blue-400 font-medium mb-3">Help us understand your landing page needs</p>
-                </div>
-
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                    What is your business/brand about?
-                  </label>
-                  <textarea
-                    value={formData.businessDescription}
-                    onChange={(e) =>
-                      setFormData({ ...formData, businessDescription: e.target.value })
-                    }
-                    rows={2}
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm placeholder-white/40 focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
-                    placeholder="Brief description of your business, target audience, and goals"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                    Do you have existing branding?
-                  </label>
-                  <select
-                    value={formData.hasExistingBranding}
-                    onChange={(e) =>
-                      setFormData({ ...formData, hasExistingBranding: e.target.value })
-                    }
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 0.5rem center',
-                      backgroundSize: '1.25em 1.25em',
-                      paddingRight: '2.5rem',
-                    }}
-                  >
-                    <option value="" className="bg-gray-900">Select...</option>
-                    <option value="Yes - logo and brand guidelines" className="bg-gray-900">Yes - I have logo and brand guidelines</option>
-                    <option value="Partial - logo only" className="bg-gray-900">Partial - I have a logo only</option>
-                    <option value="No - need help with branding" className="bg-gray-900">No - I need help with branding</option>
-                  </select>
-                </div>
-              </>
-            )}
-
-            {formData.package.includes("Mobile App") && (
-              <>
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-xs md:text-sm text-blue-400 font-medium mb-3">Help us understand your mobile app needs</p>
+                  <p className="text-xs md:text-sm text-blue-400 font-medium mb-3">Help us understand your project needs</p>
                 </div>
 
                 <div>
@@ -629,43 +580,6 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                     <option value="Both iOS and Android" className="bg-gray-900">Both iOS and Android</option>
                     <option value="iOS only" className="bg-gray-900">iOS only</option>
                     <option value="Android only" className="bg-gray-900">Android only</option>
-                  </select>
-                </div>
-
-              </>
-            )}
-
-            {formData.package.includes("Full-Stack Web App") && (
-              <>
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-xs md:text-sm text-blue-400 font-medium mb-3">Help us understand your web app needs</p>
-                </div>
-
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
-                    What type of web application?
-                  </label>
-                  <select
-                    value={formData.appType}
-                    onChange={(e) =>
-                      setFormData({ ...formData, appType: e.target.value })
-                    }
-                    className="w-full px-3 py-2.5 md:px-4 md:py-3 bg-white/5 border border-white/10 rounded-lg md:rounded-xl text-white text-xs md:text-sm focus:border-blue-500/40 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 appearance-none cursor-pointer"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 0.5rem center',
-                      backgroundSize: '1.25em 1.25em',
-                      paddingRight: '2.5rem',
-                    }}
-                  >
-                    <option value="" className="bg-gray-900">Select...</option>
-                    <option value="SaaS Platform" className="bg-gray-900">SaaS Platform</option>
-                    <option value="Marketplace" className="bg-gray-900">Marketplace</option>
-                    <option value="Dashboard/Admin Panel" className="bg-gray-900">Dashboard/Admin Panel</option>
-                    <option value="E-commerce" className="bg-gray-900">E-commerce</option>
-                    <option value="Social Platform" className="bg-gray-900">Social Platform</option>
-                    <option value="Other" className="bg-gray-900">Other</option>
                   </select>
                 </div>
 
@@ -694,16 +608,12 @@ export default function InquiryModal({ isOpen, onClose, selectedPackage }: Inqui
                     <option value="10,000+" className="bg-gray-900">10,000+</option>
                   </select>
                 </div>
-
               </>
             )}
 
-            {formData.package.includes("Enterprise") && (
+            {/* Additional questions for Alpha Package (Enterprise) */}
+            {formData.package.includes("Alpha") && (
               <>
-                <div className="pt-2 border-t border-white/10">
-                  <p className="text-xs md:text-sm text-blue-400 font-medium mb-3">Help us understand your enterprise needs</p>
-                </div>
-
                 <div>
                   <label className="block text-xs md:text-sm font-medium text-white/80 mb-1.5">
                     Current tech stack <span className="text-white/40 font-light text-[10px] md:text-xs">(if any)</span>
