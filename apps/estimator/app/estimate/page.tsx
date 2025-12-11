@@ -18,6 +18,7 @@ export default function EstimatePage() {
   const [hasPaid, setHasPaid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [viewMode, setViewMode] = useState<"business" | "technical">("business");
   const router = useRouter();
 
   useEffect(() => {
@@ -218,9 +219,34 @@ export default function EstimatePage() {
               <ArrowLeft className="w-4 h-4" />
               Back
             </button>
-            <h1 className="text-xl font-extralight tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Scope AI</span>
-            </h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-xl font-extralight tracking-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Scope AI</span>
+              </h1>
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1 border border-white/10">
+                <button
+                  onClick={() => setViewMode("business")}
+                  className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${
+                    viewMode === "business"
+                      ? "bg-blue-500/90 text-white"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  Business
+                </button>
+                <button
+                  onClick={() => setViewMode("technical")}
+                  className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${
+                    viewMode === "technical"
+                      ? "bg-blue-500/90 text-white"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  Technical
+                </button>
+              </div>
+            </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={handleSaveEstimate}
@@ -279,30 +305,77 @@ export default function EstimatePage() {
             </div>
           </div>
 
-          {/* Tech Stack */}
-          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Code className="w-6 h-6 text-blue-400" />
-              <h2 className="text-2xl font-light text-white">Tech Stack</h2>
+          {/* Tech Stack - Conditional Rendering */}
+          {viewMode === "technical" ? (
+            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Code className="w-6 h-6 text-blue-400" />
+                <h2 className="text-2xl font-light text-white">Tech Stack</h2>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {Object.entries(estimate.techStack).map(([category, technologies]) => (
+                  <div key={category}>
+                    <h3 className="text-sm font-medium text-white/50 uppercase mb-3 tracking-wider">{category}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-black/20 border border-white/10 rounded-full text-sm text-blue-400 font-light"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              {Object.entries(estimate.techStack).map(([category, technologies]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-medium text-white/50 uppercase mb-3 tracking-wider">{category}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {technologies.map((tech, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-black/20 border border-white/10 rounded-full text-sm text-blue-400 font-light"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+          ) : (
+            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
+              <div className="flex items-center gap-3 mb-6">
+                <Code className="w-6 h-6 text-blue-400" />
+                <h2 className="text-2xl font-light text-white">Technology Overview</h2>
+              </div>
+              <p className="text-white/70 font-light mb-6">
+                Your project will be built using modern, proven technologies that ensure:
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-white font-medium mb-1">Fast Performance</div>
+                    <div className="text-white/60 text-sm font-light">Lightning-fast load times and smooth interactions</div>
                   </div>
                 </div>
-              ))}
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-white font-medium mb-1">Mobile-Friendly</div>
+                    <div className="text-white/60 text-sm font-light">Works seamlessly on all devices and screen sizes</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-white font-medium mb-1">Secure & Reliable</div>
+                    <div className="text-white/60 text-sm font-light">Enterprise-grade security and 99.9% uptime</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <div className="text-white font-medium mb-1">Scalable</div>
+                    <div className="text-white/60 text-sm font-light">Grows with your business from day one to millions of users</div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <p className="text-white/50 text-sm font-light">
+                  Want technical details? Switch to <button onClick={() => setViewMode("technical")} className="text-blue-400 hover:text-blue-300 underline">Technical View</button>
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Risks */}
           {estimate.risks.length > 0 && (
