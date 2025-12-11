@@ -913,6 +913,16 @@
     }
   }
 
+  .bg-blue-500\/90 {
+    background-color: #3080ffe6;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-blue-500\/90 {
+      background-color: color-mix(in oklab, var(--color-blue-500) 90%, transparent);
+    }
+  }
+
   .bg-red-500\/10 {
     background-color: #fb2c361a;
   }
@@ -1061,6 +1071,10 @@
     background-clip: text;
   }
 
+  .p-1 {
+    padding: calc(var(--spacing) * 1);
+  }
+
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
@@ -1099,6 +1113,10 @@
 
   .py-1 {
     padding-block: calc(var(--spacing) * 1);
+  }
+
+  .py-1\.5 {
+    padding-block: calc(var(--spacing) * 1.5);
   }
 
   .py-2 {
@@ -1344,6 +1362,10 @@
     text-transform: uppercase;
   }
 
+  .underline {
+    text-decoration-line: underline;
+  }
+
   .antialiased {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1512,6 +1534,12 @@
     .hover\:to-blue-600:hover {
       --tw-gradient-to: var(--color-blue-600);
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-blue-300:hover {
+      color: var(--color-blue-300);
     }
   }
 

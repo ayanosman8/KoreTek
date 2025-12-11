@@ -2,3 +2,10 @@
 [00:00:01.013] Server  LOG      ✓ Ready in 775ms
 [00:00:08.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:01:44.930] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:26.084] Server  LOG      ✓ Compiled in 99ms
+[00:04:54.778] Server  LOG      ✓ Compiled in 29ms
+[00:06:18.755] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:29.274] Server  ERROR   Supabase error: {}
+[00:07:29.274] Server  ERROR   Error saving estimate: {}
+[00:07:30.157] Server  ERROR   Supabase error: {}
+[00:07:30.158] Server  ERROR   Error saving estimate: {}
