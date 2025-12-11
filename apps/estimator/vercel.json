@@ -1,6 +1,6 @@
 {
-  "installCommand": "cd ../.. && pnpm install --filter @repo/scope-ai...",
-  "buildCommand": "cd ../.. && pnpm run build --filter @repo/scope-ai",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm turbo build --filter=@repo/scope-ai",
   "framework": "nextjs",
-  "outputDirectory": ".next"
+  "outputDirectory": "apps/estimator/.next"
 }
