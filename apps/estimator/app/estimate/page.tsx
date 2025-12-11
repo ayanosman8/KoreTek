@@ -346,13 +346,13 @@ export default function EstimatePage() {
             <p className="text-white/50 mb-6 font-light">
               Answer these questions to get a more refined estimate:
             </p>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {estimate.questions.map((question, index) => (
-                <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all">
-                  <p className="text-white/80 font-light mb-3">
+                <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between gap-6">
+                  <p className="text-white/80 font-light flex-1">
                     {question}
                   </p>
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 flex-shrink-0">
                     {/* Yes Checkbox */}
                     <label className="flex items-center gap-2 cursor-pointer group">
                       <input
