@@ -27,14 +27,16 @@ export async function POST(request: NextRequest) {
     const systemPrompt = `You are an expert software development consultant. You previously provided an estimate for a project and asked clarifying questions. The client has now answered those questions.
 
 Your task is to refine the original estimate based on their answers. Focus on:
-1. Adding or removing features based on their answers
-2. Adjusting the tech stack if needed
-3. Updating risks and next steps
-4. Asking new, more specific questions (with options when appropriate)
+1. KEEP THE ORIGINAL PROJECT NAME - Do not change "${originalEstimate.projectName}"
+2. Adding or removing features based on their answers
+3. Adjusting the tech stack if needed
+4. Updating risks and next steps
+5. Asking new, more specific questions (with options when appropriate)
 
 IMPORTANT: For the questions array, use the same format as before:
 - Simple yes/no questions as strings: "Do you need offline support?"
-- Questions with specific options as objects: { "text": "Preferred approach?", "options": ["Option 1", "Option 2"] }
+- Questions with specific options as objects: { "text": "Preferred platform?", "options": ["Mobile", "Web", "Both"] }
+- Keep options SHORT and SIMPLE (e.g., "Mobile", "Web", "Both" not "Mobile first", "Web only")
 
 Return a refined estimate in the same JSON format as before.`;
 
@@ -47,7 +49,7 @@ ${answeredQuestionsText || "No questions answered yet"}
 
 Please provide a refined estimate in JSON format with this structure:
 {
-  "projectName": "Updated project name",
+  "projectName": "${originalEstimate.projectName}",
   "summary": "Updated 2-3 sentence summary reflecting their answers",
   "features": ["updated feature list based on their requirements"],
   "techStack": {

@@ -9,6 +9,12 @@ export async function generateProjectEstimate(
 ): Promise<ProjectEstimate> {
   const systemPrompt = `You are an expert software development consultant specializing in modern, cutting-edge technology stacks.
 
+IMPORTANT NAMING GUIDELINES:
+- Create a CREATIVE, BRANDABLE app name (like "TasteTrail", "Snapify", "Chatly")
+- NOT descriptive names (avoid "Personal Restaurant Journal", "Chat Application")
+- Think like a real app in the App Store - catchy, memorable, unique
+- Maximum 2 words, easy to say and remember
+
 IMPORTANT: Always recommend the MOST MODERN and CUTTING-EDGE technologies available in 2025:
 
 Tech Stack Preferences:
@@ -45,8 +51,9 @@ Your response must be a valid JSON object with this exact structure:
 IMPORTANT FOR QUESTIONS:
 - For simple yes/no questions, use strings: "Do you need offline support?"
 - For questions with specific choices, use objects with options:
-  { "text": "Preferred approach?", "options": ["Social features", "Personal only", "Hybrid"] }
+  { "text": "Preferred platform?", "options": ["Mobile", "Web", "Both"] }
 - Always provide 2-4 specific options when the answer isn't a simple yes/no
+- Keep options SHORT and SIMPLE (e.g., "Mobile", "Web", "Both" not "Mobile first", "Web only", "Both equally important")
 - Options should be clear, specific, and mutually exclusive
 
 Focus on providing detailed features, modern tech stack recommendations, identifying potential risks, and asking clarifying questions.
