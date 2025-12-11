@@ -23,3 +23,9 @@
 [00:11:48.479] Server  LOG      ✓ Compiled in 25ms
 [00:11:58.427] Server  LOG      ✓ Compiled in 25ms
 [00:12:05.863] Server  LOG      ✓ Compiled in 14ms
+[00:15:54.642] Server  LOG      ✓ Compiled in 51ms
+[00:16:04.302] Server  LOG      ✓ Compiled in 24ms
+[00:16:20.398] Server  ERROR   Supabase error: {}
+[00:16:20.398] Server  ERROR   Error saving estimate: {}
+[00:16:20.892] Server  LOG      ✓ Compiled in 91ms
+[00:16:35.158] Server  LOG      ✓ Compiled in 30ms

@@ -22,6 +22,7 @@ export default function EstimatePage() {
   const [isRefining, setIsRefining] = useState(false);
   const [refinementCount, setRefinementCount] = useState(0);
   const [showRefinedMessage, setShowRefinedMessage] = useState(false);
+  const [refinementSuccess, setRefinementSuccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -433,33 +434,30 @@ export default function EstimatePage() {
                     setRefinementCount(prev => prev + 1);
                     setQuestionAnswers({});
 
-                    // Scroll to top and show success message
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setShowRefinedMessage(true);
-                    setTimeout(() => setShowRefinedMessage(false), 4000);
+                    // Show success state in modal
+                    setRefinementSuccess(true);
+
+                    // Wait, then close modal and scroll to top
+                    setTimeout(() => {
+                      setIsRefining(false);
+                      setRefinementSuccess(false);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      setShowRefinedMessage(true);
+                      setTimeout(() => setShowRefinedMessage(false), 4000);
+                    }, 1500);
                   } catch (error) {
                     console.error("Error refining estimate:", error);
-                  } finally {
                     setIsRefining(false);
                   }
                 }}
                 disabled={isRefining || Object.values(questionAnswers).filter(a => a && a !== "").length === 0}
                 className="w-full px-6 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {isRefining ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Refining Blueprint...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Refine Blueprint</span>
-                    {Object.values(questionAnswers).filter(a => a && a !== "").length > 0 && (
-                      <span className="text-white/70 text-sm">
-                        ({Object.values(questionAnswers).filter(a => a && a !== "").length} answered)
-                      </span>
-                    )}
-                  </>
+                <span>Refine Blueprint</span>
+                {Object.values(questionAnswers).filter(a => a && a !== "").length > 0 && (
+                  <span className="text-white/70 text-sm">
+                    ({Object.values(questionAnswers).filter(a => a && a !== "").length} answered)
+                  </span>
                 )}
               </button>
               {refinementCount > 0 && (
@@ -581,6 +579,43 @@ export default function EstimatePage() {
             >
               Create Another Blueprint
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Refinement Loading Modal */}
+      {isRefining && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-300">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl p-12 max-w-md w-full mx-6 text-center">
+            {refinementSuccess ? (
+              <>
+                {/* Success State */}
+                <div className="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
+                  <CheckCircle2 className="w-12 h-12 text-blue-400" />
+                </div>
+                <h3 className="text-2xl font-light text-white mb-2">Blueprint Updated!</h3>
+                <p className="text-white/60 font-light">Your requirements have been refined</p>
+              </>
+            ) : (
+              <>
+                {/* Loading State */}
+                <div className="relative w-20 h-20 mx-auto mb-6">
+                  {/* Animated Circles */}
+                  <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+                  <div className="absolute inset-0 border-4 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
+                  <div className="absolute inset-2 border-4 border-transparent border-t-blue-400 rounded-full animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div>
+                </div>
+                <h3 className="text-2xl font-light text-white mb-2">Refining Blueprint</h3>
+                <p className="text-white/60 font-light">Analyzing your answers and updating the plan...</p>
+
+                {/* Progress Dots */}
+                <div className="flex justify-center gap-2 mt-6">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
