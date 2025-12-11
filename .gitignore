@@ -43,3 +43,7 @@ next-env.d.ts
 # localStorage polyfill storage
 tmp/
 .env.local
+
+# turbo
+.turbo
+dist/

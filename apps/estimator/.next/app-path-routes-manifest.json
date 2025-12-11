@@ -1,0 +1,16 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/page": "/admin",
+  "/api/checkout/route": "/api/checkout",
+  "/api/generate-estimate/route": "/api/generate-estimate",
+  "/api/save-estimate/route": "/api/save-estimate",
+  "/api/save-lead/route": "/api/save-lead",
+  "/api/save-user-estimate/route": "/api/save-user-estimate",
+  "/api/webhook/stripe/route": "/api/webhook/stripe",
+  "/auth/callback/route": "/auth/callback",
+  "/auth/login/page": "/auth/login",
+  "/estimate/page": "/estimate",
+  "/my-estimates/page": "/my-estimates",
+  "/page": "/"
+}

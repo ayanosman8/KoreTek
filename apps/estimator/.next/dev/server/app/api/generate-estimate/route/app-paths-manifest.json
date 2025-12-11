@@ -1,0 +1,3 @@
+{
+  "/api/generate-estimate/route": "app/api/generate-estimate/route.js"
+}

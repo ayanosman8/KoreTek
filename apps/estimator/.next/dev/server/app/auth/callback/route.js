@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/auth/callback/route.js")
+R.c("server/chunks/65d48_next_a571d785._.js")
+R.c("server/chunks/a3170_@supabase_realtime-js_dist_module_056f0344._.js")
+R.c("server/chunks/660d3_@supabase_storage-js_dist_module_9a06e2b3._.js")
+R.c("server/chunks/44925_@supabase_auth-js_dist_module_ca4b907e._.js")
+R.c("server/chunks/node_modules__pnpm_a934ab82._.js")
+R.c("server/chunks/[root-of-the-server]__f62abed7._.js")
+R.c("server/chunks/apps_estimator__next-internal_server_app_auth_callback_route_actions_399d3469.js")
+R.m("[project]/node_modules/.pnpm/next@16.0.8_react-dom@19.2.1_react@19.2.1__react@19.2.1/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/apps/estimator/app/auth/callback/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/node_modules/.pnpm/next@16.0.8_react-dom@19.2.1_react@19.2.1__react@19.2.1/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/apps/estimator/app/auth/callback/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports

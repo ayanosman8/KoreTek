@@ -1,0 +1,2 @@
+[{"name":"hot-reloader","duration":39,"timestamp":85988966089,"id":3,"tags":{"version":"16.0.8"},"startTime":1765418630014,"traceId":"046b99f2226047a7"},{"name":"compile-path","duration":12620,"timestamp":85989027913,"id":4,"tags":{"trigger":"instrumentation Node.js"},"startTime":1765418630075,"traceId":"046b99f2226047a7"}]
+[{"name":"compile-path","duration":13355,"timestamp":85989040713,"id":5,"tags":{"trigger":"instrumentation Edge"},"startTime":1765418630088,"traceId":"046b99f2226047a7"}]

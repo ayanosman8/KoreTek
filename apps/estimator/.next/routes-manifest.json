@@ -1,0 +1,128 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/api/checkout",
+      "regex": "^/api/checkout(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/checkout(?:/)?$"
+    },
+    {
+      "page": "/api/generate-estimate",
+      "regex": "^/api/generate\\-estimate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/generate\\-estimate(?:/)?$"
+    },
+    {
+      "page": "/api/save-estimate",
+      "regex": "^/api/save\\-estimate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/save\\-estimate(?:/)?$"
+    },
+    {
+      "page": "/api/save-lead",
+      "regex": "^/api/save\\-lead(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/save\\-lead(?:/)?$"
+    },
+    {
+      "page": "/api/save-user-estimate",
+      "regex": "^/api/save\\-user\\-estimate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/save\\-user\\-estimate(?:/)?$"
+    },
+    {
+      "page": "/api/webhook/stripe",
+      "regex": "^/api/webhook/stripe(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/webhook/stripe(?:/)?$"
+    },
+    {
+      "page": "/auth/callback",
+      "regex": "^/auth/callback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/callback(?:/)?$"
+    },
+    {
+      "page": "/auth/login",
+      "regex": "^/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/login(?:/)?$"
+    },
+    {
+      "page": "/estimate",
+      "regex": "^/estimate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/estimate(?:/)?$"
+    },
+    {
+      "page": "/my-estimates",
+      "regex": "^/my\\-estimates(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-estimates(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

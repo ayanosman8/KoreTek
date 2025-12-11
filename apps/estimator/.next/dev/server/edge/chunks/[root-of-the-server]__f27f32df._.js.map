@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/apps/estimator/middleware.ts"],"sourcesContent":["import { updateSession } from \"@repo/auth/middleware\";\n\nexport async function middleware(request: any) {\n  return await updateSession(request);\n}\n\nexport const config = {\n  matcher: [\n    /*\n     * Match all request paths except:\n     * - _next/static (static files)\n     * - _next/image (image optimization files)\n     * - favicon.ico (favicon file)\n     * - public folder\n     */\n    \"/((?!_next/static|_next/image|favicon.ico|.*\\\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)\",\n  ],\n};\n"],"names":[],"mappings":";;;;;;;;;;;;AAEO,eAAe,WAAW,OAAY;IAC3C,OAAO,MAAM,cAAc;AAC7B;AAEO,MAAM,SAAS;IACpB,SAAS;QACP;;;;;;KAMC,GACD;KACD;AACH"}}]
+}
