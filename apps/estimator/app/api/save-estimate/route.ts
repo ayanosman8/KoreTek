@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@repo/database/client";
-import type { ProjectEstimate } from "@repo/ai/types";
+import { supabase } from "@/lib/database/client";
+import type { ProjectEstimate } from "@/lib/ai/types";
 
 export async function POST(request: NextRequest) {
   try {

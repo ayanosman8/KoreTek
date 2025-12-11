@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { callOpenRouter, MODELS } from "@repo/ai/openrouter";
-import type { ProjectEstimate } from "@repo/ai/types";
+import { callOpenRouter, MODELS } from "@/lib/ai/openrouter";
+import type { ProjectEstimate } from "@/lib/ai/types";
 
 interface QuestionAnswer {
   question: string;

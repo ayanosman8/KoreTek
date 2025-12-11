@@ -1,4 +1,4 @@
-import { updateSession } from "@repo/auth/middleware";
+import { updateSession } from "@/lib/auth/middleware";
 
 export async function middleware(request: any) {
   return await updateSession(request);

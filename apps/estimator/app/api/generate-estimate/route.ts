@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateProjectEstimate } from "@repo/ai/estimator";
+import { generateProjectEstimate } from "@/lib/ai/estimator";
 
 export async function POST(request: NextRequest) {
   try {

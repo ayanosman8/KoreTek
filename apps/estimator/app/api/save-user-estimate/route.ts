@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@repo/auth/server";
+import { createClient } from "@/lib/auth/server";
 
 export async function POST(request: Request) {
   try {

@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Trash2, Eye, ArrowLeft, Loader2 } from "lucide-react";
-import { createClient } from "@repo/auth/client";
-import type { ProjectEstimate } from "@repo/ai/types";
+import { createClient } from "@/lib/auth/client";
+import type { ProjectEstimate } from "@/lib/ai/types";
 
 interface SavedEstimate {
   id: string;

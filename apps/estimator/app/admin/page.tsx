@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { getUser } from "@repo/auth/server";
-import { supabase } from "@repo/database/client";
+import { getUser } from "@/lib/auth/server";
+import { supabase } from "@/lib/database/client";
 import { LogOut, BarChart3, Users, FileText } from "lucide-react";
 import LogoutButton from "./components/LogoutButton";
 

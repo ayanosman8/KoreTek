@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn, signInWithGoogle } from "@repo/auth/client";
+import { signIn, signInWithGoogle } from "@/lib/auth/client";
 import { Lock, Mail, AlertCircle } from "lucide-react";
 
 function LoginForm() {

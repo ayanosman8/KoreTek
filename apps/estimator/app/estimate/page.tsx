@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save } from "lucide-react";
-import type { ProjectEstimate, QuestionOption } from "@repo/ai/types";
-import { createClient } from "@repo/auth/client";
+import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
+import { createClient } from "@/lib/auth/client";
 
 export default function EstimatePage() {
   const [estimate, setEstimate] = useState<ProjectEstimate | null>(null);
