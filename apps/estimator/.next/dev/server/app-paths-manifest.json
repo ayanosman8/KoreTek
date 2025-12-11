@@ -1,5 +1,6 @@
 {
   "/api/generate-estimate/route": "app/api/generate-estimate/route.js",
+  "/api/refine-estimate/route": "app/api/refine-estimate/route.js",
   "/api/save-estimate/route": "app/api/save-estimate/route.js",
   "/estimate/page": "app/estimate/page.js"
 }
