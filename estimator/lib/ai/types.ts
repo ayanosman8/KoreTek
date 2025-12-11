@@ -47,3 +47,65 @@ export interface Lead {
   estimate?: ProjectEstimate;
   createdAt?: Date;
 }
+
+export interface Blueprint {
+  id: string;
+  user_id: string;
+  project_name: string;
+  project_description: string | null;
+  summary: string | null;
+  features: string[];
+  tech_stack: {
+    frontend: string[];
+    backend: string[];
+    database: string[];
+    infrastructure: string[];
+  };
+  risks: string[];
+  next_steps: string[];
+  questions: (string | QuestionOption)[];
+  enhancements: Record<string, any>;
+  tags: string[];
+  is_starred: boolean;
+  is_archived: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateBlueprintInput {
+  project_name: string;
+  project_description: string;
+  summary: string;
+  features: string[];
+  tech_stack: {
+    frontend: string[];
+    backend: string[];
+    database: string[];
+    infrastructure: string[];
+  };
+  risks: string[];
+  next_steps: string[];
+  questions: (string | QuestionOption)[];
+  enhancements?: Record<string, any>;
+  tags?: string[];
+}
+
+export interface UpdateBlueprintInput {
+  project_name?: string;
+  project_description?: string;
+  summary?: string;
+  features?: string[];
+  tech_stack?: {
+    frontend: string[];
+    backend: string[];
+    database: string[];
+    infrastructure: string[];
+  };
+  risks?: string[];
+  next_steps?: string[];
+  questions?: (string | QuestionOption)[];
+  enhancements?: Record<string, any>;
+  tags?: string[];
+  is_starred?: boolean;
+  is_archived?: boolean;
+}

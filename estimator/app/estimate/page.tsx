@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, RefreshCw } from "lucide-react";
+import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, RefreshCw, BookmarkPlus } from "lucide-react";
 import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
 import { createClient, signInWithGoogle } from "@/lib/auth/client";
 import jsPDF from "jspdf";
@@ -28,6 +28,8 @@ export default function EstimatePage() {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [addedFeatures, setAddedFeatures] = useState<Set<string>>(new Set());
+  const [isSavingToLibrary, setIsSavingToLibrary] = useState(false);
+  const [saveToLibrarySuccess, setSaveToLibrarySuccess] = useState(false);
   const hasStartedGenerating = useRef(false);
   const router = useRouter();
 
@@ -510,6 +512,61 @@ export default function EstimatePage() {
     setShowDropdown(false);
   };
 
+  const handleSaveToLibrary = async () => {
+    if (!estimate) return;
+
+    // Check if user is logged in
+    const supabase = createClient();
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+
+    if (!currentUser) {
+      setShowSignUpModal(true);
+      return;
+    }
+
+    setIsSavingToLibrary(true);
+
+    try {
+      const projectDescription = localStorage.getItem("latestBlueprintDescription") || "";
+
+      const response = await fetch("/api/blueprints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          project_name: estimate.projectName,
+          project_description: projectDescription,
+          summary: estimate.summary,
+          features: estimate.features,
+          tech_stack: estimate.techStack,
+          risks: estimate.risks,
+          next_steps: estimate.nextSteps,
+          questions: estimate.questions,
+          enhancements: enhancements,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save blueprint");
+
+      setSaveToLibrarySuccess(true);
+      setTimeout(() => setSaveToLibrarySuccess(false), 3000);
+    } catch (error) {
+      console.error("Error saving to library:", error);
+      alert("Failed to save blueprint to library. Please try again.");
+    } finally {
+      setIsSavingToLibrary(false);
+    }
+  };
+
+  // Check auth status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient();
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      setUser(currentUser);
+    };
+    checkAuth();
+  }, []);
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden flex items-center justify-center">
@@ -589,16 +646,28 @@ export default function EstimatePage() {
         <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border-b border-white/10"></div>
         <div className="relative w-full px-6 lg:px-12 py-4">
           <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-white/70 hover:text-blue-400 transition-all font-light"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push("/")}
+                className="flex items-center gap-2 text-white/70 hover:text-blue-400 transition-all font-light"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+              {user && (
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="flex items-center gap-2 text-white/70 hover:text-blue-400 transition-all font-light"
+                >
+                  <BookmarkPlus className="w-4 h-4" />
+                  My Library
+                </button>
+              )}
+            </div>
             <h1 className="text-xl font-extralight tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
+            <div className="w-24"></div> {/* Spacer for centering */}
           </div>
         </div>
       </header>
@@ -972,7 +1041,35 @@ export default function EstimatePage() {
                 <p className="text-sm text-white/50 font-light">Download or copy your project blueprint</p>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* Save to Library Button */}
+                <button
+                  onClick={handleSaveToLibrary}
+                  disabled={isSavingToLibrary}
+                  className={`px-6 py-3 rounded-lg transition-all inline-flex items-center gap-2 font-medium ${
+                    saveToLibrarySuccess
+                      ? "bg-green-500/20 text-green-400 border border-green-500/50"
+                      : "bg-white/5 hover:bg-white/10 border border-white/10 text-white"
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {isSavingToLibrary ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Saving...
+                    </>
+                  ) : saveToLibrarySuccess ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      Saved!
+                    </>
+                  ) : (
+                    <>
+                      <BookmarkPlus className="w-4 h-4" />
+                      Save to Library
+                    </>
+                  )}
+                </button>
+
                 {/* Export Dropdown */}
                 <div className="relative">
                   <button
