@@ -18,6 +18,11 @@ export interface ProjectRequirements {
   estimatedCost: string;
 }
 
+export interface QuestionOption {
+  text: string;
+  options: string[];
+}
+
 export interface ProjectEstimate {
   projectName: string;
   summary: string;
@@ -30,7 +35,7 @@ export interface ProjectEstimate {
   };
   risks: string[];
   nextSteps: string[];
-  questions: string[];
+  questions: (string | QuestionOption)[];
 }
 
 export interface Lead {

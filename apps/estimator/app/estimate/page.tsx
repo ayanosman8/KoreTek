@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save } from "lucide-react";
-import type { ProjectEstimate } from "@repo/ai/types";
+import type { ProjectEstimate, QuestionOption } from "@repo/ai/types";
 import { createClient } from "@repo/auth/client";
 
 export default function EstimatePage() {
@@ -18,7 +18,7 @@ export default function EstimatePage() {
   const [hasPaid, setHasPaid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [questionAnswers, setQuestionAnswers] = useState<Record<number, "yes" | "no" | undefined>>({});
+  const [questionAnswers, setQuestionAnswers] = useState<Record<number, string>>({});
   const [isRefining, setIsRefining] = useState(false);
   const [refinementCount, setRefinementCount] = useState(0);
   const router = useRouter();
@@ -347,54 +347,47 @@ export default function EstimatePage() {
               Answer these questions to get a more refined estimate:
             </p>
             <div className="space-y-3">
-              {estimate.questions.map((question, index) => (
-                <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between gap-6">
-                  <p className="text-white/80 font-light flex-1">
-                    {question}
-                  </p>
-                  <div className="flex gap-4 flex-shrink-0">
-                    {/* Yes Checkbox */}
-                    <label className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={questionAnswers[index] === "yes"}
-                        onChange={() => setQuestionAnswers(prev => ({
-                          ...prev,
-                          [index]: prev[index] === "yes" ? undefined : "yes"
-                        }))}
-                        className="w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
-                      />
-                      <span className={`text-sm font-medium transition-colors ${
-                        questionAnswers[index] === "yes"
-                          ? "text-blue-400"
-                          : "text-white/50 group-hover:text-white/70"
-                      }`}>
-                        Yes
-                      </span>
-                    </label>
+              {estimate.questions.map((question, index) => {
+                const isSimpleQuestion = typeof question === "string";
+                const questionText = isSimpleQuestion ? question : (question as QuestionOption).text;
+                const options = isSimpleQuestion ? ["Yes", "No"] : (question as QuestionOption).options;
 
-                    {/* No Checkbox */}
-                    <label className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="checkbox"
-                        checked={questionAnswers[index] === "no"}
-                        onChange={() => setQuestionAnswers(prev => ({
-                          ...prev,
-                          [index]: prev[index] === "no" ? undefined : "no"
-                        }))}
-                        className="w-5 h-5 rounded border-white/20 bg-white/5 text-white/40 focus:ring-2 focus:ring-white/20 focus:ring-offset-0 cursor-pointer"
-                      />
-                      <span className={`text-sm font-medium transition-colors ${
-                        questionAnswers[index] === "no"
-                          ? "text-white/70"
-                          : "text-white/50 group-hover:text-white/70"
-                      }`}>
-                        No
-                      </span>
-                    </label>
+                return (
+                  <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between gap-6">
+                    <p className="text-white/80 font-light flex-1">
+                      {questionText}
+                    </p>
+                    <div className="flex gap-4 flex-shrink-0">
+                      {options.map((option) => (
+                        <label key={option} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={questionAnswers[index] === option}
+                            onChange={() => setQuestionAnswers(prev => ({
+                              ...prev,
+                              [index]: prev[index] === option ? "" : option
+                            }))}
+                            className={`w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer ${
+                              option === "Yes" || (isSimpleQuestion && options.indexOf(option) === 0)
+                                ? "text-blue-500 focus:ring-blue-500/50"
+                                : "text-white/40 focus:ring-white/20"
+                            }`}
+                          />
+                          <span className={`text-sm font-medium transition-colors whitespace-nowrap ${
+                            questionAnswers[index] === option
+                              ? option === "Yes" || (!isSimpleQuestion && options.indexOf(option) === 0)
+                                ? "text-blue-400"
+                                : "text-white/70"
+                              : "text-white/50 group-hover:text-white/70"
+                          }`}>
+                            {option}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Refine Button */}
@@ -404,10 +397,13 @@ export default function EstimatePage() {
                   setIsRefining(true);
                   try {
                     const projectDescription = sessionStorage.getItem("projectDescription");
-                    const answeredQuestions = estimate.questions.map((q, i) => ({
-                      question: q,
-                      answer: questionAnswers[i] === "yes" ? "Yes" : questionAnswers[i] === "no" ? "No" : "Not answered"
-                    }));
+                    const answeredQuestions = estimate.questions.map((q, i) => {
+                      const questionText = typeof q === "string" ? q : q.text;
+                      return {
+                        question: questionText,
+                        answer: questionAnswers[i] || "Not answered"
+                      };
+                    });
 
                     const response = await fetch("/api/refine-estimate", {
                       method: "POST",
@@ -431,7 +427,7 @@ export default function EstimatePage() {
                     setIsRefining(false);
                   }
                 }}
-                disabled={isRefining || Object.values(questionAnswers).filter(a => a !== undefined).length === 0}
+                disabled={isRefining || Object.values(questionAnswers).filter(a => a && a !== "").length === 0}
                 className="w-full px-6 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isRefining ? (
@@ -442,9 +438,9 @@ export default function EstimatePage() {
                 ) : (
                   <>
                     <span>Refine Estimate</span>
-                    {Object.values(questionAnswers).filter(a => a !== undefined).length > 0 && (
+                    {Object.values(questionAnswers).filter(a => a && a !== "").length > 0 && (
                       <span className="text-white/70 text-sm">
-                        ({Object.values(questionAnswers).filter(a => a !== undefined).length} answered)
+                        ({Object.values(questionAnswers).filter(a => a && a !== "").length} answered)
                       </span>
                     )}
                   </>

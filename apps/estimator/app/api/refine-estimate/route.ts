@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     // Build the refinement prompt
     const answeredQuestionsText = answeredQuestions
-      .filter((qa: QuestionAnswer) => qa.answer === "Yes")
+      .filter((qa: QuestionAnswer) => qa.answer && qa.answer !== "Not answered")
       .map((qa: QuestionAnswer) => `- ${qa.question}: ${qa.answer}`)
       .join("\n");
 
@@ -30,7 +30,11 @@ Your task is to refine the original estimate based on their answers. Focus on:
 1. Adding or removing features based on their answers
 2. Adjusting the tech stack if needed
 3. Updating risks and next steps
-4. Asking new, more specific questions if needed
+4. Asking new, more specific questions (with options when appropriate)
+
+IMPORTANT: For the questions array, use the same format as before:
+- Simple yes/no questions as strings: "Do you need offline support?"
+- Questions with specific options as objects: { "text": "Preferred approach?", "options": ["Option 1", "Option 2"] }
 
 Return a refined estimate in the same JSON format as before.`;
 
@@ -39,13 +43,7 @@ Return a refined estimate in the same JSON format as before.`;
 Original Estimate Summary: ${originalEstimate.summary}
 
 Client's Answers to Questions:
-${answeredQuestionsText || "No specific requirements selected"}
-
-Questions They Said NO to:
-${answeredQuestions
-  .filter((qa: QuestionAnswer) => qa.answer === "No")
-  .map((qa: QuestionAnswer) => `- ${qa.question}`)
-  .join("\n")}
+${answeredQuestionsText || "No questions answered yet"}
 
 Please provide a refined estimate in JSON format with this structure:
 {
@@ -60,7 +58,10 @@ Please provide a refined estimate in JSON format with this structure:
   },
   "risks": ["updated risks"],
   "nextSteps": ["updated next steps"],
-  "questions": ["new, more specific questions based on their answers"]
+  "questions": [
+    "Simple yes/no question?",
+    { "text": "Question with options?", "options": ["Option 1", "Option 2", "Option 3"] }
+  ]
 }`;
 
     const response = await callOpenRouter(

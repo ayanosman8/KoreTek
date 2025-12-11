@@ -801,92 +801,68 @@ function EstimatePage() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "space-y-3",
-                                    children: estimate.questions.map((question, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: estimate.questions.map((question, index)=>{
+                                        const isSimpleQuestion = typeof question === "string";
+                                        const questionText = isSimpleQuestion ? question : question.text;
+                                        const options = isSimpleQuestion ? [
+                                            "Yes",
+                                            "No"
+                                        ] : question.options;
+                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between gap-6",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-white/80 font-light flex-1",
-                                                    children: question
+                                                    children: questionText
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                    lineNumber: 352,
-                                                    columnNumber: 19
+                                                    lineNumber: 357,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex gap-4 flex-shrink-0",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    children: options.map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                             className: "flex items-center gap-2 cursor-pointer group",
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                                     type: "checkbox",
-                                                                    checked: questionAnswers[index] === "yes",
+                                                                    checked: questionAnswers[index] === option,
                                                                     onChange: ()=>setQuestionAnswers((prev)=>({
                                                                                 ...prev,
-                                                                                [index]: prev[index] === "yes" ? undefined : "yes"
+                                                                                [index]: prev[index] === option ? "" : option
                                                                             })),
-                                                                    className: "w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
+                                                                    className: `w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer ${option === "Yes" || isSimpleQuestion && options.indexOf(option) === 0 ? "text-blue-500 focus:ring-blue-500/50" : "text-white/40 focus:ring-white/20"}`
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                                    lineNumber: 358,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 363,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: `text-sm font-medium transition-colors ${questionAnswers[index] === "yes" ? "text-blue-400" : "text-white/50 group-hover:text-white/70"}`,
-                                                                    children: "Yes"
+                                                                    className: `text-sm font-medium transition-colors whitespace-nowrap ${questionAnswers[index] === option ? option === "Yes" || !isSimpleQuestion && options.indexOf(option) === 0 ? "text-blue-400" : "text-white/70" : "text-white/50 group-hover:text-white/70"}`,
+                                                                    children: option
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                                    lineNumber: 367,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 376,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
-                                                        }, void 0, true, {
+                                                        }, option, true, {
                                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                            lineNumber: 357,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                            className: "flex items-center gap-2 cursor-pointer group",
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                                    type: "checkbox",
-                                                                    checked: questionAnswers[index] === "no",
-                                                                    onChange: ()=>setQuestionAnswers((prev)=>({
-                                                                                ...prev,
-                                                                                [index]: prev[index] === "no" ? undefined : "no"
-                                                                            })),
-                                                                    className: "w-5 h-5 rounded border-white/20 bg-white/5 text-white/40 focus:ring-2 focus:ring-white/20 focus:ring-offset-0 cursor-pointer"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                                    lineNumber: 378,
-                                                                    columnNumber: 23
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: `text-sm font-medium transition-colors ${questionAnswers[index] === "no" ? "text-white/70" : "text-white/50 group-hover:text-white/70"}`,
-                                                                    children: "No"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                                    lineNumber: 387,
-                                                                    columnNumber: 23
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                            lineNumber: 377,
-                                                            columnNumber: 21
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
+                                                            lineNumber: 362,
+                                                            columnNumber: 25
+                                                        }, this))
+                                                }, void 0, false, {
                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                    lineNumber: 355,
-                                                    columnNumber: 19
+                                                    lineNumber: 360,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, index, true, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 351,
-                                            columnNumber: 17
-                                        }, this))
+                                            lineNumber: 356,
+                                            columnNumber: 19
+                                        }, this);
+                                    })
                                 }, void 0, false, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
                                     lineNumber: 349,
@@ -900,10 +876,13 @@ function EstimatePage() {
                                                 setIsRefining(true);
                                                 try {
                                                     const projectDescription = sessionStorage.getItem("projectDescription");
-                                                    const answeredQuestions = estimate.questions.map((q, i)=>({
-                                                            question: q,
-                                                            answer: questionAnswers[i] === "yes" ? "Yes" : questionAnswers[i] === "no" ? "No" : "Not answered"
-                                                        }));
+                                                    const answeredQuestions = estimate.questions.map((q, i)=>{
+                                                        const questionText = typeof q === "string" ? q : q.text;
+                                                        return {
+                                                            question: questionText,
+                                                            answer: questionAnswers[i] || "Not answered"
+                                                        };
+                                                    });
                                                     const response = await fetch("/api/refine-estimate", {
                                                         method: "POST",
                                                         headers: {
@@ -926,7 +905,7 @@ function EstimatePage() {
                                                     setIsRefining(false);
                                                 }
                                             },
-                                            disabled: isRefining || Object.values(questionAnswers).filter((a)=>a !== undefined).length === 0,
+                                            disabled: isRefining || Object.values(questionAnswers).filter((a)=>a && a !== "").length === 0,
                                             className: "w-full px-6 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2",
                                             children: isRefining ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                                 children: [
@@ -934,14 +913,14 @@ function EstimatePage() {
                                                         className: "w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                        lineNumber: 439,
+                                                        lineNumber: 435,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: "Refining Estimate..."
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                        lineNumber: 440,
+                                                        lineNumber: 436,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
@@ -951,26 +930,26 @@ function EstimatePage() {
                                                         children: "Refine Estimate"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 440,
                                                         columnNumber: 21
                                                     }, this),
-                                                    Object.values(questionAnswers).filter((a)=>a !== undefined).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    Object.values(questionAnswers).filter((a)=>a && a !== "").length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "text-white/70 text-sm",
                                                         children: [
                                                             "(",
-                                                            Object.values(questionAnswers).filter((a)=>a !== undefined).length,
+                                                            Object.values(questionAnswers).filter((a)=>a && a !== "").length,
                                                             " answered)"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                        lineNumber: 446,
+                                                        lineNumber: 442,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true)
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 402,
+                                            lineNumber: 395,
                                             columnNumber: 15
                                         }, this),
                                         refinementCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -986,7 +965,7 @@ function EstimatePage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                    lineNumber: 455,
+                                                    lineNumber: 451,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -997,7 +976,7 @@ function EstimatePage() {
                                                             "Love this refined estimate? ",
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                                 fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                                lineNumber: 461,
+                                                                lineNumber: 457,
                                                                 columnNumber: 51
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1006,31 +985,31 @@ function EstimatePage() {
                                                                 children: !user ? "Login to save" : !hasPaid ? "Unlock unlimited saves for $7" : "Save this estimate"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                                lineNumber: 462,
+                                                                lineNumber: 458,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " and compare multiple versions of your project."
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                        lineNumber: 460,
+                                                        lineNumber: 456,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                                    lineNumber: 459,
+                                                    lineNumber: 455,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 454,
+                                            lineNumber: 450,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 401,
+                                    lineNumber: 394,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -1047,7 +1026,7 @@ function EstimatePage() {
                                     children: "Ready to Start?"
                                 }, void 0, false, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 477,
+                                    lineNumber: 473,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1055,7 +1034,7 @@ function EstimatePage() {
                                     children: "Get a detailed proposal with pricing, timeline, technical specifications, and our team's availability."
                                 }, void 0, false, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 478,
+                                    lineNumber: 474,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1066,20 +1045,20 @@ function EstimatePage() {
                                             className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 485,
+                                            lineNumber: 481,
                                             columnNumber: 15
                                         }, this),
                                         "Request Detailed Proposal"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 481,
+                                    lineNumber: 477,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 476,
+                            lineNumber: 472,
                             columnNumber: 11
                         }, this)
                     ]
@@ -1106,7 +1085,7 @@ function EstimatePage() {
                                     children: "Get Full Proposal"
                                 }, void 0, false, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 497,
+                                    lineNumber: 493,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1116,18 +1095,18 @@ function EstimatePage() {
                                         className: "w-5 h-5"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                        lineNumber: 502,
+                                        lineNumber: 498,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 498,
+                                    lineNumber: 494,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 496,
+                            lineNumber: 492,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1135,7 +1114,7 @@ function EstimatePage() {
                             children: "Enter your details and we'll send you a comprehensive proposal."
                         }, void 0, false, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 505,
+                            lineNumber: 501,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1150,7 +1129,7 @@ function EstimatePage() {
                                             children: "Name"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 510,
+                                            lineNumber: 506,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1163,13 +1142,13 @@ function EstimatePage() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 513,
+                                            lineNumber: 509,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 509,
+                                    lineNumber: 505,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1180,7 +1159,7 @@ function EstimatePage() {
                                             children: "Email"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 524,
+                                            lineNumber: 520,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1193,13 +1172,13 @@ function EstimatePage() {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 527,
+                                            lineNumber: 523,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 523,
+                                    lineNumber: 519,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1212,7 +1191,7 @@ function EstimatePage() {
                                             children: "Cancel"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 538,
+                                            lineNumber: 534,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1221,30 +1200,30 @@ function EstimatePage() {
                                             children: "Send Proposal"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                            lineNumber: 545,
+                                            lineNumber: 541,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 537,
+                                    lineNumber: 533,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 508,
+                            lineNumber: 504,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                    lineNumber: 495,
+                    lineNumber: 491,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                lineNumber: 494,
+                lineNumber: 490,
                 columnNumber: 9
             }, this),
             emailSubmitted && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1256,7 +1235,7 @@ function EstimatePage() {
                             className: "w-16 h-16 text-blue-400 mx-auto mb-4"
                         }, void 0, false, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 561,
+                            lineNumber: 557,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1264,7 +1243,7 @@ function EstimatePage() {
                             children: "Proposal Sent"
                         }, void 0, false, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 562,
+                            lineNumber: 558,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1276,14 +1255,14 @@ function EstimatePage() {
                                     children: email
                                 }, void 0, false, {
                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                                    lineNumber: 564,
+                                    lineNumber: 560,
                                     columnNumber: 35
                                 }, this),
                                 ". We'll be in touch soon."
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 563,
+                            lineNumber: 559,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1292,18 +1271,18 @@ function EstimatePage() {
                             children: "Create Another Estimate"
                         }, void 0, false, {
                             fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                            lineNumber: 566,
+                            lineNumber: 562,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                    lineNumber: 560,
+                    lineNumber: 556,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/apps/estimator/app/estimate/page.tsx",
-                lineNumber: 559,
+                lineNumber: 555,
                 columnNumber: 9
             }, this)
         ]
