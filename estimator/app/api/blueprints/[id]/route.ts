@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/database/client";
+import { createClient } from "@/lib/auth/server";
 import type { UpdateBlueprintInput } from "@/lib/ai/types";
 
 // GET /api/blueprints/[id] - Fetch a single blueprint
@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -49,7 +49,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -109,7 +109,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();

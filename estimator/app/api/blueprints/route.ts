@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/database/client";
+import { createClient } from "@/lib/auth/server";
 import type { CreateBlueprintInput } from "@/lib/ai/types";
 
 // GET /api/blueprints - Fetch all user's blueprints
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 // POST /api/blueprints - Create a new blueprint
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser();
