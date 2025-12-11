@@ -343,14 +343,14 @@ export default function EstimatePage() {
           {/* Questions */}
           <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
             <h2 className="text-2xl font-light text-white mb-4">Questions for You</h2>
-            <p className="text-white/50 mb-6 font-light">
-              Answer these questions to get a more refined estimate:
+            <p className="text-white/50 mb-4 font-light">
+              Check the boxes for features you want (✓ = Yes):
             </p>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {estimate.questions.map((question, index) => (
                 <label
                   key={index}
-                  className="flex items-start gap-3 cursor-pointer group"
+                  className="flex items-start gap-3 cursor-pointer group p-3 rounded-lg hover:bg-white/5 transition-all"
                 >
                   <input
                     type="checkbox"
@@ -359,11 +359,20 @@ export default function EstimatePage() {
                       ...prev,
                       [index]: e.target.checked
                     }))}
-                    className="mt-1 w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
+                    className="mt-0.5 w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
                   />
-                  <span className="text-white/70 font-light group-hover:text-white transition-colors flex-1">
-                    {question}
-                  </span>
+                  <div className="flex-1 flex items-center justify-between gap-3">
+                    <span className="text-white/70 font-light group-hover:text-white transition-colors">
+                      {question}
+                    </span>
+                    <span className={`text-sm font-medium px-2 py-0.5 rounded transition-all ${
+                      questionAnswers[index]
+                        ? "text-blue-400 bg-blue-500/10"
+                        : "text-white/30"
+                    }`}>
+                      {questionAnswers[index] ? "✓ Yes" : "No"}
+                    </span>
+                  </div>
                 </label>
               ))}
             </div>
