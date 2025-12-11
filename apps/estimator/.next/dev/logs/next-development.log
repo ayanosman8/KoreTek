@@ -1,40 +1,4 @@
-[00:00:01.015] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:01.090] Server  LOG      ✓ Ready in 817ms
-[00:00:02.786] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:10.146] Server  LOG      ✓ Compiled in 38ms
-[00:02:37.345] Server  LOG      ✓ Compiled in 29ms
-[00:02:58.401] Server  LOG      ✓ Compiled in 87ms
-[00:05:08.122] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:19.524] Server  ERROR   Error fetching estimates: {}
-[00:05:19.754] Server  ERROR   Error fetching leads: {}
-[00:05:20.207] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:05:45.533] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:07:01.431] Server  ERROR   Supabase error: {}
-[00:07:01.431] Server  ERROR   Error saving estimate: {}
-[00:07:01.898] Server  ERROR   Supabase error: {}
-[00:07:01.898] Server  ERROR   Error saving estimate: {}
-[00:11:15.973] Server  LOG      ✓ Compiled in 128ms
-[00:11:35.039] Server  LOG      ✓ Compiled in 21ms
-[00:11:43.742] Server  LOG      ✓ Compiled in 36ms
-[00:11:53.140] Server  LOG      ✓ Compiled in 37ms
-[00:12:01.446] Server  LOG      ✓ Compiled in 60ms
-[00:13:13.542] Server  LOG      ✓ Compiled in 17ms
-[00:13:28.394] Server  LOG      ✓ Compiled in 33ms
-[00:16:08.197] Server  LOG      ✓ Compiled in 43ms
-[00:16:14.996] Server  LOG      ✓ Compiled in 33ms
-[00:16:22.208] Server  LOG      ✓ Compiled in 245ms
-[00:16:34.177] Server  ERROR   Supabase error: {}
-[00:16:34.178] Server  ERROR   Error saving estimate: {}
-[00:16:36.015] Server  LOG      ✓ Compiled in 49ms
-[00:16:40.316] Server  ERROR   Supabase error: {}
-[00:16:40.316] Server  ERROR   Error saving estimate: {}
-[00:16:49.429] Server  LOG      ✓ Compiled in 211ms
-[00:17:17.030] Browser ERROR   Error creating checkout: {}
-[00:18:52.033] Server  LOG        Reload env: .env.local
-[00:19:34.871] Server  LOG      ✓ Compiled in 104ms
-[00:19:48.873] Server  LOG        Reload env: .env.local
-[00:26:02.900] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:26:22.445] Server  ERROR   Supabase error: {}
-[00:26:22.445] Server  ERROR   Error saving estimate: {}
-[00:37:04.207] Server  LOG      ✓ Compiled in 107ms
-[00:37:12.228] Server  LOG      ✓ Compiled in 33ms
+[00:00:00.922] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:01.013] Server  LOG      ✓ Ready in 775ms
+[00:00:08.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:44.930] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
