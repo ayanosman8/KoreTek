@@ -65,7 +65,7 @@ export default function Home() {
             </h1>
 
             <p className="text-2xl md:text-3xl text-white/80 font-light">
-              Get Instant Project Estimates
+              Instant Project Blueprints
             </p>
 
             <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed font-light">
@@ -132,7 +132,7 @@ export default function Home() {
                     </>
                   ) : (
                     <>
-                      <span>Get Estimate</span>
+                      <span>Create Blueprint</span>
                       <Sparkles className="w-4 h-4" />
                     </>
                   )}
