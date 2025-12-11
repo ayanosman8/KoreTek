@@ -58,6 +58,12 @@
       "namedRegex": "^/api/generate\\-estimate(?:/)?$"
     },
     {
+      "page": "/api/refine-estimate",
+      "regex": "^/api/refine\\-estimate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/refine\\-estimate(?:/)?$"
+    },
+    {
       "page": "/api/save-estimate",
       "regex": "^/api/save\\-estimate(?:/)?$",
       "routeKeys": {},

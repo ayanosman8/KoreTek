@@ -4,6 +4,7 @@
   "/admin/page": "/admin",
   "/api/checkout/route": "/api/checkout",
   "/api/generate-estimate/route": "/api/generate-estimate",
+  "/api/refine-estimate/route": "/api/refine-estimate",
   "/api/save-estimate/route": "/api/save-estimate",
   "/api/save-lead/route": "/api/save-lead",
   "/api/save-user-estimate/route": "/api/save-user-estimate",

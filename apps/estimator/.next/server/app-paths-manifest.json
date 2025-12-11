@@ -4,6 +4,7 @@
   "/admin/page": "app/admin/page.js",
   "/api/checkout/route": "app/api/checkout/route.js",
   "/api/generate-estimate/route": "app/api/generate-estimate/route.js",
+  "/api/refine-estimate/route": "app/api/refine-estimate/route.js",
   "/api/save-estimate/route": "app/api/save-estimate/route.js",
   "/api/save-lead/route": "app/api/save-lead/route.js",
   "/api/save-user-estimate/route": "app/api/save-user-estimate/route.js",
