@@ -1,11 +1,11 @@
-import { createClient } from '@/lib/database/client';
+import { getSupabaseClient } from '@/lib/database/client';
 import { UserRole, Profile } from '@/lib/database/types';
 
 /**
  * Get the current user's profile including their role
  */
 export async function getUserProfile(): Promise<Profile | null> {
-  const supabase = createClient();
+  const supabase = getSupabaseClient();
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
@@ -90,7 +90,7 @@ export async function updateUserRole(
   userId: string,
   newRole: UserRole
 ): Promise<{ success: boolean; error?: string }> {
-  const supabase = createClient();
+  const supabase = getSupabaseClient();
 
   // Check if current user is admin
   const currentUserIsAdmin = await isAdmin();
