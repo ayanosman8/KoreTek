@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save } from "lucide-react";
+import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, RefreshCw } from "lucide-react";
 import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
-import { createClient } from "@/lib/auth/client";
+import { createClient, signInWithGoogle } from "@/lib/auth/client";
+import jsPDF from "jspdf";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function EstimatePage() {
   const [estimate, setEstimate] = useState<ProjectEstimate | null>(null);
@@ -18,48 +21,134 @@ export default function EstimatePage() {
   const [hasPaid, setHasPaid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [questionAnswers, setQuestionAnswers] = useState<Record<number, string>>({});
-  const [isRefining, setIsRefining] = useState(false);
-  const [refinementCount, setRefinementCount] = useState(0);
-  const [showRefinedMessage, setShowRefinedMessage] = useState(false);
-  const [refinementSuccess, setRefinementSuccess] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [enhancements, setEnhancements] = useState<Record<string, any>>({});
+  const [loadingEnhancement, setLoadingEnhancement] = useState<string | null>(null);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [signUpLoading, setSignUpLoading] = useState(false);
+  const [addedFeatures, setAddedFeatures] = useState<Set<string>>(new Set());
+  const hasStartedGenerating = useRef(false);
   const router = useRouter();
 
   useEffect(() => {
-    const projectDescription = sessionStorage.getItem("projectDescription");
-
-    if (!projectDescription) {
-      router.push("/");
+    // If we've already started, don't run again
+    if (hasStartedGenerating.current) {
+      console.log("Already started generating, skipping");
       return;
     }
 
-    generateEstimate(projectDescription);
+    console.log("EstimatePage useEffect running");
+
+    // First, check if we have a saved blueprint in localStorage
+    const savedBlueprint = localStorage.getItem("latestBlueprint");
+    const savedDescription = localStorage.getItem("latestBlueprintDescription");
+    const savedEnhancements = localStorage.getItem("latestBlueprintEnhancements");
+    const savedAddedFeatures = localStorage.getItem("latestBlueprintAddedFeatures");
+    console.log("Saved blueprint exists:", !!savedBlueprint);
+    console.log("Saved description:", savedDescription);
+
+    // Check if there's a NEW project description from the homepage
+    const projectDescription = sessionStorage.getItem("projectDescription");
+    console.log("Session description:", projectDescription);
+
+    // If there's a new description AND it's different from the saved one, generate new
+    if (projectDescription && projectDescription !== savedDescription) {
+      console.log("Generating new estimate");
+      hasStartedGenerating.current = true;
+      // Clear sessionStorage immediately to prevent re-runs
+      sessionStorage.removeItem("projectDescription");
+      // Clear old enhancements when generating new blueprint
+      localStorage.removeItem("latestBlueprintEnhancements");
+      localStorage.removeItem("latestBlueprintAddedFeatures");
+      // Generate a new blueprint
+      generateEstimate(projectDescription);
+      return;
+    }
+
+    // Otherwise, load from localStorage if available
+    if (savedBlueprint && savedDescription) {
+      console.log("Loading from localStorage");
+      hasStartedGenerating.current = true;
+      try {
+        const parsedEstimate = JSON.parse(savedBlueprint);
+        setEstimate(parsedEstimate);
+
+        // Restore enhancements if they exist
+        if (savedEnhancements) {
+          try {
+            const parsedEnhancements = JSON.parse(savedEnhancements);
+
+            // Only keep valid enhancement keys (discard old ones)
+            const validKeys = ['target-audience', 'monetization', 'mvp-comparison', 'cool-features'];
+            const cleanedEnhancements: Record<string, any> = {};
+
+            Object.entries(parsedEnhancements).forEach(([key, value]) => {
+              if (validKeys.includes(key)) {
+                cleanedEnhancements[key] = value;
+              }
+            });
+
+            setEnhancements(cleanedEnhancements);
+            // Save cleaned data back to localStorage
+            localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(cleanedEnhancements));
+            console.log("Restored enhancements (old ones discarded):", cleanedEnhancements);
+          } catch (e) {
+            console.error("Failed to parse saved enhancements:", e);
+          }
+        }
+
+        // Restore added features if they exist
+        if (savedAddedFeatures) {
+          try {
+            const parsedAddedFeatures = JSON.parse(savedAddedFeatures);
+            setAddedFeatures(new Set(parsedAddedFeatures));
+            console.log("Restored added features:", parsedAddedFeatures);
+          } catch (e) {
+            console.error("Failed to parse saved added features:", e);
+          }
+        }
+
+        setIsLoading(false);
+        return;
+      } catch (error) {
+        console.error("Failed to restore blueprint:", error);
+      }
+    }
+
+    // No saved blueprint and no new description - redirect home
+    console.log("No blueprint found, redirecting to home");
+    router.push("/");
   }, [router]);
 
-  // Check user auth and payment status
+  // TODO: Re-enable auth checks later
+  // useEffect(() => {
+  //   const checkUserStatus = async () => {
+  //     try {
+  //       const supabase = createClient();
+  //       const { data: { user } } = await supabase.auth.getUser();
+  //       if (user) {
+  //         setUser(user);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error checking user status:', error);
+  //     }
+  //   };
+  //   checkUserStatus();
+  // }, []);
+
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const checkUserStatus = async () => {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (user) {
-        setUser(user);
-
-        // Check if user has paid
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('has_paid')
-          .eq('id', user.id)
-          .single();
-
-        if (profile?.has_paid) {
-          setHasPaid(true);
-        }
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (showDropdown && !target.closest('.relative')) {
+        setShowDropdown(false);
       }
     };
 
-    checkUserStatus();
-  }, []);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showDropdown]);
 
   const generateEstimate = async (description: string) => {
     try {
@@ -75,6 +164,10 @@ export default function EstimatePage() {
 
       const data = await response.json();
       setEstimate(data.estimate);
+
+      // Save to localStorage for free users (persists across refreshes)
+      localStorage.setItem("latestBlueprint", JSON.stringify(data.estimate));
+      localStorage.setItem("latestBlueprintDescription", description);
 
       // Auto-save estimate to database for analytics
       try {
@@ -123,14 +216,17 @@ export default function EstimatePage() {
   };
 
   const handleSaveEstimate = async () => {
+    // DEV MODE: Skip payment check for save feature in development
+    const isDev = process.env.NODE_ENV === 'development';
+
     // Not logged in - redirect to login
-    if (!user) {
+    if (!user && !isDev) {
       router.push("/auth/login");
       return;
     }
 
-    // Logged in but hasn't paid - redirect to checkout
-    if (!hasPaid) {
+    // Logged in but hasn't paid - redirect to checkout (skip in dev)
+    if (!hasPaid && !isDev) {
       setIsSaving(true);
       try {
         const response = await fetch("/api/checkout", {
@@ -149,7 +245,7 @@ export default function EstimatePage() {
       return;
     }
 
-    // Paid user - save estimate
+    // Paid user - save estimate (or dev mode)
     setIsSaving(true);
     try {
       const projectDescription = sessionStorage.getItem("projectDescription");
@@ -172,13 +268,290 @@ export default function EstimatePage() {
     }
   };
 
+  const formatBlueprintAsMarkdown = () => {
+    if (!estimate) return '';
+
+    let markdown = `# ${estimate.projectName}\n\n`;
+    markdown += `${estimate.summary}\n\n`;
+
+    markdown += `## Core Features\n\n`;
+    estimate.features.forEach(feature => {
+      markdown += `- ${feature}\n`;
+    });
+
+    markdown += `\n## Recommended Tech Stack\n\n`;
+    Object.entries(estimate.techStack).forEach(([category, technologies]) => {
+      markdown += `### ${category}\n`;
+      technologies.forEach(tech => {
+        markdown += `- ${tech}\n`;
+      });
+      markdown += `\n`;
+    });
+
+    if (estimate.risks.length > 0) {
+      markdown += `## Potential Risks\n\n`;
+      estimate.risks.forEach(risk => {
+        markdown += `- ${risk}\n`;
+      });
+      markdown += `\n`;
+    }
+
+    markdown += `## Next Steps\n\n`;
+    estimate.nextSteps.forEach((step, index) => {
+      markdown += `${index + 1}. ${step}\n`;
+    });
+
+    markdown += `\n---\n\n*Generated by Spark - KoreLnx Project Blueprint Tool*\n`;
+
+    return markdown;
+  };
+
+  const handleCopyToClipboard = async () => {
+    // TODO: Re-enable auth check later
+    // if (!user) {
+    //   setShowSignUpModal(true);
+    //   setShowDropdown(false);
+    //   return;
+    // }
+
+    const markdown = formatBlueprintAsMarkdown();
+
+    try {
+      await navigator.clipboard.writeText(markdown);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+      setShowDropdown(false);
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
+  };
+
+  const handleDownloadMarkdown = () => {
+    // TODO: Re-enable auth check later
+    // if (!user) {
+    //   setShowSignUpModal(true);
+    //   setShowDropdown(false);
+    //   return;
+    // }
+
+    const markdown = formatBlueprintAsMarkdown();
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${estimate?.projectName.replace(/[^a-z0-9]/gi, '-').toLowerCase() || 'blueprint'}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setShowDropdown(false);
+  };
+
+  const handleAddFeature = (featureTitle: string) => {
+    if (!estimate) return;
+
+    console.log("Adding feature:", featureTitle);
+
+    const updatedEstimate = {
+      ...estimate,
+      features: [...estimate.features, featureTitle]
+    };
+
+    // Add to estimate features
+    setEstimate(updatedEstimate);
+
+    // Update localStorage
+    localStorage.setItem("latestBlueprint", JSON.stringify(updatedEstimate));
+
+    // Track as added
+    setAddedFeatures(prev => {
+      const newSet = new Set(prev);
+      newSet.add(featureTitle);
+      console.log("Added features:", newSet);
+
+      // Save to localStorage
+      localStorage.setItem("latestBlueprintAddedFeatures", JSON.stringify(Array.from(newSet)));
+
+      return newSet;
+    });
+
+    // Scroll to features section to show it was added
+    setTimeout(() => {
+      const featuresSection = document.querySelector('.features-section');
+      if (featuresSection) {
+        featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
+  const handleDownloadPDF = () => {
+    if (!estimate) return;
+
+    // TODO: Re-enable auth check later
+    // if (!user) {
+    //   setShowSignUpModal(true);
+    //   setShowDropdown(false);
+    //   return;
+    // }
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = margin;
+
+    // Helper function to add text with word wrap
+    const addText = (text: string, fontSize: number, isBold: boolean = false, color: number[] = [0, 0, 0]) => {
+      doc.setFontSize(fontSize);
+      doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+      doc.setTextColor(color[0], color[1], color[2]);
+      const lines = doc.splitTextToSize(text, pageWidth - (margin * 2));
+
+      lines.forEach((line: string) => {
+        if (yPos > pageHeight - margin) {
+          doc.addPage();
+          yPos = margin;
+        }
+        doc.text(line, margin, yPos);
+        yPos += fontSize * 0.5;
+      });
+    };
+
+    const addSpacing = (space: number) => {
+      yPos += space;
+    };
+
+    // Header
+    doc.setFillColor(59, 130, 246); // Blue color
+    doc.rect(0, 0, pageWidth, 30, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Spark', margin, 20);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Project Blueprint', pageWidth - margin - 40, 20);
+
+    yPos = 45;
+
+    // Project Name
+    addText(estimate.projectName, 18, true, [59, 130, 246]);
+    addSpacing(8);
+
+    // Summary
+    addText(estimate.summary, 11, false, [60, 60, 60]);
+    addSpacing(12);
+
+    // Features
+    doc.setDrawColor(200, 200, 200);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    addSpacing(8);
+    addText('Core Features', 14, true, [59, 130, 246]);
+    addSpacing(6);
+
+    estimate.features.forEach((feature) => {
+      addText(`• ${feature}`, 10);
+      addSpacing(2);
+    });
+    addSpacing(10);
+
+    // Tech Stack
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    addSpacing(8);
+    addText('Recommended Tech Stack', 14, true, [59, 130, 246]);
+    addSpacing(6);
+
+    Object.entries(estimate.techStack).forEach(([category, technologies]) => {
+      addText(category, 11, true);
+      addSpacing(3);
+      technologies.forEach((tech) => {
+        addText(`  • ${tech}`, 10);
+        addSpacing(2);
+      });
+      addSpacing(4);
+    });
+    addSpacing(6);
+
+    // Risks
+    if (estimate.risks.length > 0) {
+      doc.line(margin, yPos, pageWidth - margin, yPos);
+      addSpacing(8);
+      addText('Potential Risks', 14, true, [59, 130, 246]);
+      addSpacing(6);
+
+      estimate.risks.forEach((risk) => {
+        addText(`• ${risk}`, 10);
+        addSpacing(2);
+      });
+      addSpacing(10);
+    }
+
+    // Next Steps
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    addSpacing(8);
+    addText('Next Steps', 14, true, [59, 130, 246]);
+    addSpacing(6);
+
+    estimate.nextSteps.forEach((step, index) => {
+      addText(`${index + 1}. ${step}`, 10);
+      addSpacing(2);
+    });
+
+    // Footer
+    const finalYPos = doc.internal.pageSize.getHeight() - 15;
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Generated by Spark - KoreLnx Project Blueprint Tool', pageWidth / 2, finalYPos, { align: 'center' });
+
+    // Save the PDF
+    const fileName = `${estimate.projectName.replace(/[^a-z0-9]/gi, '-').toLowerCase()}-blueprint.pdf`;
+    doc.save(fileName);
+    setShowDropdown(false);
+  };
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-light text-white mb-2">Creating Your Project Blueprint</h2>
-          <p className="text-white/60 font-light">This will take just a moment...</p>
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden flex items-center justify-center">
+        {/* Animated background effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+        <div className="text-center relative z-10">
+          {/* Animated loader */}
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            {/* Outer ring */}
+            <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+
+            {/* Spinning ring 1 */}
+            <div className="absolute inset-0 border-4 border-transparent border-t-blue-500 border-r-blue-400 rounded-full animate-spin"></div>
+
+            {/* Spinning ring 2 - counter direction */}
+            <div className="absolute inset-3 border-4 border-transparent border-b-blue-400 border-l-blue-300 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+
+            {/* Inner pulsing circle */}
+            <div className="absolute inset-8 bg-gradient-to-br from-blue-500/40 to-blue-600/40 rounded-full animate-pulse"></div>
+
+            {/* Center sparkle */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-3 h-3 bg-blue-400 rounded-full animate-ping"></div>
+            </div>
+          </div>
+
+          <h2 className="text-3xl font-light text-white mb-3 animate-pulse">
+            Creating Your Project Blueprint
+          </h2>
+
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+            <div className="w-2 h-2 bg-blue-300 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          </div>
+
+          <p className="text-white/60 font-light text-lg">
+            Analyzing your idea with AI
+          </p>
         </div>
       </div>
     );
@@ -226,52 +599,12 @@ export default function EstimatePage() {
             <h1 className="text-xl font-extralight tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleSaveEstimate}
-                disabled={isSaving || saveSuccess}
-                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg transition-all text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSaving ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>{!user ? "Redirecting..." : !hasPaid ? "Redirecting..." : "Saving..."}</span>
-                  </>
-                ) : saveSuccess ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Saved!</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    <span>{!user ? "Login to Save" : !hasPaid ? "Unlock Saves" : "Save Blueprint"}</span>
-                  </>
-                )}
-              </button>
-              <button
-                onClick={() => setShowEmailCapture(true)}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg transition-all text-sm font-medium shadow-lg shadow-blue-500/20"
-              >
-                Get Proposal
-              </button>
-            </div>
           </div>
         </div>
       </header>
 
       <main className="pt-32 pb-20 px-6">
         <div className="max-w-5xl mx-auto">
-          {/* Success Message After Refinement */}
-          {showRefinedMessage && (
-            <div className="mb-8 p-4 bg-blue-500/20 border border-blue-500/40 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top duration-500">
-              <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0" />
-              <div className="flex-1">
-                <p className="text-white font-medium">Project blueprint updated!</p>
-                <p className="text-white/60 text-sm">Your requirements have been refined based on your answers.</p>
-              </div>
-            </div>
-          )}
           {/* Project Name */}
           <div className="mb-16">
             <h1 className="text-4xl md:text-6xl font-extralight text-white mb-4 tracking-tight">
@@ -282,7 +615,7 @@ export default function EstimatePage() {
 
 
           {/* Features */}
-          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
+          <div className="features-section bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
             <h2 className="text-2xl font-light text-white mb-6">Core Features</h2>
             <div className="grid md:grid-cols-2 gap-4">
               {estimate.features.map((feature, index) => (
@@ -352,141 +685,349 @@ export default function EstimatePage() {
             </ol>
           </div>
 
-          {/* Questions */}
-          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
-            <h2 className="text-2xl font-light text-white mb-4">Questions for You</h2>
-            <p className="text-white/50 mb-6 font-light">
-              Answer these questions to refine your project blueprint:
-            </p>
-            <div className="space-y-4">
-              {estimate.questions.map((question, index) => {
-                const isSimpleQuestion = typeof question === "string";
-                const questionText = isSimpleQuestion ? question : (question as QuestionOption).text;
-                const options = isSimpleQuestion ? ["Yes", "No"] : (question as QuestionOption).options;
-
-                return (
-                  <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all">
-                    <p className="text-white/80 font-light mb-3">
-                      {questionText}
-                    </p>
-                    <div className="flex flex-wrap gap-3">
-                      {options.map((option, optionIndex) => (
-                        <label key={option} className="flex items-center gap-2 cursor-pointer group min-w-[100px]">
-                          <input
-                            type="checkbox"
-                            checked={questionAnswers[index] === option}
-                            onChange={() => setQuestionAnswers(prev => ({
-                              ...prev,
-                              [index]: prev[index] === option ? "" : option
-                            }))}
-                            className={`w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer flex-shrink-0 ${
-                              optionIndex === 0
-                                ? "text-blue-500 focus:ring-blue-500/50"
-                                : "text-white/40 focus:ring-white/20"
-                            }`}
-                          />
-                          <span className={`text-sm font-medium transition-colors ${
-                            questionAnswers[index] === option
-                              ? optionIndex === 0
-                                ? "text-blue-400"
-                                : "text-white/80"
-                              : "text-white/50 group-hover:text-white/70"
-                          }`}>
-                            {option}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+          {/* Enhancement Buttons */}
+          <div className="mb-12">
+            <div className="mb-8">
+              <h2 className="text-3xl font-extralight text-white mb-2">Enhance Your Blueprint</h2>
+              <p className="text-white/50 font-light">
+                Add detailed insights to make smarter decisions
+              </p>
             </div>
 
-            {/* Refine Button */}
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <button
-                onClick={async () => {
-                  setIsRefining(true);
-                  try {
-                    const projectDescription = sessionStorage.getItem("projectDescription");
-                    const answeredQuestions = estimate.questions.map((q, i) => {
-                      const questionText = typeof q === "string" ? q : q.text;
-                      return {
-                        question: questionText,
-                        answer: questionAnswers[i] || "Not answered"
-                      };
-                    });
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                {
+                  id: 'target-audience',
+                  gradient: 'from-blue-500/10 to-cyan-500/10',
+                  border: 'border-blue-500/20',
+                  activeBorder: 'border-blue-500',
+                  title: 'Target Audience',
+                  desc: 'User personas and pain points'
+                },
+                {
+                  id: 'monetization',
+                  gradient: 'from-emerald-500/10 to-teal-500/10',
+                  border: 'border-emerald-500/20',
+                  activeBorder: 'border-emerald-500',
+                  title: 'Monetization Ideas',
+                  desc: 'Revenue models and pricing strategies'
+                },
+                {
+                  id: 'mvp-comparison',
+                  gradient: 'from-purple-500/10 to-pink-500/10',
+                  border: 'border-purple-500/20',
+                  activeBorder: 'border-purple-500',
+                  title: 'MVP Strategy',
+                  desc: 'Quick launch vs full build comparison'
+                },
+                {
+                  id: 'cool-features',
+                  gradient: 'from-orange-500/10 to-amber-500/10',
+                  border: 'border-orange-500/20',
+                  activeBorder: 'border-orange-500',
+                  title: 'Feature Ideas',
+                  desc: 'Innovative additions to consider'
+                }
+              ].map(button => (
+                <button
+                  key={button.id}
+                  onClick={async () => {
+                    if (enhancements[button.id]) {
+                      document.getElementById(`enhancement-${button.id}`)?.scrollIntoView({ behavior: 'smooth' });
+                      return;
+                    }
 
-                    const response = await fetch("/api/refine-estimate", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        projectDescription,
-                        originalEstimate: estimate,
-                        answeredQuestions
-                      }),
-                    });
+                    setLoadingEnhancement(button.id);
+                    try {
+                      const response = await fetch("/api/enhance-blueprint", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          projectDescription: localStorage.getItem("latestBlueprintDescription"),
+                          estimate,
+                          enhancementType: button.id
+                        }),
+                      });
 
-                    if (!response.ok) throw new Error("Failed to refine");
+                      if (!response.ok) throw new Error("Failed to enhance");
 
-                    const data = await response.json();
-                    setEstimate(data.estimate);
-                    setRefinementCount(prev => prev + 1);
-                    setQuestionAnswers({});
+                      const data = await response.json();
+                      const updatedEnhancements = { ...enhancements, [button.id]: data.enhancement };
+                      setEnhancements(updatedEnhancements);
 
-                    // Show success state in modal
-                    setRefinementSuccess(true);
+                      // Save enhancements to localStorage
+                      localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(updatedEnhancements));
 
-                    // Wait, then close modal and scroll to top
-                    setTimeout(() => {
-                      setIsRefining(false);
-                      setRefinementSuccess(false);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                      setShowRefinedMessage(true);
-                      setTimeout(() => setShowRefinedMessage(false), 4000);
-                    }, 1500);
-                  } catch (error) {
-                    console.error("Error refining estimate:", error);
-                    setIsRefining(false);
-                  }
-                }}
-                disabled={isRefining || Object.values(questionAnswers).filter(a => a && a !== "").length === 0}
-                className="w-full px-6 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                <span>Refine Blueprint</span>
-                {Object.values(questionAnswers).filter(a => a && a !== "").length > 0 && (
-                  <span className="text-white/70 text-sm">
-                    ({Object.values(questionAnswers).filter(a => a && a !== "").length} answered)
-                  </span>
-                )}
-              </button>
-              {refinementCount > 0 && (
-                <div className="mt-4">
-                  <p className="text-center text-white/50 text-sm mb-3 font-light">
-                    Refined {refinementCount} {refinementCount === 1 ? 'time' : 'times'}
-                  </p>
-                  {/* Soft Paywall Message */}
-                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                    <p className="text-white/80 text-sm text-center font-light">
-                      Love this refined blueprint? <br />
-                      <button
-                        onClick={handleSaveEstimate}
-                        className="text-blue-400 hover:text-blue-300 font-medium underline"
-                      >
-                        {!user ? "Login to save" : !hasPaid ? "Unlock unlimited saves for $7" : "Save this blueprint"}
-                      </button> and compare multiple versions of your project.
-                    </p>
+                      setTimeout(() => {
+                        document.getElementById(`enhancement-${button.id}`)?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    } catch (error) {
+                      console.error("Error enhancing:", error);
+                    } finally {
+                      setLoadingEnhancement(null);
+                    }
+                  }}
+                  disabled={loadingEnhancement !== null}
+                  className={`
+                    group relative overflow-hidden
+                    bg-gradient-to-br ${button.gradient}
+                    backdrop-blur-xl border-2 ${enhancements[button.id] ? button.activeBorder : button.border}
+                    rounded-2xl p-6 text-left
+                    transition-all duration-300 ease-out
+                    ${loadingEnhancement === button.id ? 'opacity-70' : ''}
+                    disabled:cursor-not-allowed
+                  `}
+                >
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-medium text-white text-lg">{button.title}</h3>
+                      <div className="flex items-center gap-2">
+                        {loadingEnhancement === button.id && (
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        )}
+                        {enhancements[button.id] && (
+                          <CheckCircle2 className="w-5 h-5 text-green-400" />
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-sm text-white/60 font-light leading-relaxed">{button.desc}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Enhanced Sections */}
+          {Object.entries(enhancements).map(([type, content]) => {
+            // Special handling for cool-features
+            if (type === 'cool-features') {
+              let features: Array<{ title: string; description: string; category: string }> = [];
+
+              try {
+                // Try to parse JSON
+                console.log("Raw content for cool-features:", content);
+                features = JSON.parse(content);
+                console.log("Parsed features:", features);
+              } catch (e) {
+                // If parsing fails, show error message
+                console.error("Failed to parse cool-features:", e);
+                console.log("Content that failed to parse:", content);
+                return (
+                  <div key={type} id={`enhancement-${type}`} className="bg-black/20 border border-blue-500/30 rounded-xl p-8 mb-8">
+                    <h2 className="text-2xl font-light text-white mb-4">Additional Feature Ideas</h2>
+                    <p className="text-white/60">Failed to load feature suggestions. Please try again.</p>
+                  </div>
+                );
+              }
+
+              return (
+                <div key={type} id={`enhancement-${type}`} className="bg-black/20 border border-blue-500/30 rounded-xl p-8 mb-8" style={{ position: 'relative', zIndex: 10 }}>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-light text-white">Additional Feature Ideas</h2>
+                    <button
+                      onClick={async () => {
+                        setLoadingEnhancement(type);
+                        try {
+                          const response = await fetch("/api/enhance-blueprint", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              projectDescription: localStorage.getItem("latestBlueprintDescription"),
+                              estimate,
+                              enhancementType: type
+                            }),
+                          });
+
+                          if (!response.ok) throw new Error("Failed to enhance");
+
+                          const data = await response.json();
+                          const updatedEnhancements = { ...enhancements, [type]: data.enhancement };
+                          setEnhancements(updatedEnhancements);
+                          localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(updatedEnhancements));
+                        } catch (error) {
+                          console.error("Error regenerating:", error);
+                        } finally {
+                          setLoadingEnhancement(null);
+                        }
+                      }}
+                      disabled={loadingEnhancement !== null}
+                      className="flex items-center gap-2 px-3 py-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${loadingEnhancement === type ? 'animate-spin' : ''}`} />
+                      Regenerate
+                    </button>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {features.map((feature, index) => {
+                      const isAdded = addedFeatures.has(feature.title);
+
+                      return (
+                        <div key={index} className="bg-black/30 border border-white/10 rounded-lg p-5 hover:border-white/20 transition-all" style={{ position: 'relative', zIndex: 20 }}>
+                          <h3 className="font-medium text-white mb-3">{feature.title}</h3>
+                          <p className="text-sm text-white/60 font-light mb-4 leading-relaxed">
+                            {feature.description}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              console.log("Adding feature:", feature.title);
+                              handleAddFeature(feature.title);
+                            }}
+                            disabled={isAdded}
+                            className={`
+                              w-full px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer
+                              ${isAdded
+                                ? 'bg-green-500/20 text-green-400'
+                                : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                              }
+                            `}
+                            style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
+                          >
+                            {isAdded ? (
+                              <span className="flex items-center justify-center gap-2">
+                                <CheckCircle2 className="w-4 h-4" />
+                                Added to Blueprint
+                              </span>
+                            ) : (
+                              '+ Add to Blueprint'
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              )}
+              );
+            }
+
+            // Regular rendering for other enhancement types
+            const titles: Record<string, string> = {
+              'target-audience': 'Target Audience',
+              'monetization': 'Monetization Ideas',
+              'mvp-comparison': 'MVP Strategy'
+            };
+
+            return (
+              <div key={type} id={`enhancement-${type}`} className="bg-black/20 border border-blue-500/30 rounded-xl p-8 mb-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-light text-white">{titles[type] || type}</h2>
+                  <button
+                    onClick={async () => {
+                      setLoadingEnhancement(type);
+                      try {
+                        const response = await fetch("/api/enhance-blueprint", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            projectDescription: localStorage.getItem("latestBlueprintDescription"),
+                            estimate,
+                            enhancementType: type
+                          }),
+                        });
+
+                        if (!response.ok) throw new Error("Failed to enhance");
+
+                        const data = await response.json();
+                        const updatedEnhancements = { ...enhancements, [type]: data.enhancement };
+                        setEnhancements(updatedEnhancements);
+                        localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(updatedEnhancements));
+                      } catch (error) {
+                        console.error("Error regenerating:", error);
+                      } finally {
+                        setLoadingEnhancement(null);
+                      }
+                    }}
+                    disabled={loadingEnhancement !== null}
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${loadingEnhancement === type ? 'animate-spin' : ''}`} />
+                    Regenerate
+                  </button>
+                </div>
+                <div className="prose prose-invert prose-lg max-w-none
+                  prose-headings:text-white prose-headings:font-light
+                  prose-h2:text-xl prose-h2:mb-4 prose-h2:mt-6 prose-h2:text-blue-400
+                  prose-h3:text-lg prose-h3:mb-3 prose-h3:mt-4 prose-h3:text-blue-300
+                  prose-p:text-white/70 prose-p:leading-relaxed prose-p:mb-4
+                  prose-ul:text-white/70 prose-ul:mb-4 prose-ul:list-disc prose-ul:ml-6
+                  prose-ol:text-white/70 prose-ol:mb-4 prose-ol:list-decimal prose-ol:ml-6
+                  prose-li:mb-2
+                  prose-strong:text-white prose-strong:font-medium
+                  prose-code:text-blue-300 prose-code:bg-black/30 prose-code:px-2 prose-code:py-1 prose-code:rounded
+                ">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {content}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Export & Actions Bar */}
+          <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg font-medium text-white mb-1">Export Your Blueprint</h3>
+                <p className="text-sm text-white/50 font-light">Download or copy your project blueprint</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                {/* Export Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowDropdown(!showDropdown)}
+                    className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export
+                    <ChevronDown className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {showDropdown && (
+                    <div className="absolute right-0 mt-2 w-48 bg-black/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl overflow-hidden z-10">
+                      <button
+                        onClick={handleCopyToClipboard}
+                        className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light"
+                      >
+                        <Copy className="w-4 h-4" />
+                        {copySuccess ? 'Copied!' : 'Copy as Markdown'}
+                      </button>
+                      <button
+                        onClick={handleDownloadMarkdown}
+                        className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light border-t border-white/5"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Download Markdown
+                      </button>
+                      <button
+                        onClick={handleDownloadPDF}
+                        className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light border-t border-white/5"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download PDF
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Get Proposal Button */}
+                <button
+                  onClick={() => setShowEmailCapture(true)}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2 shadow-lg shadow-blue-500/20"
+                >
+                  <Mail className="w-4 h-4" />
+                  Get Proposal
+                </button>
+              </div>
             </div>
           </div>
 
           {/* CTA */}
           <div className="bg-black/20 border border-white/10 rounded-xl p-12 text-center">
-            <h2 className="text-3xl font-light text-white mb-4">Ready to Start?</h2>
+            <h2 className="text-3xl font-light text-white mb-4">Ready to Start Building?</h2>
             <p className="text-white/60 mb-8 max-w-2xl mx-auto font-light">
-              Get a detailed proposal with pricing, timeline, technical specifications, and our team's availability.
+              Turn your blueprint into reality with KoreLnx. Get a detailed proposal with pricing, timeline, technical specifications, and our team's availability.
             </p>
             <button
               onClick={() => setShowEmailCapture(true)}
@@ -583,39 +1124,61 @@ export default function EstimatePage() {
         </div>
       )}
 
-      {/* Refinement Loading Modal */}
-      {isRefining && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-300">
-          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl p-12 max-w-md w-full mx-6 text-center">
-            {refinementSuccess ? (
-              <>
-                {/* Success State */}
-                <div className="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-blue-500 flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500">
-                  <CheckCircle2 className="w-12 h-12 text-blue-400" />
-                </div>
-                <h3 className="text-2xl font-light text-white mb-2">Blueprint Updated!</h3>
-                <p className="text-white/60 font-light">Your requirements have been refined</p>
-              </>
-            ) : (
-              <>
-                {/* Loading State */}
-                <div className="relative w-20 h-20 mx-auto mb-6">
-                  {/* Animated Circles */}
-                  <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
-                  <div className="absolute inset-0 border-4 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
-                  <div className="absolute inset-2 border-4 border-transparent border-t-blue-400 rounded-full animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div>
-                </div>
-                <h3 className="text-2xl font-light text-white mb-2">Refining Blueprint</h3>
-                <p className="text-white/60 font-light">Analyzing your answers and updating the plan...</p>
+      {/* Sign Up Modal */}
+      {showSignUpModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl p-8 max-w-md w-full">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-light text-white">Sign Up to Download</h3>
+              <button
+                onClick={() => setShowSignUpModal(false)}
+                className="text-white/50 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-white/60 mb-6 font-light">
+              Create a free account to download your blueprint and access premium features.
+            </p>
 
-                {/* Progress Dots */}
-                <div className="flex justify-center gap-2 mt-6">
-                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                </div>
-              </>
-            )}
+            {/* Google Sign In */}
+            <button
+              type="button"
+              onClick={async () => {
+                setSignUpLoading(true);
+                try {
+                  await signInWithGoogle();
+                } catch (error) {
+                  console.error("Sign up error:", error);
+                  setSignUpLoading(false);
+                }
+              }}
+              disabled={signUpLoading}
+              className="w-full px-6 py-3 bg-white hover:bg-gray-50 text-gray-800 font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
+            >
+              {signUpLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-gray-800/30 border-t-gray-800 rounded-full animate-spin" />
+                  <span>Signing up...</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  Continue with Google
+                </>
+              )}
+            </button>
+
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <p className="text-center text-sm text-white/40 font-light">
+                Free forever • No credit card required
+              </p>
+            </div>
           </div>
         </div>
       )}
