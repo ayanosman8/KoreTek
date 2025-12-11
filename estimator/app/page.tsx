@@ -55,7 +55,7 @@ export default function Home() {
           {/* Hero */}
           <div className="text-center mb-16 space-y-6">
             <p className="text-lg md:text-xl text-white/60 font-light tracking-wide">
-              Powered by KoreLnx
+              Powered by KoreLnxxxx
             </p>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-tight tracking-tight">
