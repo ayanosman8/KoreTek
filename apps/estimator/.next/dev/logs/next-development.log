@@ -9,3 +9,15 @@
 [00:07:29.274] Server  ERROR   Error saving estimate: {}
 [00:07:30.157] Server  ERROR   Supabase error: {}
 [00:07:30.158] Server  ERROR   Error saving estimate: {}
+[00:15:15.241] Server  LOG      ✓ Compiled in 59ms
+[00:15:25.635] Server  LOG      ✓ Compiled in 31ms
+[00:15:40.931] Server  ERROR   Supabase error: {}
+[00:15:40.931] Server  ERROR   Error saving estimate: {}
+[00:15:41.069] Browser ERROR   uncaughtError: ReferenceError: viewMode is not defined
+[00:15:49.324] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:15:49.348] Server  LOG      ✓ Compiled in 40ms
+[00:15:50.297] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:07.693] Server  ERROR   Supabase error: {}
+[00:16:07.693] Server  ERROR   Error saving estimate: {}
+[00:16:17.374] Server  LOG      ✓ Compiled in 60ms
+[00:17:06.118] Server  LOG      ✓ Compiled in 42ms

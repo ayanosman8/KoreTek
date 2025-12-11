@@ -18,7 +18,9 @@ export default function EstimatePage() {
   const [hasPaid, setHasPaid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [viewMode, setViewMode] = useState<"business" | "technical">("business");
+  const [questionAnswers, setQuestionAnswers] = useState<Record<number, boolean>>({});
+  const [isRefining, setIsRefining] = useState(false);
+  const [refinementCount, setRefinementCount] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -219,34 +221,9 @@ export default function EstimatePage() {
               <ArrowLeft className="w-4 h-4" />
               Back
             </button>
-            <div className="flex items-center gap-4">
-              <h1 className="text-xl font-extralight tracking-tight">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Scope AI</span>
-              </h1>
-              {/* View Mode Toggle */}
-              <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1 border border-white/10">
-                <button
-                  onClick={() => setViewMode("business")}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${
-                    viewMode === "business"
-                      ? "bg-blue-500/90 text-white"
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  Business
-                </button>
-                <button
-                  onClick={() => setViewMode("technical")}
-                  className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${
-                    viewMode === "technical"
-                      ? "bg-blue-500/90 text-white"
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  Technical
-                </button>
-              </div>
-            </div>
+            <h1 className="text-xl font-extralight tracking-tight">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Scope AI</span>
+            </h1>
             <div className="flex items-center gap-3">
               <button
                 onClick={handleSaveEstimate}
@@ -305,77 +282,30 @@ export default function EstimatePage() {
             </div>
           </div>
 
-          {/* Tech Stack - Conditional Rendering */}
-          {viewMode === "technical" ? (
-            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Code className="w-6 h-6 text-blue-400" />
-                <h2 className="text-2xl font-light text-white">Tech Stack</h2>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                {Object.entries(estimate.techStack).map(([category, technologies]) => (
-                  <div key={category}>
-                    <h3 className="text-sm font-medium text-white/50 uppercase mb-3 tracking-wider">{category}</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {technologies.map((tech, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-black/20 border border-white/10 rounded-full text-sm text-blue-400 font-light"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {/* Tech Stack */}
+          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Code className="w-6 h-6 text-blue-400" />
+              <h2 className="text-2xl font-light text-white">Recommended Tech Stack</h2>
             </div>
-          ) : (
-            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Code className="w-6 h-6 text-blue-400" />
-                <h2 className="text-2xl font-light text-white">Technology Overview</h2>
-              </div>
-              <p className="text-white/70 font-light mb-6">
-                Your project will be built using modern, proven technologies that ensure:
-              </p>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-white font-medium mb-1">Fast Performance</div>
-                    <div className="text-white/60 text-sm font-light">Lightning-fast load times and smooth interactions</div>
+            <div className="grid md:grid-cols-2 gap-6">
+              {Object.entries(estimate.techStack).map(([category, technologies]) => (
+                <div key={category}>
+                  <h3 className="text-sm font-medium text-white/50 uppercase mb-3 tracking-wider">{category}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {technologies.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-black/20 border border-white/10 rounded-full text-sm text-blue-400 font-light"
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-white font-medium mb-1">Mobile-Friendly</div>
-                    <div className="text-white/60 text-sm font-light">Works seamlessly on all devices and screen sizes</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-white font-medium mb-1">Secure & Reliable</div>
-                    <div className="text-white/60 text-sm font-light">Enterprise-grade security and 99.9% uptime</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-white font-medium mb-1">Scalable</div>
-                    <div className="text-white/60 text-sm font-light">Grows with your business from day one to millions of users</div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <p className="text-white/50 text-sm font-light">
-                  Want technical details? Switch to <button onClick={() => setViewMode("technical")} className="text-blue-400 hover:text-blue-300 underline">Technical View</button>
-                </p>
-              </div>
+              ))}
             </div>
-          )}
+          </div>
 
           {/* Risks */}
           {estimate.risks.length > 0 && (
@@ -414,16 +344,103 @@ export default function EstimatePage() {
           <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
             <h2 className="text-2xl font-light text-white mb-4">Questions for You</h2>
             <p className="text-white/50 mb-6 font-light">
-              These will help us refine the estimate:
+              Answer these questions to get a more refined estimate:
             </p>
-            <ul className="space-y-3">
+            <div className="space-y-4">
               {estimate.questions.map((question, index) => (
-                <li key={index} className="text-white/70 flex items-start gap-2 font-light">
-                  <span className="text-blue-400 mt-1">?</span>
-                  <span>{question}</span>
-                </li>
+                <label
+                  key={index}
+                  className="flex items-start gap-3 cursor-pointer group"
+                >
+                  <input
+                    type="checkbox"
+                    checked={questionAnswers[index] || false}
+                    onChange={(e) => setQuestionAnswers(prev => ({
+                      ...prev,
+                      [index]: e.target.checked
+                    }))}
+                    className="mt-1 w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
+                  />
+                  <span className="text-white/70 font-light group-hover:text-white transition-colors flex-1">
+                    {question}
+                  </span>
+                </label>
               ))}
-            </ul>
+            </div>
+
+            {/* Refine Button */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <button
+                onClick={async () => {
+                  setIsRefining(true);
+                  try {
+                    const projectDescription = sessionStorage.getItem("projectDescription");
+                    const answeredQuestions = estimate.questions.map((q, i) => ({
+                      question: q,
+                      answer: questionAnswers[i] ? "Yes" : "No"
+                    }));
+
+                    const response = await fetch("/api/refine-estimate", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        projectDescription,
+                        originalEstimate: estimate,
+                        answeredQuestions
+                      }),
+                    });
+
+                    if (!response.ok) throw new Error("Failed to refine");
+
+                    const data = await response.json();
+                    setEstimate(data.estimate);
+                    setRefinementCount(prev => prev + 1);
+                    setQuestionAnswers({});
+                  } catch (error) {
+                    console.error("Error refining estimate:", error);
+                  } finally {
+                    setIsRefining(false);
+                  }
+                }}
+                disabled={isRefining || Object.keys(questionAnswers).length === 0}
+                className="w-full px-6 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isRefining ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Refining Estimate...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Refine Estimate</span>
+                    {Object.keys(questionAnswers).length > 0 && (
+                      <span className="text-white/70 text-sm">
+                        ({Object.keys(questionAnswers).length} answered)
+                      </span>
+                    )}
+                  </>
+                )}
+              </button>
+              {refinementCount > 0 && (
+                <div className="mt-4">
+                  <p className="text-center text-white/50 text-sm mb-3 font-light">
+                    Refined {refinementCount} {refinementCount === 1 ? 'time' : 'times'}
+                  </p>
+                  {/* Soft Paywall Message */}
+                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+                    <p className="text-white/80 text-sm text-center font-light">
+                      Love this refined estimate? <br />
+                      <button
+                        onClick={handleSaveEstimate}
+                        className="text-blue-400 hover:text-blue-300 font-medium underline"
+                      >
+                        {!user ? "Login to save" : !hasPaid ? "Unlock unlimited saves for $7" : "Save this estimate"}
+                      </button> and compare multiple versions of your project.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* CTA */}
