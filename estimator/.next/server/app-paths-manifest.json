@@ -13,5 +13,6 @@
   "/auth/login/page": "app/auth/login/page.js",
   "/estimate/page": "app/estimate/page.js",
   "/my-estimates/page": "app/my-estimates/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/unauthorized/page": "app/unauthorized/page.js"
 }

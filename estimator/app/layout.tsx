@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Scope AI | AI-Powered Project Estimator by KoreLnx",
+  title: "Spark | AI-Powered Project Estimator by KoreLnx",
   description: "Get instant AI-powered project estimates with pricing, timeline, and tech stack recommendations. Free, no commitment required.",
 };
 

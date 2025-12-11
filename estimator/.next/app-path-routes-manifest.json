@@ -13,5 +13,6 @@
   "/auth/login/page": "/auth/login",
   "/estimate/page": "/estimate",
   "/my-estimates/page": "/my-estimates",
-  "/page": "/"
+  "/page": "/",
+  "/unauthorized/page": "/unauthorized"
 }

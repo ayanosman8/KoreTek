@@ -110,6 +110,7 @@ site_url = "https://korelnx.com"
 additional_redirect_urls = [
   # Production web URLs
   "https://korelnx.com/auth/callback",
+  "https://spark.korelnx.com/auth/callback",
   "https://estimator-iota.vercel.app/auth/callback",
   # Local development
   "http://localhost:3000/auth/callback",

@@ -224,7 +224,7 @@ export default function EstimatePage() {
               Back
             </button>
             <h1 className="text-xl font-extralight tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Scope AI</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
             <div className="flex items-center gap-3">
               <button

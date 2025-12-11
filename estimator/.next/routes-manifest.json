@@ -110,6 +110,12 @@
       "regex": "^/my\\-estimates(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/my\\-estimates(?:/)?$"
+    },
+    {
+      "page": "/unauthorized",
+      "regex": "^/unauthorized(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/unauthorized(?:/)?$"
     }
   ],
   "dataRoutes": [],

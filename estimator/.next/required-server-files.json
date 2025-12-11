@@ -99,7 +99,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/ayanosman/dev-portfolio",
+    "outputFileTracingRoot": "/Users/ayanosman/dev-portfolio/estimator",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -294,12 +294,12 @@
       "@repo/database"
     ],
     "turbopack": {
-      "root": "/Users/ayanosman/dev-portfolio"
+      "root": "/Users/ayanosman/dev-portfolio/estimator"
     },
     "distDirRoot": ".next"
   },
   "appDir": "/Users/ayanosman/dev-portfolio/estimator",
-  "relativeAppDir": "estimator",
+  "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
     ".next/server/pages-manifest.json",

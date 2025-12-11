@@ -1,0 +1,3 @@
+module.exports=[33290,a=>{"use strict";var b=a.i(7997);function c({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{className:"antialiased bg-gradient-to-br from-black via-gray-900 to-black min-h-screen",children:a})})}a.s(["default",()=>c,"metadata",0,{title:"Scope AI | AI-Powered Project Estimator by KoreLnx",description:"Get instant AI-powered project estimates with pricing, timeline, and tech stack recommendations. Free, no commitment required."}])}];
+
+//# sourceMappingURL=app_layout_tsx_271801d7._.js.map

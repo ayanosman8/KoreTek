@@ -37,13 +37,13 @@ export default function Home() {
         <div className="relative w-full px-6 lg:px-12 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-extralight tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Scope AI</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
             <a
               href="https://korelnx.com"
               className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 cursor-pointer"
             >
-              Back to Website
+              KoreLnx
             </a>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function Home() {
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-tight tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400">
-                Scope AI
+                Spark
               </span>
             </h1>
 
@@ -179,7 +179,7 @@ export default function Home() {
       <footer className="border-t border-white/10 px-6 py-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm text-white/40 font-light">
-            Scope AI by KoreLnx • Powered by Claude AI • Free Forever
+            Spark by KoreLnx
           </p>
         </div>
       </footer>
