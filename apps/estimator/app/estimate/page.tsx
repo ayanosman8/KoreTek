@@ -176,7 +176,7 @@ export default function EstimatePage() {
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-light text-white mb-2">Creating Your Project Brief</h2>
+          <h2 className="text-2xl font-light text-white mb-2">Creating Your Project Blueprint</h2>
           <p className="text-white/60 font-light">This will take just a moment...</p>
         </div>
       </div>
@@ -244,7 +244,7 @@ export default function EstimatePage() {
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
-                    <span>{!user ? "Login to Save" : !hasPaid ? "Unlock Saves" : "Save Brief"}</span>
+                    <span>{!user ? "Login to Save" : !hasPaid ? "Unlock Saves" : "Save Blueprint"}</span>
                   </>
                 )}
               </button>
@@ -266,7 +266,7 @@ export default function EstimatePage() {
             <div className="mb-8 p-4 bg-blue-500/20 border border-blue-500/40 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top duration-500">
               <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-white font-medium">Project brief updated!</p>
+                <p className="text-white font-medium">Project blueprint updated!</p>
                 <p className="text-white/60 text-sm">Your requirements have been refined based on your answers.</p>
               </div>
             </div>
@@ -355,7 +355,7 @@ export default function EstimatePage() {
           <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
             <h2 className="text-2xl font-light text-white mb-4">Questions for You</h2>
             <p className="text-white/50 mb-6 font-light">
-              Answer these questions to refine your project brief:
+              Answer these questions to refine your project blueprint:
             </p>
             <div className="space-y-4">
               {estimate.questions.map((question, index) => {
@@ -449,11 +449,11 @@ export default function EstimatePage() {
                 {isRefining ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Refining Project Brief...</span>
+                    <span>Refining Blueprint...</span>
                   </>
                 ) : (
                   <>
-                    <span>Refine Project Brief</span>
+                    <span>Refine Blueprint</span>
                     {Object.values(questionAnswers).filter(a => a && a !== "").length > 0 && (
                       <span className="text-white/70 text-sm">
                         ({Object.values(questionAnswers).filter(a => a && a !== "").length} answered)
@@ -470,12 +470,12 @@ export default function EstimatePage() {
                   {/* Soft Paywall Message */}
                   <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
                     <p className="text-white/80 text-sm text-center font-light">
-                      Love this refined brief? <br />
+                      Love this refined blueprint? <br />
                       <button
                         onClick={handleSaveEstimate}
                         className="text-blue-400 hover:text-blue-300 font-medium underline"
                       >
-                        {!user ? "Login to save" : !hasPaid ? "Unlock unlimited saves for $7" : "Save this brief"}
+                        {!user ? "Login to save" : !hasPaid ? "Unlock unlimited saves for $7" : "Save this blueprint"}
                       </button> and compare multiple versions of your project.
                     </p>
                   </div>
@@ -579,7 +579,7 @@ export default function EstimatePage() {
               onClick={() => router.push("/")}
               className="px-6 py-3 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg transition-all font-medium"
             >
-              Create Another Brief
+              Create Another Blueprint
             </button>
           </div>
         </div>
