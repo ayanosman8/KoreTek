@@ -108,8 +108,10 @@ enabled = true
 site_url = "https://korelnx.com"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 additional_redirect_urls = [
+  # Production web URLs
   "https://korelnx.com/auth/callback",
   "https://estimator-iota.vercel.app/auth/callback",
+  # Local development
   "http://localhost:3000/auth/callback",
   "http://localhost:3001/auth/callback"
 ]
