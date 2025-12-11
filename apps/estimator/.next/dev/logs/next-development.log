@@ -1,35 +1,6 @@
-[00:00:00.922] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:01.013] Server  LOG      ✓ Ready in 775ms
-[00:00:08.539] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:44.930] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:04:26.084] Server  LOG      ✓ Compiled in 99ms
-[00:04:54.778] Server  LOG      ✓ Compiled in 29ms
-[00:06:18.755] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:07:29.274] Server  ERROR   Supabase error: {}
-[00:07:29.274] Server  ERROR   Error saving estimate: {}
-[00:07:30.157] Server  ERROR   Supabase error: {}
-[00:07:30.158] Server  ERROR   Error saving estimate: {}
-[00:15:15.241] Server  LOG      ✓ Compiled in 59ms
-[00:15:25.635] Server  LOG      ✓ Compiled in 31ms
-[00:15:40.931] Server  ERROR   Supabase error: {}
-[00:15:40.931] Server  ERROR   Error saving estimate: {}
-[00:15:41.069] Browser ERROR   uncaughtError: ReferenceError: viewMode is not defined
-[00:15:49.324] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
-[00:15:49.348] Server  LOG      ✓ Compiled in 40ms
-[00:15:50.297] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:16:07.693] Server  ERROR   Supabase error: {}
-[00:16:07.693] Server  ERROR   Error saving estimate: {}
-[00:16:17.374] Server  LOG      ✓ Compiled in 60ms
-[00:17:06.118] Server  LOG      ✓ Compiled in 42ms
-[00:21:40.447] Server  LOG      ✓ Compiled in 51ms
-[00:21:52.468] Server  LOG      ✓ Compiled in 36ms
-[00:22:58.226] Server  LOG      ✓ Compiled in 30ms
-[00:23:09.305] Server  LOG      ✓ Compiled in 44ms
-[00:25:25.261] Server  LOG      ✓ Compiled in 36ms
-[00:25:40.066] Server  LOG      ✓ Compiled in 35ms
-[00:25:47.174] Server  LOG      ✓ Compiled in 25ms
-[00:28:00.214] Server  LOG      ✓ Compiled in 59ms
-[00:31:17.703] Server  LOG      ✓ Compiled in 77ms
-[00:31:29.001] Server  LOG      ✓ Compiled in 47ms
-[00:31:34.339] Server  LOG      ✓ Compiled in 25ms
-[00:31:43.076] Server  LOG      ✓ Compiled in 23ms
+[00:00:01.046] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:01.119] Server  LOG      ✓ Ready in 876ms
+[00:00:03.489] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:28.116] Server  ERROR   Supabase error: {}
+[00:00:28.116] Server  ERROR   Error saving estimate: {}
+[00:01:57.396] Server  LOG      ✓ Compiled in 146ms

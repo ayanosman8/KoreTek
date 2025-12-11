@@ -788,7 +788,7 @@ function EstimatePage() {
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-3",
+                                    className: "space-y-4",
                                     children: estimate.questions.map((question, index)=>{
                                         const isSimpleQuestion = typeof question === "string";
                                         const questionText = isSimpleQuestion ? question : question.text;
@@ -797,10 +797,10 @@ function EstimatePage() {
                                             "No"
                                         ] : question.options;
                                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between gap-6",
+                                            className: "p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-white/80 font-light flex-1",
+                                                    className: "text-white/80 font-light mb-3",
                                                     children: questionText
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
@@ -808,9 +808,9 @@ function EstimatePage() {
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex gap-4 flex-shrink-0",
-                                                    children: options.map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                            className: "flex items-center gap-2 cursor-pointer group",
+                                                    className: "flex flex-wrap gap-3",
+                                                    children: options.map((option, optionIndex)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                            className: "flex items-center gap-2 cursor-pointer group min-w-[100px]",
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                                     type: "checkbox",
@@ -819,14 +819,14 @@ function EstimatePage() {
                                                                                 ...prev,
                                                                                 [index]: prev[index] === option ? "" : option
                                                                             })),
-                                                                    className: `w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer ${option === "Yes" || isSimpleQuestion && options.indexOf(option) === 0 ? "text-blue-500 focus:ring-blue-500/50" : "text-white/40 focus:ring-white/20"}`
+                                                                    className: `w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer flex-shrink-0 ${optionIndex === 0 ? "text-blue-500 focus:ring-blue-500/50" : "text-white/40 focus:ring-white/20"}`
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",
                                                                     lineNumber: 363,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_react$2d$dom$40$19$2e$2$2e$1_react$40$19$2e$2$2e$1_$5f$react$40$19$2e$2$2e$1$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: `text-sm font-medium transition-colors whitespace-nowrap ${questionAnswers[index] === option ? option === "Yes" || !isSimpleQuestion && options.indexOf(option) === 0 ? "text-blue-400" : "text-white/70" : "text-white/50 group-hover:text-white/70"}`,
+                                                                    className: `text-sm font-medium transition-colors ${questionAnswers[index] === option ? optionIndex === 0 ? "text-blue-400" : "text-white/80" : "text-white/50 group-hover:text-white/70"}`,
                                                                     children: option
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/apps/estimator/app/estimate/page.tsx",

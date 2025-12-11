@@ -346,20 +346,20 @@ export default function EstimatePage() {
             <p className="text-white/50 mb-6 font-light">
               Answer these questions to get a more refined estimate:
             </p>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {estimate.questions.map((question, index) => {
                 const isSimpleQuestion = typeof question === "string";
                 const questionText = isSimpleQuestion ? question : (question as QuestionOption).text;
                 const options = isSimpleQuestion ? ["Yes", "No"] : (question as QuestionOption).options;
 
                 return (
-                  <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all flex items-center justify-between gap-6">
-                    <p className="text-white/80 font-light flex-1">
+                  <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all">
+                    <p className="text-white/80 font-light mb-3">
                       {questionText}
                     </p>
-                    <div className="flex gap-4 flex-shrink-0">
-                      {options.map((option) => (
-                        <label key={option} className="flex items-center gap-2 cursor-pointer group">
+                    <div className="flex flex-wrap gap-3">
+                      {options.map((option, optionIndex) => (
+                        <label key={option} className="flex items-center gap-2 cursor-pointer group min-w-[100px]">
                           <input
                             type="checkbox"
                             checked={questionAnswers[index] === option}
@@ -367,17 +367,17 @@ export default function EstimatePage() {
                               ...prev,
                               [index]: prev[index] === option ? "" : option
                             }))}
-                            className={`w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer ${
-                              option === "Yes" || (isSimpleQuestion && options.indexOf(option) === 0)
+                            className={`w-5 h-5 rounded border-white/20 bg-white/5 focus:ring-2 focus:ring-offset-0 cursor-pointer flex-shrink-0 ${
+                              optionIndex === 0
                                 ? "text-blue-500 focus:ring-blue-500/50"
                                 : "text-white/40 focus:ring-white/20"
                             }`}
                           />
-                          <span className={`text-sm font-medium transition-colors whitespace-nowrap ${
+                          <span className={`text-sm font-medium transition-colors ${
                             questionAnswers[index] === option
-                              ? option === "Yes" || (!isSimpleQuestion && options.indexOf(option) === 0)
+                              ? optionIndex === 0
                                 ? "text-blue-400"
-                                : "text-white/70"
+                                : "text-white/80"
                               : "text-white/50 group-hover:text-white/70"
                           }`}>
                             {option}

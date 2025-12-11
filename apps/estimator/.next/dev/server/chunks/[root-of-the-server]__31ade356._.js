@@ -133,8 +133,18 @@ Your response must be a valid JSON object with this exact structure:
   },
   "risks": ["risk 1", "risk 2", ...],
   "nextSteps": ["step 1", "step 2", ...],
-  "questions": ["question 1", "question 2", ...]
+  "questions": [
+    "Simple yes/no question?",
+    { "text": "Question with specific options?", "options": ["Option 1", "Option 2", "Option 3"] }
+  ]
 }
+
+IMPORTANT FOR QUESTIONS:
+- For simple yes/no questions, use strings: "Do you need offline support?"
+- For questions with specific choices, use objects with options:
+  { "text": "Preferred approach?", "options": ["Social features", "Personal only", "Hybrid"] }
+- Always provide 2-4 specific options when the answer isn't a simple yes/no
+- Options should be clear, specific, and mutually exclusive
 
 Focus on providing detailed features, modern tech stack recommendations, identifying potential risks, and asking clarifying questions.
 DO NOT include pricing or timeline estimates - those will be discussed during a follow-up consultation.`;
