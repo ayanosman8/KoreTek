@@ -18,7 +18,7 @@ export default function EstimatePage() {
   const [hasPaid, setHasPaid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [questionAnswers, setQuestionAnswers] = useState<Record<number, boolean>>({});
+  const [questionAnswers, setQuestionAnswers] = useState<Record<number, "yes" | "no" | undefined>>({});
   const [isRefining, setIsRefining] = useState(false);
   const [refinementCount, setRefinementCount] = useState(0);
   const router = useRouter();
@@ -343,37 +343,57 @@ export default function EstimatePage() {
           {/* Questions */}
           <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
             <h2 className="text-2xl font-light text-white mb-4">Questions for You</h2>
-            <p className="text-white/50 mb-4 font-light">
-              Check the boxes for features you want (✓ = Yes):
+            <p className="text-white/50 mb-6 font-light">
+              Answer these questions to get a more refined estimate:
             </p>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {estimate.questions.map((question, index) => (
-                <label
-                  key={index}
-                  className="flex items-start gap-3 cursor-pointer group p-3 rounded-lg hover:bg-white/5 transition-all"
-                >
-                  <input
-                    type="checkbox"
-                    checked={questionAnswers[index] || false}
-                    onChange={(e) => setQuestionAnswers(prev => ({
-                      ...prev,
-                      [index]: e.target.checked
-                    }))}
-                    className="mt-0.5 w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
-                  />
-                  <div className="flex-1 flex items-center justify-between gap-3">
-                    <span className="text-white/70 font-light group-hover:text-white transition-colors">
-                      {question}
-                    </span>
-                    <span className={`text-sm font-medium px-2 py-0.5 rounded transition-all ${
-                      questionAnswers[index]
-                        ? "text-blue-400 bg-blue-500/10"
-                        : "text-white/30"
-                    }`}>
-                      {questionAnswers[index] ? "✓ Yes" : "No"}
-                    </span>
+                <div key={index} className="p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all">
+                  <p className="text-white/80 font-light mb-3">
+                    {question}
+                  </p>
+                  <div className="flex gap-4">
+                    {/* Yes Checkbox */}
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={questionAnswers[index] === "yes"}
+                        onChange={() => setQuestionAnswers(prev => ({
+                          ...prev,
+                          [index]: prev[index] === "yes" ? undefined : "yes"
+                        }))}
+                        className="w-5 h-5 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-0 cursor-pointer"
+                      />
+                      <span className={`text-sm font-medium transition-colors ${
+                        questionAnswers[index] === "yes"
+                          ? "text-blue-400"
+                          : "text-white/50 group-hover:text-white/70"
+                      }`}>
+                        Yes
+                      </span>
+                    </label>
+
+                    {/* No Checkbox */}
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={questionAnswers[index] === "no"}
+                        onChange={() => setQuestionAnswers(prev => ({
+                          ...prev,
+                          [index]: prev[index] === "no" ? undefined : "no"
+                        }))}
+                        className="w-5 h-5 rounded border-white/20 bg-white/5 text-white/40 focus:ring-2 focus:ring-white/20 focus:ring-offset-0 cursor-pointer"
+                      />
+                      <span className={`text-sm font-medium transition-colors ${
+                        questionAnswers[index] === "no"
+                          ? "text-white/70"
+                          : "text-white/50 group-hover:text-white/70"
+                      }`}>
+                        No
+                      </span>
+                    </label>
                   </div>
-                </label>
+                </div>
               ))}
             </div>
 
@@ -386,7 +406,7 @@ export default function EstimatePage() {
                     const projectDescription = sessionStorage.getItem("projectDescription");
                     const answeredQuestions = estimate.questions.map((q, i) => ({
                       question: q,
-                      answer: questionAnswers[i] ? "Yes" : "No"
+                      answer: questionAnswers[i] === "yes" ? "Yes" : questionAnswers[i] === "no" ? "No" : "Not answered"
                     }));
 
                     const response = await fetch("/api/refine-estimate", {
@@ -411,7 +431,7 @@ export default function EstimatePage() {
                     setIsRefining(false);
                   }
                 }}
-                disabled={isRefining || Object.keys(questionAnswers).length === 0}
+                disabled={isRefining || Object.values(questionAnswers).filter(a => a !== undefined).length === 0}
                 className="w-full px-6 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isRefining ? (
@@ -422,9 +442,9 @@ export default function EstimatePage() {
                 ) : (
                   <>
                     <span>Refine Estimate</span>
-                    {Object.keys(questionAnswers).length > 0 && (
+                    {Object.values(questionAnswers).filter(a => a !== undefined).length > 0 && (
                       <span className="text-white/70 text-sm">
-                        ({Object.keys(questionAnswers).length} answered)
+                        ({Object.values(questionAnswers).filter(a => a !== undefined).length} answered)
                       </span>
                     )}
                   </>
