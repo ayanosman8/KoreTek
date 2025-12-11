@@ -63,16 +63,8 @@ CREATE POLICY "Users can delete own blueprints"
   FOR DELETE
   USING (auth.uid() = user_id);
 
--- Admins can view all blueprints
-CREATE POLICY "Admins can view all blueprints"
-  ON public.blueprints
-  FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.profiles
-      WHERE id = auth.uid() AND role = 'admin'
-    )
-  );
+-- Note: Admin policy removed to prevent infinite recursion with profiles RLS
+-- If admin access is needed, implement via security definer function
 
 -- Trigger to automatically update updated_at
 DROP TRIGGER IF EXISTS on_blueprint_updated ON public.blueprints;
