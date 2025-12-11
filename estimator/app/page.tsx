@@ -133,7 +133,6 @@ export default function Home() {
                   ) : (
                     <>
                       <span>Create Blueprint</span>
-                      <Sparkles className="w-4 h-4" />
                     </>
                   )}
                 </button>
