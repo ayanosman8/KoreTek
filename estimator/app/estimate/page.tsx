@@ -513,17 +513,28 @@ export default function EstimatePage() {
   };
 
   const handleSaveToLibrary = async () => {
-    if (!estimate) return;
+    console.log("🔷 Save to Library button clicked");
+
+    if (!estimate) {
+      console.log("❌ No estimate found");
+      return;
+    }
+
+    console.log("✅ Estimate exists, checking auth...");
 
     // Check if user is logged in
     const supabase = createClient();
     const { data: { user: currentUser } } = await supabase.auth.getUser();
 
+    console.log("👤 Current user:", currentUser ? currentUser.email : "Not logged in");
+
     if (!currentUser) {
+      console.log("🔓 No user - showing sign up modal");
       setShowSignUpModal(true);
       return;
     }
 
+    console.log("💾 User is logged in, saving to library...");
     setIsSavingToLibrary(true);
 
     try {
@@ -1042,6 +1053,17 @@ export default function EstimatePage() {
               </div>
 
               <div className="flex items-center gap-3 flex-wrap">
+                {/* Test Button - Temporary for debugging */}
+                <button
+                  onClick={() => {
+                    console.log("🧪 TEST BUTTON CLICKED!");
+                    alert("Test button works! Check console for logs.");
+                  }}
+                  className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg text-sm"
+                >
+                  Test Click
+                </button>
+
                 {/* Save to Library Button */}
                 <button
                   onClick={handleSaveToLibrary}
