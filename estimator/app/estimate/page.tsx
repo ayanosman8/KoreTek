@@ -33,6 +33,13 @@ export default function EstimatePage() {
   const hasStartedGenerating = useRef(false);
   const router = useRouter();
 
+  // Generate Gravatar URL from email
+  const getGravatarUrl = (email: string) => {
+    const hash = email.toLowerCase().trim();
+    // Simple hash for demo - in production you'd use proper MD5
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=3b82f6&color=fff&size=128`;
+  };
+
   useEffect(() => {
     // If we've already started, don't run again
     if (hasStartedGenerating.current) {
@@ -678,7 +685,41 @@ export default function EstimatePage() {
             <h1 className="text-xl font-extralight tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
-            <div className="w-24"></div> {/* Spacer for centering */}
+
+            {/* User Profile */}
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                  <p className="text-xs text-white/50">{user.email}</p>
+                </div>
+                <div className="relative">
+                  <img
+                    src={user.user_metadata?.avatar_url || (user.email ? getGravatarUrl(user.email) : '')}
+                    alt={user.user_metadata?.full_name || user.email || 'User'}
+                    className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
+                    onError={(e) => {
+                      // Fallback to initials if image fails to load
+                      e.currentTarget.style.display = 'none';
+                      const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
+                    <span className="text-white font-medium text-sm">
+                      {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowSignUpModal(true)}
+                className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white text-sm rounded-lg transition-all"
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </header>

@@ -30,6 +30,11 @@ export default function DashboardPage() {
   const [allTags, setAllTags] = useState<string[]>([]);
   const router = useRouter();
 
+  // Generate avatar URL from email
+  const getGravatarUrl = (email: string) => {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=3b82f6&color=fff&size=128`;
+  };
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -216,13 +221,43 @@ export default function DashboardPage() {
                 My Blueprints
               </span>
             </h1>
-            <button
-              onClick={() => router.push("/")}
-              className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg transition-all inline-flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              New Blueprint
-            </button>
+
+            {/* User Profile & Actions */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push("/")}
+                className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg transition-all inline-flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">New Blueprint</span>
+              </button>
+
+              {user && (
+                <div className="flex items-center gap-3">
+                  <div className="text-right hidden md:block">
+                    <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-white/50">{user.email}</p>
+                  </div>
+                  <div className="relative">
+                    <img
+                      src={user.user_metadata?.avatar_url || (user.email ? getGravatarUrl(user.email) : '')}
+                      alt={user.user_metadata?.full_name || user.email || 'User'}
+                      className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
+                      <span className="text-white font-medium text-sm">
+                        {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
