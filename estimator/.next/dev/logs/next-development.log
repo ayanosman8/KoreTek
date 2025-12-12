@@ -8,3 +8,10 @@
 [00:06:19.621] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:06:48.690] Server  LOG      ✓ Compiled in 105ms
 [00:17:02.481] Server  LOG      ✓ Compiled in 258ms
+[00:19:00.951] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:08.546] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:09.046] Browser ERROR   Error loading estimates: {"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.user_estimates' in the schema cache"}
+[00:20:15.684] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./app/my-estimates/page.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:20:15.809] Server  LOG      ✓ Compiled in 125ms
+[00:20:15.811] Browser ERROR   uncaughtError: Error: Internal Next.js error: Router action dispatched before initialization.
+[00:20:16.468] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
