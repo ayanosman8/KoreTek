@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, RefreshCw, BookmarkPlus } from "lucide-react";
+import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, RefreshCw, BookmarkPlus, LogOut, Settings, CreditCard, UserX } from "lucide-react";
 import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
 import { createClient, signInWithGoogle } from "@/lib/auth/client";
 import jsPDF from "jspdf";
@@ -30,14 +30,17 @@ export default function EstimatePage() {
   const [addedFeatures, setAddedFeatures] = useState<Set<string>>(new Set());
   const [isSavingToLibrary, setIsSavingToLibrary] = useState(false);
   const [saveToLibrarySuccess, setSaveToLibrarySuccess] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const hasStartedGenerating = useRef(false);
   const router = useRouter();
 
-  // Generate Gravatar URL from email
-  const getGravatarUrl = (email: string) => {
-    const hash = email.toLowerCase().trim();
-    // Simple hash for demo - in production you'd use proper MD5
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=3b82f6&color=fff&size=128`;
+  // Generate avatar URL from email
+  const getAvatarUrl = (email: string) => {
+    const name = email.split('@')[0];
+    console.log("Generating avatar for:", email, "name:", name);
+    const url = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3b82f6&color=fff&size=128&bold=true`;
+    console.log("Avatar URL:", url);
+    return url;
   };
 
   useEffect(() => {
@@ -222,6 +225,12 @@ export default function EstimatePage() {
       console.error("Error saving lead:", error);
       setEmailSubmitted(true);
     }
+  };
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
   };
 
   const handleSaveEstimate = async () => {
@@ -688,29 +697,103 @@ export default function EstimatePage() {
 
             {/* User Profile */}
             {user ? (
-              <div className="flex items-center gap-3">
-                <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
-                  <p className="text-xs text-white/50">{user.email}</p>
-                </div>
-                <div className="relative">
-                  <img
-                    src={user.user_metadata?.avatar_url || (user.email ? getGravatarUrl(user.email) : '')}
-                    alt={user.user_metadata?.full_name || user.email || 'User'}
-                    className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
-                    onError={(e) => {
-                      // Fallback to initials if image fails to load
-                      e.currentTarget.style.display = 'none';
-                      const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
-                    <span className="text-white font-medium text-sm">
-                      {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
-                    </span>
+              <div className="relative">
+                <button
+                  onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                  className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                >
+                  <div className="text-right hidden sm:block">
+                    <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-white/50">{user.email}</p>
                   </div>
-                </div>
+                  <div className="relative">
+                    <img
+                      src={user.email ? getAvatarUrl(user.email) : ''}
+                      alt={user.user_metadata?.full_name || user.email || 'User'}
+                      className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
+                      onError={(e) => {
+                        console.log("Avatar image failed to load, showing fallback");
+                        // Fallback to initials if image fails to load
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
+                      <span className="text-white font-medium text-sm">
+                        {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-white/50 hidden sm:block" />
+                </button>
+
+                {showProfileDropdown && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowProfileDropdown(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-56 bg-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
+                      <div className="p-3 border-b border-white/10">
+                        <p className="text-sm font-medium text-white truncate">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                        <p className="text-xs text-white/50 truncate">{user.email}</p>
+                      </div>
+
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            setShowProfileDropdown(false);
+                            router.push('/settings');
+                          }}
+                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                        >
+                          <Settings className="w-4 h-4 text-white/70" />
+                          <span className="text-sm text-white/90">Settings</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setShowProfileDropdown(false);
+                            // TODO: Navigate to subscription management
+                            alert('Subscription management coming soon!');
+                          }}
+                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                        >
+                          <CreditCard className="w-4 h-4 text-white/70" />
+                          <span className="text-sm text-white/90">Manage Subscription</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setShowProfileDropdown(false);
+                            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                              // TODO: Implement account deletion
+                              alert('Account deletion will be implemented soon');
+                            }
+                          }}
+                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                        >
+                          <UserX className="w-4 h-4 text-red-400" />
+                          <span className="text-sm text-red-400">Delete Account</span>
+                        </button>
+                      </div>
+
+                      <div className="border-t border-white/10">
+                        <button
+                          onClick={() => {
+                            setShowProfileDropdown(false);
+                            handleLogout();
+                          }}
+                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                        >
+                          <LogOut className="w-4 h-4 text-white/70" />
+                          <span className="text-sm text-white/90">Log Out</span>
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <button

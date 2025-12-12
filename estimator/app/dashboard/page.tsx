@@ -13,7 +13,12 @@ import {
   Filter,
   Calendar,
   Code,
-  Sparkles
+  Sparkles,
+  LogOut,
+  Settings,
+  CreditCard,
+  UserX,
+  ChevronDown
 } from "lucide-react";
 import type { Blueprint } from "@/lib/ai/types";
 import { createClient } from "@/lib/auth/client";
@@ -28,11 +33,13 @@ export default function DashboardPage() {
   const [filterArchived, setFilterArchived] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const router = useRouter();
 
   // Generate avatar URL from email
-  const getGravatarUrl = (email: string) => {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=3b82f6&color=fff&size=128`;
+  const getAvatarUrl = (email: string) => {
+    const name = email.split('@')[0];
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3b82f6&color=fff&size=128&bold=true`;
   };
 
   useEffect(() => {
@@ -85,6 +92,12 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/");
   };
 
   const filterBlueprints = () => {
@@ -233,28 +246,101 @@ export default function DashboardPage() {
               </button>
 
               {user && (
-                <div className="flex items-center gap-3">
-                  <div className="text-right hidden md:block">
-                    <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
-                    <p className="text-xs text-white/50">{user.email}</p>
-                  </div>
-                  <div className="relative">
-                    <img
-                      src={user.user_metadata?.avatar_url || (user.email ? getGravatarUrl(user.email) : '')}
-                      alt={user.user_metadata?.full_name || user.email || 'User'}
-                      className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                        if (fallback) fallback.style.display = 'flex';
-                      }}
-                    />
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
-                      <span className="text-white font-medium text-sm">
-                        {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
-                      </span>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                  >
+                    <div className="text-right hidden md:block">
+                      <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                      <p className="text-xs text-white/50">{user.email}</p>
                     </div>
-                  </div>
+                    <div className="relative">
+                      <img
+                        src={user.email ? getAvatarUrl(user.email) : ''}
+                        alt={user.user_metadata?.full_name || user.email || 'User'}
+                        className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'flex';
+                        }}
+                      />
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
+                        <span className="text-white font-medium text-sm">
+                          {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-white/50 hidden md:block" />
+                  </button>
+
+                  {showProfileDropdown && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowProfileDropdown(false)}
+                      />
+                      <div className="absolute right-0 mt-2 w-56 bg-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
+                        <div className="p-3 border-b border-white/10">
+                          <p className="text-sm font-medium text-white truncate">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
+                          <p className="text-xs text-white/50 truncate">{user.email}</p>
+                        </div>
+
+                        <div className="py-1">
+                          <button
+                            onClick={() => {
+                              setShowProfileDropdown(false);
+                              router.push('/settings');
+                            }}
+                            className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                          >
+                            <Settings className="w-4 h-4 text-white/70" />
+                            <span className="text-sm text-white/90">Settings</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setShowProfileDropdown(false);
+                              // TODO: Navigate to subscription management
+                              alert('Subscription management coming soon!');
+                            }}
+                            className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                          >
+                            <CreditCard className="w-4 h-4 text-white/70" />
+                            <span className="text-sm text-white/90">Manage Subscription</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setShowProfileDropdown(false);
+                              if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                                // TODO: Implement account deletion
+                                alert('Account deletion will be implemented soon');
+                              }
+                            }}
+                            className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                          >
+                            <UserX className="w-4 h-4 text-red-400" />
+                            <span className="text-sm text-red-400">Delete Account</span>
+                          </button>
+                        </div>
+
+                        <div className="border-t border-white/10">
+                          <button
+                            onClick={() => {
+                              setShowProfileDropdown(false);
+                              handleLogout();
+                            }}
+                            className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                          >
+                            <LogOut className="w-4 h-4 text-white/70" />
+                            <span className="text-sm text-white/90">Log Out</span>
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
