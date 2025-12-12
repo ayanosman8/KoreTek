@@ -1,6 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/api/blueprints/[id]/route": "app/api/blueprints/[id]/route.js",
+  "/auth/login/page": "app/auth/login/page.js",
   "/dashboard/blueprints/[id]/page": "app/dashboard/blueprints/[id]/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/settings/page": "app/dashboard/settings/page.js",

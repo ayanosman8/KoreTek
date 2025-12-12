@@ -2,38 +2,15 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn, signInWithGoogle } from "@/lib/auth/client";
-import { Lock, Mail, AlertCircle } from "lucide-react";
+import { signInWithGoogle } from "@/lib/auth/client";
+import { AlertCircle, Sparkles } from "lucide-react";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/admin";
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const { error } = await signIn(email, password);
-
-      if (error) {
-        setError(error.message);
-      } else {
-        router.push(redirectTo);
-        router.refresh();
-      }
-    } catch (err: any) {
-      setError(err.message || "An error occurred during login");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 
   const handleGoogleSignIn = async () => {
     setError("");
@@ -64,12 +41,16 @@ function LoginForm() {
         <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-extralight text-white mb-2">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Sparkles className="w-8 h-8 text-blue-400" />
+            </div>
+            <h1 className="text-4xl font-extralight text-white mb-3">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">
-                Scope AI
+                Spark
               </span>
             </h1>
-            <p className="text-white/60 font-light">Internal Tools Login</p>
+            <p className="text-white/60 font-light text-lg">Sign in to continue</p>
+            <p className="text-white/40 font-light text-sm mt-2">Save blueprints, unlock Pro features, and more</p>
           </div>
 
           {/* Error Message */}
@@ -85,7 +66,7 @@ function LoginForm() {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className="w-full px-6 py-3 bg-white hover:bg-gray-50 text-gray-800 font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg mb-6"
+            className="w-full px-6 py-4 bg-white hover:bg-gray-50 text-gray-800 font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -96,75 +77,29 @@ function LoginForm() {
             {loading ? "Signing in..." : "Continue with Google"}
           </button>
 
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-black text-white/40 font-light">Or continue with email</span>
-            </div>
+          {/* Benefits */}
+          <div className="mt-8 pt-6 border-t border-white/10">
+            <p className="text-sm text-white/50 font-light mb-3 text-center">What you get:</p>
+            <ul className="space-y-2 text-sm text-white/60 font-light">
+              <li className="flex items-center gap-2">
+                <span className="text-blue-400">•</span>
+                Save and manage your blueprints
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-blue-400">•</span>
+                Access from any device
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-blue-400">•</span>
+                Unlock Pro features (edit, swap tech, enhancements)
+              </li>
+            </ul>
           </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-white/70 mb-2">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 font-light transition-all"
-                  placeholder="your@email.com"
-                  required
-                  autoComplete="email"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-white/70 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 font-light transition-all"
-                  placeholder="••••••••"
-                  required
-                  autoComplete="current-password"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full px-6 py-3 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Signing in...
-                </span>
-              ) : (
-                "Sign In"
-              )}
-            </button>
-          </form>
 
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-white/10">
-            <p className="text-center text-sm text-white/40 font-light">
-              KoreLnx Internal Tools • Secure Access Only
+            <p className="text-center text-xs text-white/30 font-light">
+              Powered by KoreLnx
             </p>
           </div>
         </div>
