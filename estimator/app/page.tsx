@@ -57,12 +57,20 @@ export default function Home() {
             <h1 className="text-xl font-extralight tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
-            <a
-              href="https://korelnx.com"
-              className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 cursor-pointer"
-            >
-              KoreLnx
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://korelnx.com"
+                className="text-sm font-medium text-white/70 hover:text-blue-400 transition-all duration-300 cursor-pointer"
+              >
+                KoreLnx
+              </a>
+              <button
+                onClick={() => router.push('/auth/login')}
+                className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all font-medium text-sm"
+              >
+                Login / Sign Up
+              </button>
+            </div>
           </div>
         </div>
       </header>
