@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, BookmarkPlus, LogOut, Settings, CreditCard, UserX } from "lucide-react";
+import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, BookmarkPlus, LogOut, Settings } from "lucide-react";
 import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
 import { createClient, signInWithGoogle } from "@/lib/auth/client";
 import jsPDF from "jspdf";
@@ -723,34 +723,6 @@ export default function EstimatePage() {
                           <span className="text-sm text-white/90">Settings</span>
                         </button>
 
-                        <button
-                          onClick={() => {
-                            setShowProfileDropdown(false);
-                            // TODO: Navigate to subscription management
-                            alert('Subscription management coming soon!');
-                          }}
-                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
-                        >
-                          <CreditCard className="w-4 h-4 text-white/70" />
-                          <span className="text-sm text-white/90">Manage Subscription</span>
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setShowProfileDropdown(false);
-                            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-                              // TODO: Implement account deletion
-                              alert('Account deletion will be implemented soon');
-                            }
-                          }}
-                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
-                        >
-                          <UserX className="w-4 h-4 text-red-400" />
-                          <span className="text-sm text-red-400">Delete Account</span>
-                        </button>
-                      </div>
-
-                      <div className="border-t border-white/10">
                         <button
                           onClick={() => {
                             setShowProfileDropdown(false);
