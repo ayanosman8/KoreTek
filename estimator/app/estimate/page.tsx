@@ -1052,14 +1052,16 @@ export default function EstimatePage() {
                 <p className="text-sm text-white/50 font-light">Download or copy your project blueprint</p>
               </div>
 
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-3 flex-wrap relative z-0">
                 {/* Test Button - Temporary for debugging */}
                 <button
                   onClick={() => {
                     console.log("🧪 TEST BUTTON CLICKED!");
                     alert("Test button works! Check console for logs.");
                   }}
-                  className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg text-sm"
+                  onMouseEnter={() => console.log("🖱️ Mouse entered TEST button")}
+                  className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg text-sm relative z-20"
+                  style={{ pointerEvents: 'auto' }}
                 >
                   Test Click
                 </button>
@@ -1067,12 +1069,14 @@ export default function EstimatePage() {
                 {/* Save to Library Button */}
                 <button
                   onClick={handleSaveToLibrary}
+                  onMouseEnter={() => console.log("🖱️ Mouse entered Save to Library button")}
                   disabled={isSavingToLibrary}
-                  className={`px-6 py-3 rounded-lg transition-all inline-flex items-center gap-2 font-medium ${
+                  className={`px-6 py-3 rounded-lg transition-all inline-flex items-center gap-2 font-medium relative z-20 ${
                     saveToLibrarySuccess
                       ? "bg-green-500/20 text-green-400 border border-green-500/50"
                       : "bg-white/5 hover:bg-white/10 border border-white/10 text-white"
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  style={{ pointerEvents: 'auto' }}
                 >
                   {isSavingToLibrary ? (
                     <>
@@ -1093,7 +1097,7 @@ export default function EstimatePage() {
                 </button>
 
                 {/* Export Dropdown */}
-                <div className="relative">
+                <div className="relative z-10">
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2"
@@ -1104,7 +1108,7 @@ export default function EstimatePage() {
                   </button>
 
                   {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-black/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl overflow-hidden z-10">
+                    <div className="absolute right-0 mt-2 w-48 bg-black/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl overflow-hidden z-50">
                       <button
                         onClick={handleCopyToClipboard}
                         className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light"
