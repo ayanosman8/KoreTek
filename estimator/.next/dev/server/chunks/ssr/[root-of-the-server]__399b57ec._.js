@@ -206,8 +206,8 @@ function DashboardLayout({ children }) {
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: ()=>router.push('/settings'),
-                                        className: `px-4 py-2 rounded-lg transition-colors ${isActive('/settings') ? 'bg-white/10 text-white' : 'text-white/60 hover:text-white hover:bg-white/5'}`,
+                                        onClick: ()=>router.push('/dashboard/settings'),
+                                        className: `px-4 py-2 rounded-lg transition-colors ${isActive('/dashboard/settings') ? 'bg-white/10 text-white' : 'text-white/60 hover:text-white hover:bg-white/5'}`,
                                         children: "Settings"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/layout.tsx",
@@ -350,7 +350,7 @@ function DashboardLayout({ children }) {
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                 onClick: ()=>{
                                                                     setShowProfileDropdown(false);
-                                                                    router.push('/settings');
+                                                                    router.push('/dashboard/settings');
                                                                 },
                                                                 className: "w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left",
                                                                 children: [

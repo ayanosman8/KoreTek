@@ -1,0 +1,3 @@
+{
+  "/dashboard/blueprints/[id]/page": "app/dashboard/blueprints/[id]/page.js"
+}

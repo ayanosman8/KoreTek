@@ -5,7 +5,7 @@ import type { UpdateBlueprintInput } from "@/lib/ai/types";
 // GET /api/blueprints/[id] - Fetch a single blueprint
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -19,10 +19,12 @@ export async function GET(
       );
     }
 
+    const { id } = await params;
+
     const { data: blueprint, error } = await supabase
       .from("blueprints")
       .select("*")
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user.id)
       .single();
 
@@ -46,7 +48,7 @@ export async function GET(
 // PATCH /api/blueprints/[id] - Update a blueprint
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -60,6 +62,7 @@ export async function PATCH(
       );
     }
 
+    const { id } = await params;
     const body: UpdateBlueprintInput = await request.json();
 
     // Build update object (only include provided fields)
@@ -80,7 +83,7 @@ export async function PATCH(
     const { data: blueprint, error } = await supabase
       .from("blueprints")
       .update(updateData)
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user.id)
       .select()
       .single();
@@ -106,7 +109,7 @@ export async function PATCH(
 // DELETE /api/blueprints/[id] - Delete a blueprint
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -120,10 +123,12 @@ export async function DELETE(
       );
     }
 
+    const { id } = await params;
+
     const { error } = await supabase
       .from("blueprints")
       .delete()
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user.id);
 
     if (error) {

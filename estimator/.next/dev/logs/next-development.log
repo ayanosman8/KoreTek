@@ -9051,3 +9051,7 @@ Import traces:
   Client Component SSR:
     ./app/dashboard/page.tsx [Client Component SSR]
     ./app/dashboard/page.tsx [Server Component]
+[01:43:53.180] Server  LOG      ✓ Compiled in 183ms
+[01:43:54.532] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:43:54.731] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:43:54.766] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

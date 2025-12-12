@@ -19,7 +19,24 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/api/blueprints/[id]",
+      "regex": "^/api/blueprints/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/blueprints/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/dashboard/blueprints/[id]",
+      "regex": "^/dashboard/blueprints/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/dashboard/blueprints/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",
@@ -46,10 +63,22 @@
       "namedRegex": "^/admin(?:/)?$"
     },
     {
+      "page": "/api/blueprints",
+      "regex": "^/api/blueprints(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/blueprints(?:/)?$"
+    },
+    {
       "page": "/api/checkout",
       "regex": "^/api/checkout(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/checkout(?:/)?$"
+    },
+    {
+      "page": "/api/enhance-blueprint",
+      "regex": "^/api/enhance\\-blueprint(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/enhance\\-blueprint(?:/)?$"
     },
     {
       "page": "/api/generate-estimate",
@@ -98,6 +127,18 @@
       "regex": "^/auth/login(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/auth/login(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/dashboard/settings",
+      "regex": "^/dashboard/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard/settings(?:/)?$"
     },
     {
       "page": "/estimate",
