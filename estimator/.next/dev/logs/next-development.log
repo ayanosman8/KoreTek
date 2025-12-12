@@ -9065,3 +9065,10 @@ Import traces:
 [01:50:06.116] Server  LOG      ✓ Compiled in 361ms
 [01:50:31.165] Server  LOG      ✓ Compiled in 55ms
 [01:50:49.751] Server  LOG      ✓ Compiled in 122ms
+[01:52:25.010] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:52:31.262] Server  LOG      ✓ Compiled in 185ms
+[01:52:42.803] Server  LOG      ✓ Compiled in 101ms
+[01:53:06.937] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:53:18.883] Server  LOG      ✓ Compiled in 59ms
+[01:53:33.055] Server  LOG      ✓ Compiled in 70ms
+[01:53:58.985] Server  LOG      ✓ Compiled in 99ms

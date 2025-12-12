@@ -11,6 +11,7 @@
   "/api/save-estimate/route": "/api/save-estimate",
   "/api/save-lead/route": "/api/save-lead",
   "/api/save-user-estimate/route": "/api/save-user-estimate",
+  "/api/suggest-tech-alternatives/route": "/api/suggest-tech-alternatives",
   "/api/webhook/stripe/route": "/api/webhook/stripe",
   "/auth/callback/route": "/auth/callback",
   "/auth/login/page": "/auth/login",

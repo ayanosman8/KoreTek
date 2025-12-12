@@ -63,6 +63,16 @@ export default function DashboardLayout({
             {/* Spacer */}
             <div className="flex-1"></div>
 
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center gap-1 mr-4">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="px-4 py-2 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/5"
+              >
+                Blueprints
+              </button>
+            </nav>
+
             {/* User Profile */}
             {user && (
               <div className="relative">
@@ -107,17 +117,6 @@ export default function DashboardLayout({
                       </div>
 
                       <div className="py-1">
-                        <button
-                          onClick={() => {
-                            setShowProfileDropdown(false);
-                            router.push('/dashboard');
-                          }}
-                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
-                        >
-                          <Sparkles className="w-4 h-4 text-white/70" />
-                          <span className="text-sm text-white/90">Blueprints</span>
-                        </button>
-
                         <button
                           onClick={() => {
                             setShowProfileDropdown(false);

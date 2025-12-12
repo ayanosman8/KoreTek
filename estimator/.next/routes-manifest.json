@@ -111,6 +111,12 @@
       "namedRegex": "^/api/save\\-user\\-estimate(?:/)?$"
     },
     {
+      "page": "/api/suggest-tech-alternatives",
+      "regex": "^/api/suggest\\-tech\\-alternatives(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/suggest\\-tech\\-alternatives(?:/)?$"
+    },
+    {
       "page": "/api/webhook/stripe",
       "regex": "^/api/webhook/stripe(?:/)?$",
       "routeKeys": {},

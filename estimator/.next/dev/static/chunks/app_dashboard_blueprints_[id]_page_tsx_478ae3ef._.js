@@ -42,6 +42,10 @@ function BlueprintDetailPage() {
     const [editingSection, setEditingSection] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [editedData, setEditedData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [isSaving, setIsSaving] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [swappingTech, setSwappingTech] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [techSuggestions, setTechSuggestions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [loadingSuggestions, setLoadingSuggestions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [customTech, setCustomTech] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const params = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"])();
     const blueprintId = params.id;
@@ -211,6 +215,78 @@ function BlueprintDetailPage() {
             setIsSaving(false);
         }
     };
+    const startTechSwap = async (category, tech, index)=>{
+        if (!isPro) {
+            setShowUpgradeModal(true);
+            return;
+        }
+        setSwappingTech({
+            category,
+            tech,
+            index
+        });
+        setCustomTech("");
+        setLoadingSuggestions(true);
+        try {
+            const response = await fetch("/api/suggest-tech-alternatives", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    technology: tech,
+                    category
+                })
+            });
+            if (!response.ok) throw new Error("Failed to get suggestions");
+            const data = await response.json();
+            setTechSuggestions(data.alternatives || []);
+        } catch (error) {
+            console.error("Error getting suggestions:", error);
+            setTechSuggestions([]);
+        } finally{
+            setLoadingSuggestions(false);
+        }
+    };
+    const swapTechnology = async (newTech)=>{
+        if (!blueprint || !swappingTech) return;
+        const updatedTechStack = {
+            ...blueprint.tech_stack
+        };
+        const categoryItems = [
+            ...updatedTechStack[swappingTech.category]
+        ];
+        categoryItems[swappingTech.index] = newTech;
+        updatedTechStack[swappingTech.category] = categoryItems;
+        setIsSaving(true);
+        try {
+            const response = await fetch(`/api/blueprints/${blueprintId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tech_stack: updatedTechStack
+                })
+            });
+            if (!response.ok) throw new Error("Failed to save");
+            const data = await response.json();
+            setBlueprint(data.blueprint);
+            setSwappingTech(null);
+            setTechSuggestions([]);
+            setCustomTech("");
+        } catch (error) {
+            console.error("Error swapping tech:", error);
+            alert("Failed to swap technology. Please try again.");
+        } finally{
+            setIsSaving(false);
+        }
+    };
+    const cancelTechSwap = ()=>{
+        setSwappingTech(null);
+        setTechSuggestions([]);
+        setCustomTech("");
+    };
     if (isLoading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center",
@@ -218,12 +294,12 @@ function BlueprintDetailPage() {
                 className: "w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin"
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                lineNumber: 189,
+                lineNumber: 259,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-            lineNumber: 188,
+            lineNumber: 258,
             columnNumber: 7
         }, this);
     }
@@ -281,21 +357,21 @@ function BlueprintDetailPage() {
                 className: "absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                lineNumber: 247,
+                lineNumber: 317,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                lineNumber: 248,
+                lineNumber: 318,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                lineNumber: 249,
+                lineNumber: 319,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -312,20 +388,20 @@ function BlueprintDetailPage() {
                                         className: "w-5 h-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 258,
+                                        lineNumber: 328,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Back to Dashboard"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 259,
+                                        lineNumber: 329,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 254,
+                                lineNumber: 324,
                                 columnNumber: 11
                             }, this),
                             editingSection === 'header' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -340,7 +416,7 @@ function BlueprintDetailPage() {
                                                     children: "Project Name"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 266,
+                                                    lineNumber: 336,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -353,13 +429,13 @@ function BlueprintDetailPage() {
                                                     className: "w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg text-white text-2xl font-extralight focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 267,
+                                                    lineNumber: 337,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                            lineNumber: 265,
+                                            lineNumber: 335,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -369,7 +445,7 @@ function BlueprintDetailPage() {
                                                     children: "Summary"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 275,
+                                                    lineNumber: 345,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -382,13 +458,13 @@ function BlueprintDetailPage() {
                                                     className: "w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 276,
+                                                    lineNumber: 346,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                            lineNumber: 274,
+                                            lineNumber: 344,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -403,14 +479,14 @@ function BlueprintDetailPage() {
                                                             className: "w-4 h-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 289,
+                                                            lineNumber: 359,
                                                             columnNumber: 21
                                                         }, this),
                                                         isSaving ? 'Saving...' : 'Save'
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 284,
+                                                    lineNumber: 354,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -422,31 +498,31 @@ function BlueprintDetailPage() {
                                                             className: "w-4 h-4"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 297,
+                                                            lineNumber: 367,
                                                             columnNumber: 21
                                                         }, this),
                                                         "Cancel"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 292,
+                                                    lineNumber: 362,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                            lineNumber: 283,
+                                            lineNumber: 353,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                    lineNumber: 264,
+                                    lineNumber: 334,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 263,
+                                lineNumber: 333,
                                 columnNumber: 13
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "relative group",
@@ -456,7 +532,7 @@ function BlueprintDetailPage() {
                                         children: blueprint.project_name
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 305,
+                                        lineNumber: 375,
                                         columnNumber: 15
                                     }, this),
                                     blueprint.summary && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -464,7 +540,7 @@ function BlueprintDetailPage() {
                                         children: blueprint.summary
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 309,
+                                        lineNumber: 379,
                                         columnNumber: 17
                                     }, this),
                                     isPro && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -475,26 +551,26 @@ function BlueprintDetailPage() {
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 316,
+                                                lineNumber: 386,
                                                 columnNumber: 19
                                             }, this),
                                             "Edit"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 312,
+                                        lineNumber: 382,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 304,
+                                lineNumber: 374,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                        lineNumber: 253,
+                        lineNumber: 323,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -511,7 +587,7 @@ function BlueprintDetailPage() {
                                                 children: "Core Features"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 329,
+                                                lineNumber: 399,
                                                 columnNumber: 15
                                             }, this),
                                             isPro && editingSection !== 'features' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -522,20 +598,20 @@ function BlueprintDetailPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 335,
+                                                        lineNumber: 405,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Edit"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 331,
+                                                lineNumber: 401,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 328,
+                                        lineNumber: 398,
                                         columnNumber: 13
                                     }, this),
                                     editingSection === 'features' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -560,7 +636,7 @@ function BlueprintDetailPage() {
                                                             className: "flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 345,
+                                                            lineNumber: 415,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -576,18 +652,18 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 362,
+                                                                lineNumber: 432,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 355,
+                                                            lineNumber: 425,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 344,
+                                                    lineNumber: 414,
                                                     columnNumber: 19
                                                 }, this)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -607,14 +683,14 @@ function BlueprintDetailPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 373,
+                                                        lineNumber: 443,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Add Feature"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 366,
+                                                lineNumber: 436,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -629,14 +705,14 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 382,
+                                                                lineNumber: 452,
                                                                 columnNumber: 21
                                                             }, this),
                                                             isSaving ? 'Saving...' : 'Save'
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 447,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -648,26 +724,26 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 390,
+                                                                lineNumber: 460,
                                                                 columnNumber: 21
                                                             }, this),
                                                             "Cancel"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 385,
+                                                        lineNumber: 455,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 376,
+                                                lineNumber: 446,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 342,
+                                        lineNumber: 412,
                                         columnNumber: 15
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "grid md:grid-cols-2 gap-4",
@@ -678,7 +754,7 @@ function BlueprintDetailPage() {
                                                         className: "w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 399,
+                                                        lineNumber: 469,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -686,28 +762,28 @@ function BlueprintDetailPage() {
                                                         children: feature
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 400,
+                                                        lineNumber: 470,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, index, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 398,
+                                                lineNumber: 468,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 396,
+                                        lineNumber: 466,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 327,
+                                lineNumber: 397,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8",
+                                className: "bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 relative",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                         className: "text-2xl font-light text-white mb-6 flex items-center gap-3",
@@ -716,14 +792,22 @@ function BlueprintDetailPage() {
                                                 className: "w-6 h-6 text-blue-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 410,
+                                                lineNumber: 480,
                                                 columnNumber: 15
                                             }, this),
-                                            "Tech Stack"
+                                            "Tech Stack",
+                                            isPro && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-xs text-blue-400/60 font-normal",
+                                                children: "(Click to swap)"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                lineNumber: 483,
+                                                columnNumber: 17
+                                            }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 409,
+                                        lineNumber: 479,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -735,39 +819,206 @@ function BlueprintDetailPage() {
                                                         children: category
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 416,
+                                                        lineNumber: 489,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "flex flex-wrap gap-2",
-                                                        children: items.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/80 text-sm",
-                                                                children: item
+                                                        children: items.map((item, index)=>{
+                                                            const isSwapping = swappingTech?.category === category && swappingTech?.index === index;
+                                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "relative",
+                                                                children: isSwapping ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6",
+                                                                    onClick: cancelTechSwap,
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl p-6 max-w-md w-full",
+                                                                        onClick: (e)=>e.stopPropagation(),
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                className: "flex items-center justify-between mb-4",
+                                                                                children: [
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                                        className: "text-xl font-light text-white",
+                                                                                        children: [
+                                                                                            "Swap ",
+                                                                                            item
+                                                                                        ]
+                                                                                    }, void 0, true, {
+                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                        lineNumber: 502,
+                                                                                        columnNumber: 35
+                                                                                    }, this),
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                                        onClick: cancelTechSwap,
+                                                                                        className: "p-1 hover:bg-white/10 rounded-lg transition-colors",
+                                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                                                                            className: "w-5 h-5 text-white/60"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                            lineNumber: 507,
+                                                                                            columnNumber: 37
+                                                                                        }, this)
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                        lineNumber: 503,
+                                                                                        columnNumber: 35
+                                                                                    }, this)
+                                                                                ]
+                                                                            }, void 0, true, {
+                                                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                lineNumber: 501,
+                                                                                columnNumber: 33
+                                                                            }, this),
+                                                                            loadingSuggestions ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                className: "flex items-center justify-center py-8",
+                                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                    className: "w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                    lineNumber: 513,
+                                                                                    columnNumber: 37
+                                                                                }, this)
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                lineNumber: 512,
+                                                                                columnNumber: 35
+                                                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                                                children: [
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                        className: "mb-4",
+                                                                                        children: [
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                                                                className: "block text-sm text-white/60 mb-2",
+                                                                                                children: "AI Suggestions"
+                                                                                            }, void 0, false, {
+                                                                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                lineNumber: 518,
+                                                                                                columnNumber: 39
+                                                                                            }, this),
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                                className: "space-y-2 max-h-60 overflow-y-auto",
+                                                                                                children: techSuggestions.map((suggestion, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                                                        onClick: ()=>swapTechnology(suggestion),
+                                                                                                        disabled: isSaving,
+                                                                                                        className: "w-full px-4 py-2 bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-500/50 rounded-lg text-white text-left transition-all disabled:opacity-50",
+                                                                                                        children: suggestion
+                                                                                                    }, idx, false, {
+                                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                        lineNumber: 521,
+                                                                                                        columnNumber: 43
+                                                                                                    }, this))
+                                                                                            }, void 0, false, {
+                                                                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                lineNumber: 519,
+                                                                                                columnNumber: 39
+                                                                                            }, this)
+                                                                                        ]
+                                                                                    }, void 0, true, {
+                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                        lineNumber: 517,
+                                                                                        columnNumber: 37
+                                                                                    }, this),
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                        className: "border-t border-white/10 pt-4",
+                                                                                        children: [
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                                                                className: "block text-sm text-white/60 mb-2",
+                                                                                                children: "Or type custom"
+                                                                                            }, void 0, false, {
+                                                                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                lineNumber: 534,
+                                                                                                columnNumber: 39
+                                                                                            }, this),
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                                className: "flex gap-2",
+                                                                                                children: [
+                                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                                                        type: "text",
+                                                                                                        value: customTech,
+                                                                                                        onChange: (e)=>setCustomTech(e.target.value),
+                                                                                                        onKeyDown: (e)=>{
+                                                                                                            if (e.key === 'Enter' && customTech.trim()) {
+                                                                                                                swapTechnology(customTech.trim());
+                                                                                                            }
+                                                                                                        },
+                                                                                                        placeholder: "Enter technology name...",
+                                                                                                        className: "flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                                                                                    }, void 0, false, {
+                                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                        lineNumber: 536,
+                                                                                                        columnNumber: 41
+                                                                                                    }, this),
+                                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                                                        onClick: ()=>customTech.trim() && swapTechnology(customTech.trim()),
+                                                                                                        disabled: !customTech.trim() || isSaving,
+                                                                                                        className: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed",
+                                                                                                        children: isSaving ? 'Saving...' : 'Swap'
+                                                                                                    }, void 0, false, {
+                                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                        lineNumber: 548,
+                                                                                                        columnNumber: 41
+                                                                                                    }, this)
+                                                                                                ]
+                                                                                            }, void 0, true, {
+                                                                                                fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                                lineNumber: 535,
+                                                                                                columnNumber: 39
+                                                                                            }, this)
+                                                                                        ]
+                                                                                    }, void 0, true, {
+                                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                                        lineNumber: 533,
+                                                                                        columnNumber: 37
+                                                                                    }, this)
+                                                                                ]
+                                                                            }, void 0, true)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                        lineNumber: 500,
+                                                                        columnNumber: 31
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                    lineNumber: 499,
+                                                                    columnNumber: 29
+                                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    onClick: ()=>startTechSwap(category, item, index),
+                                                                    disabled: !isPro,
+                                                                    className: `px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/80 text-sm transition-all ${isPro ? 'hover:bg-blue-500/20 hover:border-blue-500/50 cursor-pointer' : 'cursor-not-allowed'}`,
+                                                                    children: item
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
+                                                                    lineNumber: 562,
+                                                                    columnNumber: 29
+                                                                }, this)
                                                             }, index, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 421,
-                                                                columnNumber: 23
-                                                            }, this))
+                                                                lineNumber: 497,
+                                                                columnNumber: 25
+                                                            }, this);
+                                                        })
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 419,
+                                                        lineNumber: 492,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, category, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 415,
+                                                lineNumber: 488,
                                                 columnNumber: 17
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 413,
+                                        lineNumber: 486,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 408,
+                                lineNumber: 478,
                                 columnNumber: 11
                             }, this),
                             blueprint.risks && blueprint.risks.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -781,7 +1032,7 @@ function BlueprintDetailPage() {
                                                 children: "Potential Risks"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 438,
+                                                lineNumber: 585,
                                                 columnNumber: 17
                                             }, this),
                                             isPro && editingSection !== 'risks' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -792,20 +1043,20 @@ function BlueprintDetailPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 591,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Edit"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 440,
+                                                lineNumber: 587,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 437,
+                                        lineNumber: 584,
                                         columnNumber: 15
                                     }, this),
                                     editingSection === 'risks' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -830,7 +1081,7 @@ function BlueprintDetailPage() {
                                                             className: "flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 454,
+                                                            lineNumber: 601,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -846,18 +1097,18 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 471,
+                                                                lineNumber: 618,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 464,
+                                                            lineNumber: 611,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 453,
+                                                    lineNumber: 600,
                                                     columnNumber: 21
                                                 }, this)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -877,14 +1128,14 @@ function BlueprintDetailPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 482,
+                                                        lineNumber: 629,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Add Risk"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 475,
+                                                lineNumber: 622,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -899,14 +1150,14 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 491,
+                                                                lineNumber: 638,
                                                                 columnNumber: 23
                                                             }, this),
                                                             isSaving ? 'Saving...' : 'Save'
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 486,
+                                                        lineNumber: 633,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -918,26 +1169,26 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 499,
+                                                                lineNumber: 646,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Cancel"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 494,
+                                                        lineNumber: 641,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 485,
+                                                lineNumber: 632,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 451,
+                                        lineNumber: 598,
                                         columnNumber: 17
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                                         className: "space-y-3",
@@ -949,25 +1200,25 @@ function BlueprintDetailPage() {
                                                         children: "⚠️"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 508,
+                                                        lineNumber: 655,
                                                         columnNumber: 23
                                                     }, this),
                                                     risk
                                                 ]
                                             }, index, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 507,
+                                                lineNumber: 654,
                                                 columnNumber: 21
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 505,
+                                        lineNumber: 652,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 436,
+                                lineNumber: 583,
                                 columnNumber: 13
                             }, this),
                             blueprint.next_steps && blueprint.next_steps.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -981,7 +1232,7 @@ function BlueprintDetailPage() {
                                                 children: "Next Steps"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 521,
+                                                lineNumber: 668,
                                                 columnNumber: 17
                                             }, this),
                                             isPro && editingSection !== 'next_steps' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -992,20 +1243,20 @@ function BlueprintDetailPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 527,
+                                                        lineNumber: 674,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Edit"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 523,
+                                                lineNumber: 670,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 520,
+                                        lineNumber: 667,
                                         columnNumber: 15
                                     }, this),
                                     editingSection === 'next_steps' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1022,7 +1273,7 @@ function BlueprintDetailPage() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 537,
+                                                            lineNumber: 684,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1041,7 +1292,7 @@ function BlueprintDetailPage() {
                                                             className: "flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 538,
+                                                            lineNumber: 685,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1057,18 +1308,18 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 555,
+                                                                lineNumber: 702,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 548,
+                                                            lineNumber: 695,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 536,
+                                                    lineNumber: 683,
                                                     columnNumber: 21
                                                 }, this)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1088,14 +1339,14 @@ function BlueprintDetailPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 566,
+                                                        lineNumber: 713,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Add Step"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 559,
+                                                lineNumber: 706,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1110,14 +1361,14 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 575,
+                                                                lineNumber: 722,
                                                                 columnNumber: 23
                                                             }, this),
                                                             isSaving ? 'Saving...' : 'Save'
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 570,
+                                                        lineNumber: 717,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1129,26 +1380,26 @@ function BlueprintDetailPage() {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                lineNumber: 583,
+                                                                lineNumber: 730,
                                                                 columnNumber: 23
                                                             }, this),
                                                             "Cancel"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 578,
+                                                        lineNumber: 725,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 569,
+                                                lineNumber: 716,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 534,
+                                        lineNumber: 681,
                                         columnNumber: 17
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ol", {
                                         className: "space-y-3",
@@ -1163,31 +1414,31 @@ function BlueprintDetailPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 592,
+                                                        lineNumber: 739,
                                                         columnNumber: 23
                                                     }, this),
                                                     step
                                                 ]
                                             }, index, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 591,
+                                                lineNumber: 738,
                                                 columnNumber: 21
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 589,
+                                        lineNumber: 736,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 519,
+                                lineNumber: 666,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                        lineNumber: 325,
+                        lineNumber: 395,
                         columnNumber: 9
                     }, this),
                     isPro && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1197,7 +1448,7 @@ function BlueprintDetailPage() {
                                 className: "w-5 h-5"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 605,
+                                lineNumber: 752,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1205,13 +1456,13 @@ function BlueprintDetailPage() {
                                 children: "Pro Feature Available"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 606,
+                                lineNumber: 753,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                        lineNumber: 604,
+                        lineNumber: 751,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1225,7 +1476,7 @@ function BlueprintDetailPage() {
                                         children: "Enhance Your Blueprint"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 613,
+                                        lineNumber: 760,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1233,13 +1484,13 @@ function BlueprintDetailPage() {
                                         children: isPro ? 'Add detailed insights to make smarter decisions' : 'Upgrade to Pro to unlock advanced enhancements'
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 614,
+                                        lineNumber: 761,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 612,
+                                lineNumber: 759,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1273,7 +1524,7 @@ function BlueprintDetailPage() {
                                                                     children: button.icon
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                    lineNumber: 642,
+                                                                    lineNumber: 789,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1281,13 +1532,13 @@ function BlueprintDetailPage() {
                                                                     children: button.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                    lineNumber: 643,
+                                                                    lineNumber: 790,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 641,
+                                                            lineNumber: 788,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1297,33 +1548,33 @@ function BlueprintDetailPage() {
                                                                     className: "w-5 h-5 text-white/50"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                    lineNumber: 646,
+                                                                    lineNumber: 793,
                                                                     columnNumber: 36
                                                                 }, this),
                                                                 loadingEnhancement === button.id && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                    lineNumber: 648,
+                                                                    lineNumber: 795,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 hasEnhancement && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle2$3e$__["CheckCircle2"], {
                                                                     className: "w-5 h-5 text-green-400"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                                    lineNumber: 651,
+                                                                    lineNumber: 798,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                            lineNumber: 645,
+                                                            lineNumber: 792,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 640,
+                                                    lineNumber: 787,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1331,30 +1582,30 @@ function BlueprintDetailPage() {
                                                     children: button.desc
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                    lineNumber: 655,
+                                                    lineNumber: 802,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                            lineNumber: 639,
+                                            lineNumber: 786,
                                             columnNumber: 19
                                         }, this)
                                     }, button.id, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 624,
+                                        lineNumber: 771,
                                         columnNumber: 17
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 619,
+                                lineNumber: 766,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                        lineNumber: 611,
+                        lineNumber: 758,
                         columnNumber: 9
                     }, this),
                     blueprint.enhancements && Object.keys(blueprint.enhancements).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1371,7 +1622,7 @@ function BlueprintDetailPage() {
                                                 children: enhancementTitles[type] || type
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 669,
+                                                lineNumber: 816,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1383,20 +1634,20 @@ function BlueprintDetailPage() {
                                                         className: `w-4 h-4 ${loadingEnhancement === type ? 'animate-spin' : ''}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                        lineNumber: 675,
+                                                        lineNumber: 822,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Regenerate"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                                lineNumber: 670,
+                                                lineNumber: 817,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 668,
+                                        lineNumber: 815,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1408,29 +1659,29 @@ function BlueprintDetailPage() {
                                             children: content
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                            lineNumber: 690,
+                                            lineNumber: 837,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                        lineNumber: 679,
+                                        lineNumber: 826,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, type, true, {
                                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                lineNumber: 667,
+                                lineNumber: 814,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                        lineNumber: 665,
+                        lineNumber: 812,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                lineNumber: 251,
+                lineNumber: 321,
                 columnNumber: 7
             }, this),
             showUpgradeModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1445,7 +1696,7 @@ function BlueprintDetailPage() {
                                     className: "w-8 h-8 text-blue-400"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                    lineNumber: 705,
+                                    lineNumber: 852,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1453,13 +1704,13 @@ function BlueprintDetailPage() {
                                     children: "Upgrade to Pro"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                    lineNumber: 706,
+                                    lineNumber: 853,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                            lineNumber: 704,
+                            lineNumber: 851,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1467,7 +1718,7 @@ function BlueprintDetailPage() {
                             children: "Advanced blueprint enhancements are available exclusively for Pro users. Upgrade now to unlock target audience analysis, monetization strategies, MVP comparisons, and more."
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                            lineNumber: 708,
+                            lineNumber: 855,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1479,7 +1730,7 @@ function BlueprintDetailPage() {
                                     children: "Upgrade to Pro"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                    lineNumber: 712,
+                                    lineNumber: 859,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1488,34 +1739,34 @@ function BlueprintDetailPage() {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                                    lineNumber: 718,
+                                    lineNumber: 865,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                            lineNumber: 711,
+                            lineNumber: 858,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                    lineNumber: 703,
+                    lineNumber: 850,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-                lineNumber: 702,
+                lineNumber: 849,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/blueprints/[id]/page.tsx",
-        lineNumber: 245,
+        lineNumber: 315,
         columnNumber: 5
     }, this);
 }
-_s(BlueprintDetailPage, "mBNVPF5ryahtlxskibqImbxQrV4=", false, function() {
+_s(BlueprintDetailPage, "nZkEllApmuag5nRhL8pe98c9JJg=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"]

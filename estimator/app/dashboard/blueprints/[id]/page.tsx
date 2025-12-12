@@ -17,6 +17,10 @@ export default function BlueprintDetailPage() {
   const [editingSection, setEditingSection] = useState<string | null>(null);
   const [editedData, setEditedData] = useState<any>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [swappingTech, setSwappingTech] = useState<{ category: string; tech: string; index: number } | null>(null);
+  const [techSuggestions, setTechSuggestions] = useState<string[]>([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [customTech, setCustomTech] = useState("");
   const router = useRouter();
   const params = useParams();
   const blueprintId = params.id as string;
@@ -181,6 +185,72 @@ export default function BlueprintDetailPage() {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const startTechSwap = async (category: string, tech: string, index: number) => {
+    if (!isPro) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    setSwappingTech({ category, tech, index });
+    setCustomTech("");
+    setLoadingSuggestions(true);
+
+    try {
+      const response = await fetch("/api/suggest-tech-alternatives", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ technology: tech, category }),
+      });
+
+      if (!response.ok) throw new Error("Failed to get suggestions");
+
+      const data = await response.json();
+      setTechSuggestions(data.alternatives || []);
+    } catch (error) {
+      console.error("Error getting suggestions:", error);
+      setTechSuggestions([]);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
+  const swapTechnology = async (newTech: string) => {
+    if (!blueprint || !swappingTech) return;
+
+    const updatedTechStack = { ...blueprint.tech_stack } as any;
+    const categoryItems = [...updatedTechStack[swappingTech.category]];
+    categoryItems[swappingTech.index] = newTech;
+    updatedTechStack[swappingTech.category] = categoryItems;
+
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/blueprints/${blueprintId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tech_stack: updatedTechStack }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save");
+
+      const data = await response.json();
+      setBlueprint(data.blueprint);
+      setSwappingTech(null);
+      setTechSuggestions([]);
+      setCustomTech("");
+    } catch (error) {
+      console.error("Error swapping tech:", error);
+      alert("Failed to swap technology. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const cancelTechSwap = () => {
+    setSwappingTech(null);
+    setTechSuggestions([]);
+    setCustomTech("");
   };
 
   if (isLoading) {
@@ -405,10 +475,13 @@ export default function BlueprintDetailPage() {
           </div>
 
           {/* Tech Stack */}
-          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8">
+          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 relative">
             <h2 className="text-2xl font-light text-white mb-6 flex items-center gap-3">
               <Code className="w-6 h-6 text-blue-400" />
               Tech Stack
+              {isPro && (
+                <span className="text-xs text-blue-400/60 font-normal">(Click to swap)</span>
+              )}
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               {Object.entries(blueprint.tech_stack).map(([category, items]) => (
@@ -417,14 +490,88 @@ export default function BlueprintDetailPage() {
                     {category}
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {(items as string[]).map((item, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/80 text-sm"
-                      >
-                        {item}
-                      </span>
-                    ))}
+                    {(items as string[]).map((item, index) => {
+                      const isSwapping = swappingTech?.category === category && swappingTech?.index === index;
+
+                      return (
+                        <div key={index} className="relative">
+                          {isSwapping ? (
+                            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6" onClick={cancelTechSwap}>
+                              <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+                                <div className="flex items-center justify-between mb-4">
+                                  <h3 className="text-xl font-light text-white">Swap {item}</h3>
+                                  <button
+                                    onClick={cancelTechSwap}
+                                    className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+                                  >
+                                    <X className="w-5 h-5 text-white/60" />
+                                  </button>
+                                </div>
+
+                                {loadingSuggestions ? (
+                                  <div className="flex items-center justify-center py-8">
+                                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                  </div>
+                                ) : (
+                                  <>
+                                    <div className="mb-4">
+                                      <label className="block text-sm text-white/60 mb-2">AI Suggestions</label>
+                                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                                        {techSuggestions.map((suggestion, idx) => (
+                                          <button
+                                            key={idx}
+                                            onClick={() => swapTechnology(suggestion)}
+                                            disabled={isSaving}
+                                            className="w-full px-4 py-2 bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-500/50 rounded-lg text-white text-left transition-all disabled:opacity-50"
+                                          >
+                                            {suggestion}
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+
+                                    <div className="border-t border-white/10 pt-4">
+                                      <label className="block text-sm text-white/60 mb-2">Or type custom</label>
+                                      <div className="flex gap-2">
+                                        <input
+                                          type="text"
+                                          value={customTech}
+                                          onChange={(e) => setCustomTech(e.target.value)}
+                                          onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && customTech.trim()) {
+                                              swapTechnology(customTech.trim());
+                                            }
+                                          }}
+                                          placeholder="Enter technology name..."
+                                          className="flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                        />
+                                        <button
+                                          onClick={() => customTech.trim() && swapTechnology(customTech.trim())}
+                                          disabled={!customTech.trim() || isSaving}
+                                          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                          {isSaving ? 'Saving...' : 'Swap'}
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => startTechSwap(category, item, index)}
+                              disabled={!isPro}
+                              className={`px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-white/80 text-sm transition-all ${
+                                isPro ? 'hover:bg-blue-500/20 hover:border-blue-500/50 cursor-pointer' : 'cursor-not-allowed'
+                              }`}
+                            >
+                              {item}
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               ))}

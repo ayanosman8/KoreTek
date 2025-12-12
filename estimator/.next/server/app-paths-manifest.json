@@ -11,6 +11,7 @@
   "/api/save-estimate/route": "app/api/save-estimate/route.js",
   "/api/save-lead/route": "app/api/save-lead/route.js",
   "/api/save-user-estimate/route": "app/api/save-user-estimate/route.js",
+  "/api/suggest-tech-alternatives/route": "app/api/suggest-tech-alternatives/route.js",
   "/api/webhook/stripe/route": "app/api/webhook/stripe/route.js",
   "/auth/callback/route": "app/auth/callback/route.js",
   "/auth/login/page": "app/auth/login/page.js",
