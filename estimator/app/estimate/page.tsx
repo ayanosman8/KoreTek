@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, RefreshCw, BookmarkPlus, LogOut, Settings, CreditCard, UserX } from "lucide-react";
+import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, BookmarkPlus, LogOut, Settings, CreditCard, UserX } from "lucide-react";
 import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
 import { createClient, signInWithGoogle } from "@/lib/auth/client";
 import jsPDF from "jspdf";
@@ -23,8 +23,6 @@ export default function EstimatePage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const [enhancements, setEnhancements] = useState<Record<string, any>>({});
-  const [loadingEnhancement, setLoadingEnhancement] = useState<string | null>(null);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [addedFeatures, setAddedFeatures] = useState<Set<string>>(new Set());
@@ -55,7 +53,6 @@ export default function EstimatePage() {
     // First, check if we have a saved blueprint in localStorage
     const savedBlueprint = localStorage.getItem("latestBlueprint");
     const savedDescription = localStorage.getItem("latestBlueprintDescription");
-    const savedEnhancements = localStorage.getItem("latestBlueprintEnhancements");
     const savedAddedFeatures = localStorage.getItem("latestBlueprintAddedFeatures");
     console.log("Saved blueprint exists:", !!savedBlueprint);
     console.log("Saved description:", savedDescription);
@@ -70,8 +67,7 @@ export default function EstimatePage() {
       hasStartedGenerating.current = true;
       // Clear sessionStorage immediately to prevent re-runs
       sessionStorage.removeItem("projectDescription");
-      // Clear old enhancements when generating new blueprint
-      localStorage.removeItem("latestBlueprintEnhancements");
+      // Clear old data when generating new blueprint
       localStorage.removeItem("latestBlueprintAddedFeatures");
       // Generate a new blueprint
       generateEstimate(projectDescription);
@@ -85,30 +81,6 @@ export default function EstimatePage() {
       try {
         const parsedEstimate = JSON.parse(savedBlueprint);
         setEstimate(parsedEstimate);
-
-        // Restore enhancements if they exist
-        if (savedEnhancements) {
-          try {
-            const parsedEnhancements = JSON.parse(savedEnhancements);
-
-            // Only keep valid enhancement keys (discard old ones)
-            const validKeys = ['target-audience', 'monetization', 'mvp-comparison', 'cool-features'];
-            const cleanedEnhancements: Record<string, any> = {};
-
-            Object.entries(parsedEnhancements).forEach(([key, value]) => {
-              if (validKeys.includes(key)) {
-                cleanedEnhancements[key] = value;
-              }
-            });
-
-            setEnhancements(cleanedEnhancements);
-            // Save cleaned data back to localStorage
-            localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(cleanedEnhancements));
-            console.log("Restored enhancements (old ones discarded):", cleanedEnhancements);
-          } catch (e) {
-            console.error("Failed to parse saved enhancements:", e);
-          }
-        }
 
         // Restore added features if they exist
         if (savedAddedFeatures) {
@@ -568,7 +540,6 @@ export default function EstimatePage() {
           risks: estimate.risks,
           next_steps: estimate.nextSteps,
           questions: estimate.questions,
-          enhancements: enhancements,
         }),
       });
 
@@ -889,285 +860,6 @@ export default function EstimatePage() {
             </ol>
           </div>
 
-          {/* Enhancement Buttons */}
-          <div className="mb-12">
-            <div className="mb-8">
-              <h2 className="text-3xl font-extralight text-white mb-2">Enhance Your Blueprint</h2>
-              <p className="text-white/50 font-light">
-                Add detailed insights to make smarter decisions
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {[
-                {
-                  id: 'target-audience',
-                  gradient: 'from-blue-500/10 to-cyan-500/10',
-                  border: 'border-blue-500/20',
-                  activeBorder: 'border-blue-500',
-                  title: 'Target Audience',
-                  desc: 'User personas and pain points'
-                },
-                {
-                  id: 'monetization',
-                  gradient: 'from-emerald-500/10 to-teal-500/10',
-                  border: 'border-emerald-500/20',
-                  activeBorder: 'border-emerald-500',
-                  title: 'Monetization Ideas',
-                  desc: 'Revenue models and pricing strategies'
-                },
-                {
-                  id: 'mvp-comparison',
-                  gradient: 'from-purple-500/10 to-pink-500/10',
-                  border: 'border-purple-500/20',
-                  activeBorder: 'border-purple-500',
-                  title: 'MVP Strategy',
-                  desc: 'Quick launch vs full build comparison'
-                },
-                {
-                  id: 'cool-features',
-                  gradient: 'from-orange-500/10 to-amber-500/10',
-                  border: 'border-orange-500/20',
-                  activeBorder: 'border-orange-500',
-                  title: 'Feature Ideas',
-                  desc: 'Innovative additions to consider'
-                }
-              ].map(button => (
-                <button
-                  key={button.id}
-                  onClick={async () => {
-                    if (enhancements[button.id]) {
-                      document.getElementById(`enhancement-${button.id}`)?.scrollIntoView({ behavior: 'smooth' });
-                      return;
-                    }
-
-                    setLoadingEnhancement(button.id);
-                    try {
-                      const response = await fetch("/api/enhance-blueprint", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          projectDescription: localStorage.getItem("latestBlueprintDescription"),
-                          estimate,
-                          enhancementType: button.id
-                        }),
-                      });
-
-                      if (!response.ok) throw new Error("Failed to enhance");
-
-                      const data = await response.json();
-                      const updatedEnhancements = { ...enhancements, [button.id]: data.enhancement };
-                      setEnhancements(updatedEnhancements);
-
-                      // Save enhancements to localStorage
-                      localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(updatedEnhancements));
-
-                      setTimeout(() => {
-                        document.getElementById(`enhancement-${button.id}`)?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    } catch (error) {
-                      console.error("Error enhancing:", error);
-                    } finally {
-                      setLoadingEnhancement(null);
-                    }
-                  }}
-                  disabled={loadingEnhancement !== null}
-                  className={`
-                    group relative overflow-hidden
-                    bg-gradient-to-br ${button.gradient}
-                    backdrop-blur-xl border-2 ${enhancements[button.id] ? button.activeBorder : button.border}
-                    rounded-2xl p-6 text-left
-                    transition-all duration-300 ease-out
-                    ${loadingEnhancement === button.id ? 'opacity-70' : ''}
-                    disabled:cursor-not-allowed
-                  `}
-                >
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium text-white text-lg">{button.title}</h3>
-                      <div className="flex items-center gap-2">
-                        {loadingEnhancement === button.id && (
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        )}
-                        {enhancements[button.id] && (
-                          <CheckCircle2 className="w-5 h-5 text-green-400" />
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-sm text-white/60 font-light leading-relaxed">{button.desc}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Enhanced Sections */}
-          {Object.entries(enhancements).map(([type, content]) => {
-            // Special handling for cool-features
-            if (type === 'cool-features') {
-              let features: Array<{ title: string; description: string; category: string }> = [];
-
-              try {
-                // Try to parse JSON
-                console.log("Raw content for cool-features:", content);
-                features = JSON.parse(content);
-                console.log("Parsed features:", features);
-              } catch (e) {
-                // If parsing fails, show error message
-                console.error("Failed to parse cool-features:", e);
-                console.log("Content that failed to parse:", content);
-                return (
-                  <div key={type} id={`enhancement-${type}`} className="bg-black/20 border border-blue-500/30 rounded-xl p-8 mb-8">
-                    <h2 className="text-2xl font-light text-white mb-4">Additional Feature Ideas</h2>
-                    <p className="text-white/60">Failed to load feature suggestions. Please try again.</p>
-                  </div>
-                );
-              }
-
-              return (
-                <div key={type} id={`enhancement-${type}`} className="bg-black/20 border border-blue-500/30 rounded-xl p-8 mb-8" style={{ position: 'relative', zIndex: 10 }}>
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-light text-white">Additional Feature Ideas</h2>
-                    <button
-                      onClick={async () => {
-                        setLoadingEnhancement(type);
-                        try {
-                          const response = await fetch("/api/enhance-blueprint", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                              projectDescription: localStorage.getItem("latestBlueprintDescription"),
-                              estimate,
-                              enhancementType: type
-                            }),
-                          });
-
-                          if (!response.ok) throw new Error("Failed to enhance");
-
-                          const data = await response.json();
-                          const updatedEnhancements = { ...enhancements, [type]: data.enhancement };
-                          setEnhancements(updatedEnhancements);
-                          localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(updatedEnhancements));
-                        } catch (error) {
-                          console.error("Error regenerating:", error);
-                        } finally {
-                          setLoadingEnhancement(null);
-                        }
-                      }}
-                      disabled={loadingEnhancement !== null}
-                      className="flex items-center gap-2 px-3 py-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
-                    >
-                      <RefreshCw className={`w-4 h-4 ${loadingEnhancement === type ? 'animate-spin' : ''}`} />
-                      Regenerate
-                    </button>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {features.map((feature, index) => {
-                      const isAdded = addedFeatures.has(feature.title);
-
-                      return (
-                        <div key={index} className="bg-black/30 border border-white/10 rounded-lg p-5 hover:border-white/20 transition-all" style={{ position: 'relative', zIndex: 20 }}>
-                          <h3 className="font-medium text-white mb-3">{feature.title}</h3>
-                          <p className="text-sm text-white/60 font-light mb-4 leading-relaxed">
-                            {feature.description}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              console.log("Adding feature:", feature.title);
-                              handleAddFeature(feature.title);
-                            }}
-                            disabled={isAdded}
-                            className={`
-                              w-full px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer
-                              ${isAdded
-                                ? 'bg-green-500/20 text-green-400'
-                                : 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
-                              }
-                            `}
-                            style={{ position: 'relative', zIndex: 30, pointerEvents: 'auto' }}
-                          >
-                            {isAdded ? (
-                              <span className="flex items-center justify-center gap-2">
-                                <CheckCircle2 className="w-4 h-4" />
-                                Added to Blueprint
-                              </span>
-                            ) : (
-                              '+ Add to Blueprint'
-                            )}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            }
-
-            // Regular rendering for other enhancement types
-            const titles: Record<string, string> = {
-              'target-audience': 'Target Audience',
-              'monetization': 'Monetization Ideas',
-              'mvp-comparison': 'MVP Strategy'
-            };
-
-            return (
-              <div key={type} id={`enhancement-${type}`} className="bg-black/20 border border-blue-500/30 rounded-xl p-8 mb-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-light text-white">{titles[type] || type}</h2>
-                  <button
-                    onClick={async () => {
-                      setLoadingEnhancement(type);
-                      try {
-                        const response = await fetch("/api/enhance-blueprint", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            projectDescription: localStorage.getItem("latestBlueprintDescription"),
-                            estimate,
-                            enhancementType: type
-                          }),
-                        });
-
-                        if (!response.ok) throw new Error("Failed to enhance");
-
-                        const data = await response.json();
-                        const updatedEnhancements = { ...enhancements, [type]: data.enhancement };
-                        setEnhancements(updatedEnhancements);
-                        localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(updatedEnhancements));
-                      } catch (error) {
-                        console.error("Error regenerating:", error);
-                      } finally {
-                        setLoadingEnhancement(null);
-                      }
-                    }}
-                    disabled={loadingEnhancement !== null}
-                    className="flex items-center gap-2 px-3 py-1.5 text-sm text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
-                  >
-                    <RefreshCw className={`w-4 h-4 ${loadingEnhancement === type ? 'animate-spin' : ''}`} />
-                    Regenerate
-                  </button>
-                </div>
-                <div className="prose prose-invert prose-lg max-w-none
-                  prose-headings:text-white prose-headings:font-light
-                  prose-h2:text-xl prose-h2:mb-4 prose-h2:mt-6 prose-h2:text-blue-400
-                  prose-h3:text-lg prose-h3:mb-3 prose-h3:mt-4 prose-h3:text-blue-300
-                  prose-p:text-white/70 prose-p:leading-relaxed prose-p:mb-4
-                  prose-ul:text-white/70 prose-ul:mb-4 prose-ul:list-disc prose-ul:ml-6
-                  prose-ol:text-white/70 prose-ol:mb-4 prose-ol:list-decimal prose-ol:ml-6
-                  prose-li:mb-2
-                  prose-strong:text-white prose-strong:font-medium
-                  prose-code:text-blue-300 prose-code:bg-black/30 prose-code:px-2 prose-code:py-1 prose-code:rounded
-                ">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {content}
-                  </ReactMarkdown>
-                </div>
-              </div>
-            );
-          })}
-
           {/* Export & Actions Bar */}
           <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -1177,23 +869,9 @@ export default function EstimatePage() {
               </div>
 
               <div className="flex items-center gap-3 flex-wrap relative z-0">
-                {/* Test Button - Temporary for debugging */}
-                <button
-                  onClick={() => {
-                    console.log("🧪 TEST BUTTON CLICKED!");
-                    alert("Test button works! Check console for logs.");
-                  }}
-                  onMouseEnter={() => console.log("🖱️ Mouse entered TEST button")}
-                  className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg text-sm relative z-20"
-                  style={{ pointerEvents: 'auto' }}
-                >
-                  Test Click
-                </button>
-
                 {/* Save to Library Button */}
                 <button
                   onClick={handleSaveToLibrary}
-                  onMouseEnter={() => console.log("🖱️ Mouse entered Save to Library button")}
                   disabled={isSavingToLibrary}
                   className={`px-6 py-3 rounded-lg transition-all inline-flex items-center gap-2 font-medium relative z-20 ${
                     saveToLibrarySuccess
