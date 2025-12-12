@@ -32,6 +32,8 @@ export default function DashboardPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
+  const [isPro, setIsPro] = useState(false);
   const router = useRouter();
 
   // Generate avatar URL from email
@@ -64,6 +66,19 @@ export default function DashboardPage() {
     }
 
     setUser(user);
+
+    // Fetch subscription status
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_status, has_paid')
+      .eq('id', user.id)
+      .single();
+
+    if (profile) {
+      const status = profile.subscription_status || (profile.has_paid ? 'active' : null);
+      setSubscriptionStatus(status);
+      setIsPro(status === 'active');
+    }
   };
 
   const fetchBlueprints = async () => {
@@ -172,20 +187,8 @@ export default function DashboardPage() {
   };
 
   const openBlueprint = (blueprint: Blueprint) => {
-    // Load blueprint into estimate page
-    localStorage.setItem("latestBlueprint", JSON.stringify({
-      projectName: blueprint.project_name,
-      summary: blueprint.summary,
-      features: blueprint.features,
-      techStack: blueprint.tech_stack,
-      risks: blueprint.risks,
-      nextSteps: blueprint.next_steps,
-      questions: blueprint.questions,
-    }));
-    localStorage.setItem("latestBlueprintDescription", blueprint.project_description || "");
-    localStorage.setItem("latestBlueprintEnhancements", JSON.stringify(blueprint.enhancements || {}));
-
-    router.push("/estimate");
+    // Navigate to blueprint detail page
+    router.push(`/dashboard/blueprints/${blueprint.id}`);
   };
 
   const formatDate = (dateString: string) => {
