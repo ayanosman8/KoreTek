@@ -1226,7 +1226,7 @@ export default function EstimatePage() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
           <div className="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-2xl p-8 max-w-md w-full">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-light text-white">Sign Up to Download</h3>
+              <h3 className="text-2xl font-light text-white">Sign Up to Save Your Blueprint</h3>
               <button
                 onClick={() => setShowSignUpModal(false)}
                 className="text-white/50 hover:text-white transition-colors"
@@ -1235,7 +1235,7 @@ export default function EstimatePage() {
               </button>
             </div>
             <p className="text-white/60 mb-6 font-light">
-              Create a free account to download your blueprint and access premium features.
+              Create a free account to save this blueprint to your library and access all your projects anytime.
             </p>
 
             {/* Google Sign In */}
