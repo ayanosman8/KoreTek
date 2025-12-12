@@ -385,7 +385,7 @@ export default function BlueprintDetailPage() {
             </p>
             <div className="flex gap-3">
               <button
-                onClick={() => router.push('/settings')}
+                onClick={() => router.push('/dashboard/settings')}
                 className="flex-1 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all font-medium"
               >
                 Upgrade to Pro

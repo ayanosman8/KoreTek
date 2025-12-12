@@ -715,7 +715,7 @@ export default function EstimatePage() {
                         <button
                           onClick={() => {
                             setShowProfileDropdown(false);
-                            router.push('/settings');
+                            router.push('/dashboard/settings');
                           }}
                           className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
                         >

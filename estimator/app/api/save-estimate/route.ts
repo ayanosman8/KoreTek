@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/database/client";
+import { supabaseAdmin } from "@/lib/database/client";
 import type { ProjectEstimate } from "@/lib/ai/types";
 
 export async function POST(request: NextRequest) {
@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save to estimates table (for analytics)
-    const { data, error } = await supabase
+    // Save to estimates table (for analytics) - using admin client to bypass RLS
+    const { data, error } = await supabaseAdmin
       .from("estimates")
       .insert([
         {

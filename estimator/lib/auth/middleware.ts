@@ -50,7 +50,7 @@ export async function updateSession(request: NextRequest) {
   // Check if admin route requires admin role
   if (isAdminRoute && user) {
     const { data: profile } = await supabase
-      .from('user_profiles')
+      .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single();
@@ -66,7 +66,7 @@ export async function updateSession(request: NextRequest) {
   if (isAuthRoute && user) {
     // Already logged in - check role and redirect accordingly
     const { data: profile } = await supabase
-      .from('user_profiles')
+      .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single();

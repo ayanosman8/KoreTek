@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CreditCard, UserX, LogOut, Trash2, Settings as SettingsIcon } from "lucide-react";
+import { CreditCard, UserX, LogOut, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/auth/client";
 
 export default function SettingsPage() {
@@ -99,27 +99,12 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-
-      <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
-        {/* Header */}
+    <div className="py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Page Header */}
         <div className="mb-8">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back</span>
-          </button>
-
-          <div className="flex items-center gap-4">
-            <SettingsIcon className="w-8 h-8 text-blue-400" />
-            <h1 className="text-4xl font-extralight text-white">Settings</h1>
-          </div>
+          <h1 className="text-4xl font-extralight text-white mb-2">Settings</h1>
+          <p className="text-white/60">Manage your account and subscription</p>
         </div>
 
         {/* Account Info */}

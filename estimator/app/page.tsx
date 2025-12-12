@@ -1,22 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Zap, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function Home() {
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSavedBlueprint, setHasSavedBlueprint] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Check if there's a saved blueprint
+    const saved = localStorage.getItem("latestBlueprint");
+    setHasSavedBlueprint(!!saved);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!description.trim()) return;
+    console.log("Form submitted, description:", description);
+
+    if (!description.trim()) {
+      console.log("No description provided");
+      return;
+    }
 
     setIsLoading(true);
+    console.log("Loading state set to true");
 
     try {
+      // Clear old blueprint from localStorage when creating new one
+      localStorage.removeItem("latestBlueprint");
+      localStorage.removeItem("latestBlueprintDescription");
+
       sessionStorage.setItem("projectDescription", description);
+      console.log("Navigating to /estimate");
       router.push("/estimate");
     } catch (error) {
       console.error("Error:", error);
@@ -77,23 +95,16 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-8 pt-4">
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-extralight text-blue-500">
-                  Free
+                  No Sign Up
                 </div>
-                <div className="text-sm text-white/60 font-light uppercase tracking-wider">Forever</div>
+                <div className="text-sm text-white/60 font-light uppercase tracking-wider">Try Free</div>
               </div>
               <div className="w-px h-12 bg-white/10"></div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-extralight text-blue-500">
-                  5s
+                  AI-Powered
                 </div>
-                <div className="text-sm text-white/60 font-light uppercase tracking-wider">Results</div>
-              </div>
-              <div className="w-px h-12 bg-white/10"></div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-extralight text-blue-500">
-                  100%
-                </div>
-                <div className="text-sm text-white/60 font-light uppercase tracking-wider">Accurate</div>
+                <div className="text-sm text-white/60 font-light uppercase tracking-wider">Analysis</div>
               </div>
             </div>
           </div>
@@ -137,6 +148,17 @@ export default function Home() {
                   )}
                 </button>
               </div>
+              {hasSavedBlueprint && (
+                <div className="mt-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => router.push("/estimate")}
+                    className="text-sm text-blue-400 hover:text-blue-300 transition-colors underline"
+                  >
+                    View your latest blueprint →
+                  </button>
+                </div>
+              )}
             </div>
           </form>
 

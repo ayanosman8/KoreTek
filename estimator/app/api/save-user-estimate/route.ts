@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
     // Check if user has paid
     const { data: profile } = await supabase
-      .from('user_profiles')
+      .from('profiles')
       .select('has_paid')
       .eq('id', user.id)
       .single();

@@ -9,14 +9,10 @@ import {
   Plus,
   Trash2,
   Edit,
-  ArrowLeft,
   Filter,
   Calendar,
   Code,
-  Sparkles,
-  LogOut,
-  Settings,
-  ChevronDown
+  Sparkles
 } from "lucide-react";
 import type { Blueprint } from "@/lib/ai/types";
 import { createClient } from "@/lib/auth/client";
@@ -31,16 +27,9 @@ export default function DashboardPage() {
   const [filterArchived, setFilterArchived] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
   const [isPro, setIsPro] = useState(false);
   const router = useRouter();
-
-  // Generate avatar URL from email
-  const getAvatarUrl = (email: string) => {
-    const name = email.split('@')[0];
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3b82f6&color=fff&size=128&bold=true`;
-  };
 
   useEffect(() => {
     checkAuth();
@@ -105,12 +94,6 @@ export default function DashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/");
   };
 
   const filterBlueprints = () => {
@@ -212,117 +195,22 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/3 via-transparent to-blue-500/3"></div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-xl border-b border-white/10"></div>
-        <div className="relative w-full px-6 lg:px-12 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center gap-2 text-white/70 hover:text-blue-400 transition-all font-light"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Home
-            </button>
-            <h1 className="text-xl font-extralight tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">
-                My Blueprints
-              </span>
-            </h1>
-
-            {/* User Profile & Actions */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => router.push("/")}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg transition-all inline-flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">New Blueprint</span>
-              </button>
-
-              {user && (
-                <div className="relative">
-                  <button
-                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-                  >
-                    <div className="text-right hidden md:block">
-                      <p className="text-sm font-medium text-white">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
-                      <p className="text-xs text-white/50">{user.email}</p>
-                    </div>
-                    <div className="relative">
-                      <img
-                        src={user.email ? getAvatarUrl(user.email) : ''}
-                        alt={user.user_metadata?.full_name || user.email || 'User'}
-                        className="w-10 h-10 rounded-full border-2 border-blue-500/50 bg-blue-500"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                          if (fallback) fallback.style.display = 'flex';
-                        }}
-                      />
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center border-2 border-blue-500/50" style={{ display: 'none' }}>
-                        <span className="text-white font-medium text-sm">
-                          {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-white/50 hidden md:block" />
-                  </button>
-
-                  {showProfileDropdown && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setShowProfileDropdown(false)}
-                      />
-                      <div className="absolute right-0 mt-2 w-56 bg-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
-                        <div className="p-3 border-b border-white/10">
-                          <p className="text-sm font-medium text-white truncate">{user.user_metadata?.full_name || user.email?.split('@')[0]}</p>
-                          <p className="text-xs text-white/50 truncate">{user.email}</p>
-                        </div>
-
-                        <div className="py-1">
-                          <button
-                            onClick={() => {
-                              setShowProfileDropdown(false);
-                              router.push('/settings');
-                            }}
-                            className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
-                          >
-                            <Settings className="w-4 h-4 text-white/70" />
-                            <span className="text-sm text-white/90">Settings</span>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setShowProfileDropdown(false);
-                              handleLogout();
-                            }}
-                            className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
-                          >
-                            <LogOut className="w-4 h-4 text-white/70" />
-                            <span className="text-sm text-white/90">Log Out</span>
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+    <div className="py-12 px-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Page Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-extralight text-white mb-2">My Blueprints</h1>
+            <p className="text-white/60">Manage and enhance your project blueprints</p>
           </div>
+          <button
+            onClick={() => router.push("/")}
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all inline-flex items-center gap-2 font-medium"
+          >
+            <Plus className="w-5 h-5" />
+            New Blueprint
+          </button>
         </div>
-      </header>
-
-      <main className="pt-32 pb-20 px-6">
-        <div className="max-w-7xl mx-auto">
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-6">
@@ -555,7 +443,7 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

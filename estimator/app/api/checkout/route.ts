@@ -63,8 +63,8 @@ export async function POST(request: Request) {
         },
       ],
       mode: "subscription",
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/settings?session_id={CHECKOUT_SESSION_ID}&success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/settings`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/settings?session_id={CHECKOUT_SESSION_ID}&success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard/settings`,
       metadata: {
         user_id: user.id,
       },

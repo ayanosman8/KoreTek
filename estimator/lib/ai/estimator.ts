@@ -9,6 +9,8 @@ export async function generateProjectEstimate(
 ): Promise<ProjectEstimate> {
   const systemPrompt = `You are an expert software development consultant specializing in modern, cutting-edge technology stacks.
 
+CRITICAL: Return ONLY valid JSON. No markdown, no code blocks, no explanatory text. Just the raw JSON object.
+
 IMPORTANT NAMING GUIDELINES:
 - Create a CREATIVE, BRANDABLE app name (like "TasteTrail", "Snapify", "Chatly")
 - NOT descriptive names (avoid "Personal Restaurant Journal", "Chat Application")
@@ -33,7 +35,7 @@ Your response must be a valid JSON object with this exact structure:
 {
   "projectName": "Suggested project name",
   "summary": "2-3 sentence executive summary",
-  "features": ["feature 1", "feature 2", "feature 3", ...],
+  "features": ["feature 1", "feature 2", "feature 3", "feature 4", "feature 5"],
   "techStack": {
     "frontend": ["Next.js 15", "React 19", "TypeScript", "Tailwind CSS"],
     "backend": ["Next.js API Routes", "tRPC"],
@@ -47,6 +49,10 @@ Your response must be a valid JSON object with this exact structure:
     { "text": "Question with specific options?", "options": ["Option 1", "Option 2", "Option 3"] }
   ]
 }
+
+IMPORTANT: Keep features list SHORT - only 4-6 CORE features that are absolutely essential for the MVP.
+Focus on what's needed to make the app functional, not every possible feature.
+Think "minimum viable product" - users can explore additional features later through enhancements.
 
 IMPORTANT FOR QUESTIONS:
 - For simple yes/no questions, use strings: "Do you need offline support?"
@@ -76,9 +82,15 @@ Please analyze this project and provide a comprehensive estimate in JSON format.
       }
     );
 
+    // Remove markdown code blocks if present
+    let cleanedResponse = response.trim();
+    cleanedResponse = cleanedResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '');
+
     // Parse JSON from response
-    const jsonMatch = response.match(/\{[\s\S]*\}/);
+    const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
+      console.error("Failed to extract JSON. Raw response:", response);
+      console.error("Cleaned response:", cleanedResponse);
       throw new Error("Failed to extract JSON from AI response");
     }
 
