@@ -136,10 +136,6 @@ export default function SettingsPage() {
                 <p className="text-white">{user.user_metadata.full_name}</p>
               </div>
             )}
-            <div>
-              <p className="text-sm text-white/50 mb-1">Account ID</p>
-              <p className="text-white/70 text-sm font-mono">{user?.id}</p>
-            </div>
           </div>
         </div>
 
