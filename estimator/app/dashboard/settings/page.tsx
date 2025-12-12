@@ -38,17 +38,27 @@ export default function SettingsPage() {
     setUser(user);
 
     // Fetch subscription status from profiles
-    const { data: profile } = await supabase
+    const { data: profile, error } = await supabase
       .from('profiles')
       .select('subscription_status, has_paid')
       .eq('id', user.id)
       .single();
 
+    console.log('Profile data from Supabase:', profile);
+    console.log('Profile error:', error);
+
     if (profile) {
-      setSubscriptionStatus(profile.subscription_status || (profile.has_paid ? 'active' : null));
+      const status = profile.subscription_status || (profile.has_paid ? 'active' : null);
+      console.log('Setting subscription status to:', status);
+      setSubscriptionStatus(status);
     }
 
     setIsLoading(false);
+  };
+
+  const refreshStatus = async () => {
+    console.log('Refreshing subscription status...');
+    await checkAuth();
   };
 
   const handleUpgradeToPro = async () => {
@@ -148,13 +158,21 @@ export default function SettingsPage() {
           <div className="bg-black/30 border border-white/10 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-white font-medium">Current Plan</span>
-              <span className={`px-3 py-1 rounded-full text-sm ${
-                subscriptionStatus === 'active'
-                  ? 'bg-blue-500/20 text-blue-400'
-                  : 'bg-white/10 text-white/60'
-              }`}>
-                {subscriptionStatus === 'active' ? 'Pro' : 'Free'}
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={refreshStatus}
+                  className="px-3 py-1 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  Refresh Status
+                </button>
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  subscriptionStatus === 'active'
+                    ? 'bg-blue-500/20 text-blue-400'
+                    : 'bg-white/10 text-white/60'
+                }`}>
+                  {subscriptionStatus === 'active' ? 'Pro' : 'Free'}
+                </span>
+              </div>
             </div>
             {subscriptionStatus === 'active' ? (
               <p className="text-white/60 text-sm">You have access to all Pro features</p>

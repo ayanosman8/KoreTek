@@ -47,11 +47,19 @@ function SettingsPage() {
         }
         setUser(user);
         // Fetch subscription status from profiles
-        const { data: profile } = await supabase.from('profiles').select('subscription_status, has_paid').eq('id', user.id).single();
+        const { data: profile, error } = await supabase.from('profiles').select('subscription_status, has_paid').eq('id', user.id).single();
+        console.log('Profile data from Supabase:', profile);
+        console.log('Profile error:', error);
         if (profile) {
-            setSubscriptionStatus(profile.subscription_status || (profile.has_paid ? 'active' : null));
+            const status = profile.subscription_status || (profile.has_paid ? 'active' : null);
+            console.log('Setting subscription status to:', status);
+            setSubscriptionStatus(status);
         }
         setIsLoading(false);
+    };
+    const refreshStatus = async ()=>{
+        console.log('Refreshing subscription status...');
+        await checkAuth();
     };
     const handleUpgradeToPro = async ()=>{
         setIsUpgrading(true);
@@ -92,12 +100,12 @@ function SettingsPage() {
                 className: "w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin"
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                lineNumber: 96,
+                lineNumber: 106,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/settings/page.tsx",
-            lineNumber: 95,
+            lineNumber: 105,
             columnNumber: 7
         }, this);
     }
@@ -114,7 +122,7 @@ function SettingsPage() {
                             children: "Settings"
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 106,
+                            lineNumber: 116,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -122,13 +130,13 @@ function SettingsPage() {
                             children: "Manage your account and subscription"
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 107,
+                            lineNumber: 117,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                    lineNumber: 105,
+                    lineNumber: 115,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -139,7 +147,7 @@ function SettingsPage() {
                             children: "Account Information"
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 112,
+                            lineNumber: 122,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -152,7 +160,7 @@ function SettingsPage() {
                                             children: "Email"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 115,
+                                            lineNumber: 125,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -160,13 +168,13 @@ function SettingsPage() {
                                             children: user?.email
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 116,
+                                            lineNumber: 126,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 114,
+                                    lineNumber: 124,
                                     columnNumber: 13
                                 }, this),
                                 user?.user_metadata?.full_name && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -176,7 +184,7 @@ function SettingsPage() {
                                             children: "Name"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 120,
+                                            lineNumber: 130,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -184,25 +192,25 @@ function SettingsPage() {
                                             children: user.user_metadata.full_name
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 121,
+                                            lineNumber: 131,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 119,
+                                    lineNumber: 129,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 113,
+                            lineNumber: 123,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                    lineNumber: 111,
+                    lineNumber: 121,
                     columnNumber: 9
                 }, this),
                 showSuccess && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -212,7 +220,7 @@ function SettingsPage() {
                             className: "w-2 h-2 bg-green-400 rounded-full animate-pulse"
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 130,
+                            lineNumber: 140,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -220,13 +228,13 @@ function SettingsPage() {
                             children: "Successfully upgraded to Pro! Your subscription is now active."
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 131,
+                            lineNumber: 141,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                    lineNumber: 129,
+                    lineNumber: 139,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -242,7 +250,7 @@ function SettingsPage() {
                                             children: "Subscription"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 141,
+                                            lineNumber: 151,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -250,26 +258,26 @@ function SettingsPage() {
                                             children: "Manage your billing and subscription"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 142,
+                                            lineNumber: 152,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 140,
+                                    lineNumber: 150,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__["CreditCard"], {
                                     className: "w-6 h-6 text-blue-400"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 154,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 139,
+                            lineNumber: 149,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -283,21 +291,39 @@ function SettingsPage() {
                                             children: "Current Plan"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 160,
                                             columnNumber: 15
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: `px-3 py-1 rounded-full text-sm ${subscriptionStatus === 'active' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-white/60'}`,
-                                            children: subscriptionStatus === 'active' ? 'Pro' : 'Free'
-                                        }, void 0, false, {
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex items-center gap-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    onClick: refreshStatus,
+                                                    className: "px-3 py-1 text-xs text-blue-400 hover:text-blue-300 transition-colors",
+                                                    children: "Refresh Status"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/settings/page.tsx",
+                                                    lineNumber: 162,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: `px-3 py-1 rounded-full text-sm ${subscriptionStatus === 'active' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-white/60'}`,
+                                                    children: subscriptionStatus === 'active' ? 'Pro' : 'Free'
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/settings/page.tsx",
+                                                    lineNumber: 168,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 151,
+                                            lineNumber: 161,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 159,
                                     columnNumber: 13
                                 }, this),
                                 subscriptionStatus === 'active' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -305,20 +331,20 @@ function SettingsPage() {
                                     children: "You have access to all Pro features"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 160,
+                                    lineNumber: 178,
                                     columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "text-white/60 text-sm",
                                     children: "Upgrade to Pro for unlimited blueprints and advanced features"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 162,
+                                    lineNumber: 180,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 148,
+                            lineNumber: 158,
                             columnNumber: 11
                         }, this),
                         subscriptionStatus !== 'active' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -333,7 +359,7 @@ function SettingsPage() {
                                                 children: "Spark Pro"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                lineNumber: 171,
+                                                lineNumber: 189,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -344,7 +370,7 @@ function SettingsPage() {
                                                         children: "$29"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 173,
+                                                        lineNumber: 191,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -352,24 +378,24 @@ function SettingsPage() {
                                                         children: "/month"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 174,
+                                                        lineNumber: 192,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                lineNumber: 172,
+                                                lineNumber: 190,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                        lineNumber: 170,
+                                        lineNumber: 188,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 187,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -382,20 +408,20 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 181,
+                                                    lineNumber: 199,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Unlimited blueprint generation"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 182,
+                                                    lineNumber: 200,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 180,
+                                            lineNumber: 198,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -405,20 +431,20 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 185,
+                                                    lineNumber: 203,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Save unlimited blueprints to library"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 186,
+                                                    lineNumber: 204,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 184,
+                                            lineNumber: 202,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -428,20 +454,20 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 189,
+                                                    lineNumber: 207,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Advanced blueprint enhancements"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 190,
+                                                    lineNumber: 208,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 188,
+                                            lineNumber: 206,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -451,20 +477,20 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 193,
+                                                    lineNumber: 211,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Target audience analysis"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 194,
+                                                    lineNumber: 212,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 192,
+                                            lineNumber: 210,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -474,20 +500,20 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 197,
+                                                    lineNumber: 215,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Monetization strategies"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 198,
+                                                    lineNumber: 216,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 196,
+                                            lineNumber: 214,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -497,20 +523,20 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 201,
+                                                    lineNumber: 219,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "MVP comparison & roadmap"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 202,
+                                                    lineNumber: 220,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 218,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -520,26 +546,26 @@ function SettingsPage() {
                                                     className: "w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 205,
+                                                    lineNumber: 223,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Priority support"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                    lineNumber: 206,
+                                                    lineNumber: 224,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 204,
+                                            lineNumber: 222,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 179,
+                                    lineNumber: 197,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -549,13 +575,13 @@ function SettingsPage() {
                                     children: isUpgrading ? 'Redirecting to checkout...' : 'Upgrade to Pro'
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 210,
+                                    lineNumber: 228,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 168,
+                            lineNumber: 186,
                             columnNumber: 13
                         }, this),
                         subscriptionStatus === 'active' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -567,13 +593,13 @@ function SettingsPage() {
                             children: "Manage Subscription"
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 222,
+                            lineNumber: 240,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                    lineNumber: 138,
+                    lineNumber: 148,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -589,7 +615,7 @@ function SettingsPage() {
                                             children: "Danger Zone"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 238,
+                                            lineNumber: 256,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -597,26 +623,26 @@ function SettingsPage() {
                                             children: "Irreversible and destructive actions"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                                            lineNumber: 239,
+                                            lineNumber: 257,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 237,
+                                    lineNumber: 255,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2d$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__UserX$3e$__["UserX"], {
                                     className: "w-6 h-6 text-red-400"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 241,
+                                    lineNumber: 259,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 236,
+                            lineNumber: 254,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -634,7 +660,7 @@ function SettingsPage() {
                                                         children: "Log Out"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 249,
+                                                        lineNumber: 267,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -642,13 +668,13 @@ function SettingsPage() {
                                                         children: "Sign out of your account on this device"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 250,
+                                                        lineNumber: 268,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                lineNumber: 248,
+                                                lineNumber: 266,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -659,25 +685,25 @@ function SettingsPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 256,
+                                                        lineNumber: 274,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Log Out"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                lineNumber: 252,
+                                                lineNumber: 270,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                        lineNumber: 247,
+                                        lineNumber: 265,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 246,
+                                    lineNumber: 264,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -692,7 +718,7 @@ function SettingsPage() {
                                                         children: "Delete Account"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 266,
+                                                        lineNumber: 284,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -700,7 +726,7 @@ function SettingsPage() {
                                                         children: "Permanently delete your account and all data"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 267,
+                                                        lineNumber: 285,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -708,13 +734,13 @@ function SettingsPage() {
                                                         children: "This action cannot be undone!"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 268,
+                                                        lineNumber: 286,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                lineNumber: 265,
+                                                lineNumber: 283,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -725,48 +751,48 @@ function SettingsPage() {
                                                         className: "w-4 h-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                        lineNumber: 274,
+                                                        lineNumber: 292,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Delete"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/settings/page.tsx",
-                                                lineNumber: 270,
+                                                lineNumber: 288,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/settings/page.tsx",
-                                        lineNumber: 264,
+                                        lineNumber: 282,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                                    lineNumber: 263,
+                                    lineNumber: 281,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/settings/page.tsx",
-                            lineNumber: 244,
+                            lineNumber: 262,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/settings/page.tsx",
-                    lineNumber: 235,
+                    lineNumber: 253,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/dashboard/settings/page.tsx",
-            lineNumber: 103,
+            lineNumber: 113,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/dashboard/settings/page.tsx",
-        lineNumber: 102,
+        lineNumber: 112,
         columnNumber: 5
     }, this);
 }

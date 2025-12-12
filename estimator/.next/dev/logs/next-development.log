@@ -15,3 +15,6 @@
 [00:20:15.809] Server  LOG      ✓ Compiled in 125ms
 [00:20:15.811] Browser ERROR   uncaughtError: Error: Internal Next.js error: Router action dispatched before initialization.
 [00:20:16.468] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:25:42.215] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:26:47.834] Server  LOG      ✓ Compiled in 174ms
+[00:27:39.191] Server  LOG      ✓ Compiled in 28ms
