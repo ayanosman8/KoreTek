@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
     // Get or create Stripe customer
     const { data: profile } = await supabase
-      .from('user_profiles')
+      .from('profiles')
       .select('stripe_customer_id, email')
       .eq('id', user.id)
       .single();
@@ -37,12 +37,12 @@ export async function POST(request: Request) {
 
       // Save customer ID to profile
       await supabase
-        .from('user_profiles')
+        .from('profiles')
         .update({ stripe_customer_id: customerId })
         .eq('id', user.id);
     }
 
-    // Create checkout session
+    // Create checkout session for Pro subscription
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ["card"],
@@ -51,17 +51,20 @@ export async function POST(request: Request) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Scope AI - Unlimited Estimate Saves",
-              description: "Save unlimited project estimates and access them anytime",
+              name: "Spark Pro",
+              description: "Unlimited blueprints, advanced enhancements, priority support",
             },
-            unit_amount: 700, // $7.00
+            unit_amount: 2900, // $29.00
+            recurring: {
+              interval: "month",
+            },
           },
           quantity: 1,
         },
       ],
-      mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/my-estimates?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/estimate`,
+      mode: "subscription",
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/settings?session_id={CHECKOUT_SESSION_ID}&success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/settings`,
       metadata: {
         user_id: user.id,
       },

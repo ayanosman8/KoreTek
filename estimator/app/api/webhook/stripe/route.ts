@@ -32,18 +32,25 @@ export async function POST(request: Request) {
       );
     }
 
-    // Handle the checkout.session.completed event
+    const supabase = await createClient();
+
+    // Handle checkout.session.completed event
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.user_id;
 
-      if (userId) {
-        const supabase = await createClient();
+      if (userId && session.mode === "subscription") {
+        // Get subscription ID from the session
+        const subscriptionId = session.subscription as string;
 
-        // Update user profile to mark as paid
+        // Update user profile with subscription info
         const { error } = await supabase
-          .from('user_profiles')
-          .update({ has_paid: true })
+          .from('profiles')
+          .update({
+            has_paid: true,
+            stripe_subscription_id: subscriptionId,
+            subscription_status: 'active'
+          })
           .eq('id', userId);
 
         if (error) {
@@ -54,7 +61,47 @@ export async function POST(request: Request) {
           );
         }
 
-        console.log(`User ${userId} marked as paid`);
+        console.log(`User ${userId} subscription activated`);
+      }
+    }
+
+    // Handle subscription updates
+    if (event.type === "customer.subscription.updated") {
+      const subscription = event.data.object as Stripe.Subscription;
+      const userId = subscription.metadata?.user_id;
+
+      if (userId) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            subscription_status: subscription.status,
+          })
+          .eq('stripe_subscription_id', subscription.id);
+
+        if (error) {
+          console.error("Error updating subscription status:", error);
+        } else {
+          console.log(`Subscription ${subscription.id} updated to ${subscription.status}`);
+        }
+      }
+    }
+
+    // Handle subscription deletion
+    if (event.type === "customer.subscription.deleted") {
+      const subscription = event.data.object as Stripe.Subscription;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          has_paid: false,
+          subscription_status: 'canceled',
+        })
+        .eq('stripe_subscription_id', subscription.id);
+
+      if (error) {
+        console.error("Error canceling subscription:", error);
+      } else {
+        console.log(`Subscription ${subscription.id} canceled`);
       }
     }
 

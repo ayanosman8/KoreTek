@@ -8,10 +8,22 @@ import { createClient } from "@/lib/auth/client";
 export default function SettingsPage() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     checkAuth();
+
+    // Check for success parameter in URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
+      setShowSuccess(true);
+      // Remove the success param from URL
+      window.history.replaceState({}, '', '/settings');
+      setTimeout(() => setShowSuccess(false), 5000);
+    }
   }, []);
 
   const checkAuth = async () => {
@@ -24,7 +36,37 @@ export default function SettingsPage() {
     }
 
     setUser(user);
+
+    // Fetch subscription status from profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('subscription_status, has_paid')
+      .eq('id', user.id)
+      .single();
+
+    if (profile) {
+      setSubscriptionStatus(profile.subscription_status || (profile.has_paid ? 'active' : null));
+    }
+
     setIsLoading(false);
+  };
+
+  const handleUpgradeToPro = async () => {
+    setIsUpgrading(true);
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+      });
+
+      if (!response.ok) throw new Error('Failed to create checkout session');
+
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      alert('Failed to start checkout. Please try again.');
+      setIsUpgrading(false);
+    }
   };
 
   const handleLogout = async () => {
@@ -101,9 +143,19 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Success Message */}
+        {showSuccess && (
+          <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-4 mb-6 flex items-center gap-3">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <p className="text-green-400 text-sm font-medium">
+              Successfully upgraded to Pro! Your subscription is now active.
+            </p>
+          </div>
+        )}
+
         {/* Subscription Management */}
         <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-6">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start justify-between mb-6">
             <div>
               <h2 className="text-xl font-light text-white mb-2">Subscription</h2>
               <p className="text-white/60 text-sm">Manage your billing and subscription</p>
@@ -111,23 +163,91 @@ export default function SettingsPage() {
             <CreditCard className="w-6 h-6 text-blue-400" />
           </div>
 
-          <div className="bg-black/30 border border-white/10 rounded-lg p-6 mb-4">
+          {/* Current Plan */}
+          <div className="bg-black/30 border border-white/10 rounded-lg p-6 mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-white font-medium">Current Plan</span>
-              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">Free</span>
+              <span className={`px-3 py-1 rounded-full text-sm ${
+                subscriptionStatus === 'active'
+                  ? 'bg-blue-500/20 text-blue-400'
+                  : 'bg-white/10 text-white/60'
+              }`}>
+                {subscriptionStatus === 'active' ? 'Pro' : 'Free'}
+              </span>
             </div>
-            <p className="text-white/60 text-sm">Upgrade to Pro for advanced features</p>
+            {subscriptionStatus === 'active' ? (
+              <p className="text-white/60 text-sm">You have access to all Pro features</p>
+            ) : (
+              <p className="text-white/60 text-sm">Upgrade to Pro for unlimited blueprints and advanced features</p>
+            )}
           </div>
 
-          <button
-            onClick={() => {
-              // TODO: Implement subscription management
-              alert('Subscription management coming soon!');
-            }}
-            className="w-full px-6 py-3 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all"
-          >
-            Manage Subscription
-          </button>
+          {/* Pro Tier Card */}
+          {subscriptionStatus !== 'active' && (
+            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-6 mb-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-medium text-white mb-1">Spark Pro</h3>
+                  <div className="flex items-baseline gap-2 mb-3">
+                    <span className="text-3xl font-light text-white">$29</span>
+                    <span className="text-white/60 text-sm">/month</span>
+                  </div>
+                </div>
+              </div>
+
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>Unlimited blueprint generation</span>
+                </li>
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>Save unlimited blueprints to library</span>
+                </li>
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>Advanced blueprint enhancements</span>
+                </li>
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>Target audience analysis</span>
+                </li>
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>Monetization strategies</span>
+                </li>
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>MVP comparison & roadmap</span>
+                </li>
+                <li className="flex items-start gap-2 text-white/80 text-sm">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5" />
+                  <span>Priority support</span>
+                </li>
+              </ul>
+
+              <button
+                onClick={handleUpgradeToPro}
+                disabled={isUpgrading}
+                className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isUpgrading ? 'Redirecting to checkout...' : 'Upgrade to Pro'}
+              </button>
+            </div>
+          )}
+
+          {/* Manage Subscription Button (for Pro users) */}
+          {subscriptionStatus === 'active' && (
+            <button
+              onClick={() => {
+                // TODO: Implement customer portal
+                alert('Customer portal coming soon! You can manage your subscription from Stripe.');
+              }}
+              className="w-full px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg transition-all"
+            >
+              Manage Subscription
+            </button>
+          )}
         </div>
 
         {/* Danger Zone */}
