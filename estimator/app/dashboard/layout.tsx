@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Sparkles, Settings, LogOut, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/auth/client";
 
@@ -13,7 +13,6 @@ export default function DashboardLayout({
   const [user, setUser] = useState<any>(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     checkAuth();
@@ -42,8 +41,6 @@ export default function DashboardLayout({
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3b82f6&color=fff&size=128&bold=true`;
   };
 
-  const isActive = (path: string) => pathname === path || pathname?.startsWith(path);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       {/* Background effects */}
@@ -63,29 +60,8 @@ export default function DashboardLayout({
               </h1>
             </div>
 
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
-              <button
-                onClick={() => router.push('/dashboard')}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  isActive('/dashboard') && pathname === '/dashboard'
-                    ? 'bg-white/10 text-white'
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                Blueprints
-              </button>
-              <button
-                onClick={() => router.push('/dashboard/settings')}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  isActive('/dashboard/settings')
-                    ? 'bg-white/10 text-white'
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                Settings
-              </button>
-            </nav>
+            {/* Spacer */}
+            <div className="flex-1"></div>
 
             {/* User Profile */}
             {user && (
@@ -131,6 +107,17 @@ export default function DashboardLayout({
                       </div>
 
                       <div className="py-1">
+                        <button
+                          onClick={() => {
+                            setShowProfileDropdown(false);
+                            router.push('/dashboard');
+                          }}
+                          className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-white/5 transition-colors text-left"
+                        >
+                          <Sparkles className="w-4 h-4 text-white/70" />
+                          <span className="text-sm text-white/90">Blueprints</span>
+                        </button>
+
                         <button
                           onClick={() => {
                             setShowProfileDropdown(false);

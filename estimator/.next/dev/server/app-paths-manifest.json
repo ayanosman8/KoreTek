@@ -8,6 +8,7 @@
   "/api/save-estimate/route": "app/api/save-estimate/route.js",
   "/dashboard/blueprints/[id]/page": "app/dashboard/blueprints/[id]/page.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/dashboard/settings/page": "app/dashboard/settings/page.js",
   "/estimate/page": "app/estimate/page.js",
   "/page": "app/page.js",
   "/settings/page": "app/settings/page.js"

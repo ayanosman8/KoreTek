@@ -146,7 +146,8 @@ async function GET(request, { params }) {
                 status: 401
             });
         }
-        const { data: blueprint, error } = await supabase.from("blueprints").select("*").eq("id", params.id).eq("user_id", user.id).single();
+        const { id } = await params;
+        const { data: blueprint, error } = await supabase.from("blueprints").select("*").eq("id", id).eq("user_id", user.id).single();
         if (error || !blueprint) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: "Blueprint not found"
@@ -178,6 +179,7 @@ async function PATCH(request, { params }) {
                 status: 401
             });
         }
+        const { id } = await params;
         const body = await request.json();
         // Build update object (only include provided fields)
         const updateData = {};
@@ -193,7 +195,7 @@ async function PATCH(request, { params }) {
         if (body.tags !== undefined) updateData.tags = body.tags;
         if (body.is_starred !== undefined) updateData.is_starred = body.is_starred;
         if (body.is_archived !== undefined) updateData.is_archived = body.is_archived;
-        const { data: blueprint, error } = await supabase.from("blueprints").update(updateData).eq("id", params.id).eq("user_id", user.id).select().single();
+        const { data: blueprint, error } = await supabase.from("blueprints").update(updateData).eq("id", id).eq("user_id", user.id).select().single();
         if (error || !blueprint) {
             console.error("Error updating blueprint:", error);
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -226,7 +228,8 @@ async function DELETE(request, { params }) {
                 status: 401
             });
         }
-        const { error } = await supabase.from("blueprints").delete().eq("id", params.id).eq("user_id", user.id);
+        const { id } = await params;
+        const { error } = await supabase.from("blueprints").delete().eq("id", id).eq("user_id", user.id);
         if (error) {
             console.error("Error deleting blueprint:", error);
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
