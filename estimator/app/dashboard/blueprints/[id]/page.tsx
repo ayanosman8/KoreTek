@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ArrowLeft, Sparkles, RefreshCw, CheckCircle2, Lock, Code } from "lucide-react";
+import { ArrowLeft, Sparkles, RefreshCw, CheckCircle2, Lock, Code, Edit2, Save, X, Plus, Trash2 } from "lucide-react";
 import type { Blueprint } from "@/lib/ai/types";
 import { createClient } from "@/lib/auth/client";
 import ReactMarkdown from 'react-markdown';
@@ -14,6 +14,9 @@ export default function BlueprintDetailPage() {
   const [isPro, setIsPro] = useState(false);
   const [loadingEnhancement, setLoadingEnhancement] = useState<string | null>(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [editingSection, setEditingSection] = useState<string | null>(null);
+  const [editedData, setEditedData] = useState<any>({});
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const params = useParams();
   const blueprintId = params.id as string;
@@ -117,6 +120,69 @@ export default function BlueprintDetailPage() {
     }
   };
 
+  const startEditing = (section: string) => {
+    if (!isPro) {
+      setShowUpgradeModal(true);
+      return;
+    }
+
+    setEditingSection(section);
+
+    // Initialize edited data with current values
+    if (blueprint) {
+      switch (section) {
+        case 'header':
+          setEditedData({
+            project_name: blueprint.project_name,
+            summary: blueprint.summary || ''
+          });
+          break;
+        case 'features':
+          setEditedData({ features: [...blueprint.features] });
+          break;
+        case 'tech_stack':
+          setEditedData({ tech_stack: { ...blueprint.tech_stack } });
+          break;
+        case 'risks':
+          setEditedData({ risks: [...(blueprint.risks || [])] });
+          break;
+        case 'next_steps':
+          setEditedData({ next_steps: [...(blueprint.next_steps || [])] });
+          break;
+      }
+    }
+  };
+
+  const cancelEditing = () => {
+    setEditingSection(null);
+    setEditedData({});
+  };
+
+  const saveEdits = async () => {
+    if (!blueprint) return;
+
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/blueprints/${blueprintId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editedData),
+      });
+
+      if (!response.ok) throw new Error("Failed to save");
+
+      const data = await response.json();
+      setBlueprint(data.blueprint);
+      setEditingSection(null);
+      setEditedData({});
+    } catch (error) {
+      console.error("Error saving edits:", error);
+      alert("Failed to save changes. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
@@ -193,27 +259,149 @@ export default function BlueprintDetailPage() {
             <span>Back to Dashboard</span>
           </button>
 
-          <h1 className="text-4xl md:text-5xl font-extralight text-white mb-4 tracking-tight">
-            {blueprint.project_name}
-          </h1>
-          {blueprint.summary && (
-            <p className="text-xl text-white/60 font-light leading-relaxed">{blueprint.summary}</p>
+          {editingSection === 'header' ? (
+            <div className="bg-black/20 backdrop-blur-xl border border-blue-500/30 rounded-xl p-6 mb-4">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm text-white/60 mb-2">Project Name</label>
+                  <input
+                    type="text"
+                    value={editedData.project_name || ''}
+                    onChange={(e) => setEditedData({ ...editedData, project_name: e.target.value })}
+                    className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg text-white text-2xl font-extralight focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-white/60 mb-2">Summary</label>
+                  <textarea
+                    value={editedData.summary || ''}
+                    onChange={(e) => setEditedData({ ...editedData, summary: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={saveEdits}
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <Save className="w-4 h-4" />
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </button>
+                  <button
+                    onClick={cancelEditing}
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <X className="w-4 h-4" />
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="relative group">
+              <h1 className="text-4xl md:text-5xl font-extralight text-white mb-4 tracking-tight">
+                {blueprint.project_name}
+              </h1>
+              {blueprint.summary && (
+                <p className="text-xl text-white/60 font-light leading-relaxed mb-4">{blueprint.summary}</p>
+              )}
+              {isPro && (
+                <button
+                  onClick={() => startEditing('header')}
+                  className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg flex items-center gap-2 text-sm"
+                >
+                  <Edit2 className="w-4 h-4" />
+                  Edit
+                </button>
+              )}
+            </div>
           )}
         </div>
 
         {/* Core Blueprint Content */}
         <div className="space-y-8 mb-12">
           {/* Features */}
-          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-light text-white mb-6">Core Features</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {blueprint.features.map((feature, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-white/70 font-light">{feature}</span>
-                </div>
-              ))}
+          <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 relative group">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-light text-white">Core Features</h2>
+              {isPro && editingSection !== 'features' && (
+                <button
+                  onClick={() => startEditing('features')}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg flex items-center gap-2 text-sm"
+                >
+                  <Edit2 className="w-4 h-4" />
+                  Edit
+                </button>
+              )}
             </div>
+
+            {editingSection === 'features' ? (
+              <div className="space-y-4">
+                {editedData.features?.map((feature: string, index: number) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <input
+                      type="text"
+                      value={feature}
+                      onChange={(e) => {
+                        const newFeatures = [...editedData.features];
+                        newFeatures[index] = e.target.value;
+                        setEditedData({ ...editedData, features: newFeatures });
+                      }}
+                      className="flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                    />
+                    <button
+                      onClick={() => {
+                        const newFeatures = editedData.features.filter((_: any, i: number) => i !== index);
+                        setEditedData({ ...editedData, features: newFeatures });
+                      }}
+                      className="p-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded-lg"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={() => {
+                    const newFeatures = [...editedData.features, ''];
+                    setEditedData({ ...editedData, features: newFeatures });
+                  }}
+                  className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg flex items-center gap-2"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Feature
+                </button>
+                <div className="flex gap-2 pt-4">
+                  <button
+                    onClick={saveEdits}
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <Save className="w-4 h-4" />
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </button>
+                  <button
+                    onClick={cancelEditing}
+                    disabled={isSaving}
+                    className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <X className="w-4 h-4" />
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4">
+                {blueprint.features.map((feature, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-white/70 font-light">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Tech Stack */}
@@ -245,31 +433,168 @@ export default function BlueprintDetailPage() {
 
           {/* Risks */}
           {blueprint.risks && blueprint.risks.length > 0 && (
-            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-              <h2 className="text-2xl font-light text-white mb-6">Potential Risks</h2>
-              <ul className="space-y-3">
-                {blueprint.risks.map((risk, index) => (
-                  <li key={index} className="flex items-start gap-3 text-white/70 font-light">
-                    <span className="text-amber-400 mt-1">⚠️</span>
-                    {risk}
-                  </li>
-                ))}
-              </ul>
+            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 relative group">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-light text-white">Potential Risks</h2>
+                {isPro && editingSection !== 'risks' && (
+                  <button
+                    onClick={() => startEditing('risks')}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg flex items-center gap-2 text-sm"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                    Edit
+                  </button>
+                )}
+              </div>
+
+              {editingSection === 'risks' ? (
+                <div className="space-y-4">
+                  {editedData.risks?.map((risk: string, index: number) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <input
+                        type="text"
+                        value={risk}
+                        onChange={(e) => {
+                          const newRisks = [...editedData.risks];
+                          newRisks[index] = e.target.value;
+                          setEditedData({ ...editedData, risks: newRisks });
+                        }}
+                        className="flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                      />
+                      <button
+                        onClick={() => {
+                          const newRisks = editedData.risks.filter((_: any, i: number) => i !== index);
+                          setEditedData({ ...editedData, risks: newRisks });
+                        }}
+                        className="p-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded-lg"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => {
+                      const newRisks = [...editedData.risks, ''];
+                      setEditedData({ ...editedData, risks: newRisks });
+                    }}
+                    className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Risk
+                  </button>
+                  <div className="flex gap-2 pt-4">
+                    <button
+                      onClick={saveEdits}
+                      disabled={isSaving}
+                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                    >
+                      <Save className="w-4 h-4" />
+                      {isSaving ? 'Saving...' : 'Save'}
+                    </button>
+                    <button
+                      onClick={cancelEditing}
+                      disabled={isSaving}
+                      className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                    >
+                      <X className="w-4 h-4" />
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <ul className="space-y-3">
+                  {blueprint.risks.map((risk, index) => (
+                    <li key={index} className="flex items-start gap-3 text-white/70 font-light">
+                      <span className="text-amber-400 mt-1">⚠️</span>
+                      {risk}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
 
           {/* Next Steps */}
           {blueprint.next_steps && blueprint.next_steps.length > 0 && (
-            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8">
-              <h2 className="text-2xl font-light text-white mb-6">Next Steps</h2>
-              <ol className="space-y-3">
-                {blueprint.next_steps.map((step, index) => (
-                  <li key={index} className="flex items-start gap-3 text-white/70 font-light">
-                    <span className="text-blue-400 font-medium">{index + 1}.</span>
-                    {step}
-                  </li>
-                ))}
-              </ol>
+            <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 relative group">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-light text-white">Next Steps</h2>
+                {isPro && editingSection !== 'next_steps' && (
+                  <button
+                    onClick={() => startEditing('next_steps')}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg flex items-center gap-2 text-sm"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                    Edit
+                  </button>
+                )}
+              </div>
+
+              {editingSection === 'next_steps' ? (
+                <div className="space-y-4">
+                  {editedData.next_steps?.map((step: string, index: number) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <span className="text-blue-400 font-medium mt-2">{index + 1}.</span>
+                      <input
+                        type="text"
+                        value={step}
+                        onChange={(e) => {
+                          const newSteps = [...editedData.next_steps];
+                          newSteps[index] = e.target.value;
+                          setEditedData({ ...editedData, next_steps: newSteps });
+                        }}
+                        className="flex-1 px-4 py-2 bg-black/30 border border-white/20 rounded-lg text-white font-light focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                      />
+                      <button
+                        onClick={() => {
+                          const newSteps = editedData.next_steps.filter((_: any, i: number) => i !== index);
+                          setEditedData({ ...editedData, next_steps: newSteps });
+                        }}
+                        className="p-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded-lg"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => {
+                      const newSteps = [...editedData.next_steps, ''];
+                      setEditedData({ ...editedData, next_steps: newSteps });
+                    }}
+                    className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Step
+                  </button>
+                  <div className="flex gap-2 pt-4">
+                    <button
+                      onClick={saveEdits}
+                      disabled={isSaving}
+                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                    >
+                      <Save className="w-4 h-4" />
+                      {isSaving ? 'Saving...' : 'Save'}
+                    </button>
+                    <button
+                      onClick={cancelEditing}
+                      disabled={isSaving}
+                      className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
+                    >
+                      <X className="w-4 h-4" />
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <ol className="space-y-3">
+                  {blueprint.next_steps.map((step, index) => (
+                    <li key={index} className="flex items-start gap-3 text-white/70 font-light">
+                      <span className="text-blue-400 font-medium">{index + 1}.</span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              )}
             </div>
           )}
         </div>
