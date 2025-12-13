@@ -480,204 +480,54 @@ export default function BlueprintDetailPage() {
                 </div>
               </div>
 
-              {/* Tech Stack Overview */}
+              {/* Tech Stack */}
               <div>
-                <label className="block text-sm text-white/60 mb-3">Main Tech Stack</label>
-                <div className="space-y-4">
-                  {/* Frontend */}
-                  <div>
-                    <label className="block text-xs text-cyan-400 mb-2">Frontend</label>
-                    <div className="flex flex-wrap gap-2">
-                      {(editedData.tech_stack?.frontend || blueprint.tech_stack?.frontend || []).map((tech: string, index: number) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400/50 transition-colors"
-                        >
-                          {tech}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const current = editedData.tech_stack?.frontend || blueprint.tech_stack?.frontend || [];
-                              const updated = current.filter((_: string, i: number) => i !== index);
-                              setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, frontend: updated } });
-                            }}
-                            className="hover:text-red-400 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </span>
-                      ))}
-                      <input
-                        type="text"
-                        placeholder="+ Add"
-                        className="px-3 py-1.5 bg-black/30 border border-blue-500/20 rounded-full text-white text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:w-32 transition-all"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                            e.preventDefault();
-                            const current = editedData.tech_stack?.frontend || blueprint.tech_stack?.frontend || [];
-                            setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, frontend: [...current, e.currentTarget.value.trim()] } });
-                            e.currentTarget.value = '';
-                          }
+                <label className="block text-sm text-white/60 mb-2">Tech</label>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    ...(editedData.tech_stack?.frontend || blueprint.tech_stack?.frontend || []),
+                    ...(editedData.tech_stack?.backend || blueprint.tech_stack?.backend || []),
+                    ...(editedData.tech_stack?.database || blueprint.tech_stack?.database || []),
+                    ...(editedData.tech_stack?.payment_apis || blueprint.tech_stack?.payment_apis || []),
+                    ...(editedData.tech_stack?.ai_apis || blueprint.tech_stack?.ai_apis || [])
+                  ].map((tech: string, index: number) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400/50 transition-colors"
+                    >
+                      {tech}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const allTech = [
+                            ...(editedData.tech_stack?.frontend || blueprint.tech_stack?.frontend || []),
+                            ...(editedData.tech_stack?.backend || blueprint.tech_stack?.backend || []),
+                            ...(editedData.tech_stack?.database || blueprint.tech_stack?.database || []),
+                            ...(editedData.tech_stack?.payment_apis || blueprint.tech_stack?.payment_apis || []),
+                            ...(editedData.tech_stack?.ai_apis || blueprint.tech_stack?.ai_apis || [])
+                          ];
+                          const updated = allTech.filter((_: string, i: number) => i !== index);
+                          setEditedData({ ...editedData, tech_stack: { frontend: updated, backend: [], database: [], payment_apis: [], ai_apis: [] } });
                         }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Backend */}
-                  <div>
-                    <label className="block text-xs text-emerald-400 mb-2">Backend</label>
-                    <div className="flex flex-wrap gap-2">
-                      {(editedData.tech_stack?.backend || blueprint.tech_stack?.backend || []).map((tech: string, index: number) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400/50 transition-colors"
-                        >
-                          {tech}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const current = editedData.tech_stack?.backend || blueprint.tech_stack?.backend || [];
-                              const updated = current.filter((_: string, i: number) => i !== index);
-                              setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, backend: updated } });
-                            }}
-                            className="hover:text-red-400 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </span>
-                      ))}
-                      <input
-                        type="text"
-                        placeholder="+ Add"
-                        className="px-3 py-1.5 bg-black/30 border border-blue-500/20 rounded-full text-white text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:w-32 transition-all"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                            e.preventDefault();
-                            const current = editedData.tech_stack?.backend || blueprint.tech_stack?.backend || [];
-                            setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, backend: [...current, e.currentTarget.value.trim()] } });
-                            e.currentTarget.value = '';
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Database */}
-                  <div>
-                    <label className="block text-xs text-violet-400 mb-2">Database</label>
-                    <div className="flex flex-wrap gap-2">
-                      {(editedData.tech_stack?.database || blueprint.tech_stack?.database || []).map((tech: string, index: number) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400/50 transition-colors"
-                        >
-                          {tech}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const current = editedData.tech_stack?.database || blueprint.tech_stack?.database || [];
-                              const updated = current.filter((_: string, i: number) => i !== index);
-                              setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, database: updated } });
-                            }}
-                            className="hover:text-red-400 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </span>
-                      ))}
-                      <input
-                        type="text"
-                        placeholder="+ Add"
-                        className="px-3 py-1.5 bg-black/30 border border-blue-500/20 rounded-full text-white text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:w-32 transition-all"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                            e.preventDefault();
-                            const current = editedData.tech_stack?.database || blueprint.tech_stack?.database || [];
-                            setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, database: [...current, e.currentTarget.value.trim()] } });
-                            e.currentTarget.value = '';
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Payment APIs */}
-                  <div>
-                    <label className="block text-xs text-white/60 mb-2">Payment APIs</label>
-                    <div className="flex flex-wrap gap-2">
-                      {(editedData.tech_stack?.payment_apis || blueprint.tech_stack?.payment_apis || []).map((tech: string, index: number) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400/50 transition-colors"
-                        >
-                          {tech}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const current = editedData.tech_stack?.payment_apis || blueprint.tech_stack?.payment_apis || [];
-                              const updated = current.filter((_: string, i: number) => i !== index);
-                              setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, payment_apis: updated } });
-                            }}
-                            className="hover:text-red-400 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </span>
-                      ))}
-                      <input
-                        type="text"
-                        placeholder="+ Add"
-                        className="px-3 py-1.5 bg-black/30 border border-blue-500/20 rounded-full text-white text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:w-32 transition-all"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                            e.preventDefault();
-                            const current = editedData.tech_stack?.payment_apis || blueprint.tech_stack?.payment_apis || [];
-                            setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, payment_apis: [...current, e.currentTarget.value.trim()] } });
-                            e.currentTarget.value = '';
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* AI APIs */}
-                  <div>
-                    <label className="block text-xs text-white/60 mb-2">AI APIs</label>
-                    <div className="flex flex-wrap gap-2">
-                      {(editedData.tech_stack?.ai_apis || blueprint.tech_stack?.ai_apis || []).map((tech: string, index: number) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30 hover:border-blue-400/50 transition-colors"
-                        >
-                          {tech}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const current = editedData.tech_stack?.ai_apis || blueprint.tech_stack?.ai_apis || [];
-                              const updated = current.filter((_: string, i: number) => i !== index);
-                              setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, ai_apis: updated } });
-                            }}
-                            className="hover:text-red-400 transition-colors"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
-                        </span>
-                      ))}
-                      <input
-                        type="text"
-                        placeholder="+ Add"
-                        className="px-3 py-1.5 bg-black/30 border border-blue-500/20 rounded-full text-white text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:w-32 transition-all"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
-                            e.preventDefault();
-                            const current = editedData.tech_stack?.ai_apis || blueprint.tech_stack?.ai_apis || [];
-                            setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, ai_apis: [...current, e.currentTarget.value.trim()] } });
-                            e.currentTarget.value = '';
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
+                        className="hover:text-red-400 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    type="text"
+                    placeholder="+ Add"
+                    className="px-3 py-1.5 bg-black/30 border border-blue-500/20 rounded-full text-white text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:w-32 transition-all"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                        e.preventDefault();
+                        const currentFrontend = editedData.tech_stack?.frontend || blueprint.tech_stack?.frontend || [];
+                        setEditedData({ ...editedData, tech_stack: { ...blueprint.tech_stack, ...editedData.tech_stack, frontend: [...currentFrontend, e.currentTarget.value.trim()] } });
+                        e.currentTarget.value = '';
+                      }
+                    }}
+                  />
                 </div>
               </div>
 
