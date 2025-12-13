@@ -79,6 +79,11 @@ export async function PATCH(
     if (body.tags !== undefined) updateData.tags = body.tags;
     if (body.is_starred !== undefined) updateData.is_starred = body.is_starred;
     if (body.is_archived !== undefined) updateData.is_archived = body.is_archived;
+    if (body.is_public !== undefined) updateData.is_public = body.is_public;
+    if (body.status !== undefined) updateData.status = body.status;
+    if (body.checklist !== undefined) updateData.checklist = body.checklist;
+
+    console.log("Updating blueprint with data:", updateData);
 
     const { data: blueprint, error } = await supabase
       .from("blueprints")
@@ -90,8 +95,10 @@ export async function PATCH(
 
     if (error || !blueprint) {
       console.error("Error updating blueprint:", error);
+      console.error("Update data was:", updateData);
+      console.error("Blueprint ID:", id);
       return NextResponse.json(
-        { error: "Failed to update blueprint" },
+        { error: "Failed to update blueprint", details: error?.message },
         { status: 500 }
       );
     }

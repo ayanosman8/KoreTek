@@ -3,18 +3,29 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles, Zap, CheckCircle2, AlertCircle } from "lucide-react";
+import { createClient } from "@/lib/auth/client";
 
 export default function Home() {
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasSavedBlueprint, setHasSavedBlueprint] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
     // Check if there's a saved blueprint
     const saved = localStorage.getItem("latestBlueprint");
     setHasSavedBlueprint(!!saved);
+
+    // Check if user is logged in
+    checkAuth();
   }, []);
+
+  const checkAuth = async () => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    setUser(user);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,12 +75,21 @@ export default function Home() {
               >
                 KoreLnx
               </a>
-              <button
-                onClick={() => router.push('/auth/login')}
-                className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all font-medium text-sm"
-              >
-                Login / Sign Up
-              </button>
+              {user ? (
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all font-medium text-sm"
+                >
+                  Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => router.push('/auth/login')}
+                  className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all font-medium text-sm"
+                >
+                  Login / Sign Up
+                </button>
+              )}
             </div>
           </div>
         </div>

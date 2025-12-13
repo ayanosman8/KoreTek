@@ -23,14 +23,29 @@ export interface QuestionOption {
   options: string[];
 }
 
+export interface FeatureDetail {
+  name: string;
+  description: string;
+  tier: 'free' | 'pro';
+  tech: {
+    packages?: string[];
+    services?: string[];
+  };
+  resources?: string[];
+}
+
 export interface ProjectEstimate {
   projectName: string;
   summary: string;
-  features: string[];
+  features: FeatureDetail[];
   techStack: {
     frontend: string[];
     backend: string[];
     database: string[];
+    auth?: string[];
+    payment_apis?: string[];
+    ai_apis?: string[];
+    services?: string[];
     infrastructure: string[];
   };
   risks: string[];
@@ -48,17 +63,23 @@ export interface Lead {
   createdAt?: Date;
 }
 
+export type BlueprintStatus = 'idea' | 'planning' | 'building' | 'shipped';
+
 export interface Blueprint {
   id: string;
   user_id: string;
   project_name: string;
   project_description: string | null;
   summary: string | null;
-  features: string[];
+  features: FeatureDetail[] | string[]; // Support both old and new format
   tech_stack: {
     frontend: string[];
     backend: string[];
     database: string[];
+    auth?: string[];
+    payment_apis?: string[];
+    ai_apis?: string[];
+    services?: string[];
     infrastructure: string[];
   };
   risks: string[];
@@ -68,19 +89,26 @@ export interface Blueprint {
   tags: string[];
   is_starred: boolean;
   is_archived: boolean;
+  is_public: boolean;
+  status: BlueprintStatus;
   created_at: string;
   updated_at: string;
+  checklist?: any[];
 }
 
 export interface CreateBlueprintInput {
   project_name: string;
   project_description: string;
   summary: string;
-  features: string[];
+  features: FeatureDetail[] | string[];
   tech_stack: {
     frontend: string[];
     backend: string[];
     database: string[];
+    auth?: string[];
+    payment_apis?: string[];
+    ai_apis?: string[];
+    services?: string[];
     infrastructure: string[];
   };
   risks: string[];
@@ -94,11 +122,15 @@ export interface UpdateBlueprintInput {
   project_name?: string;
   project_description?: string;
   summary?: string;
-  features?: string[];
+  features?: FeatureDetail[] | string[];
   tech_stack?: {
     frontend: string[];
     backend: string[];
     database: string[];
+    auth?: string[];
+    payment_apis?: string[];
+    ai_apis?: string[];
+    services?: string[];
     infrastructure: string[];
   };
   risks?: string[];
@@ -108,4 +140,7 @@ export interface UpdateBlueprintInput {
   tags?: string[];
   is_starred?: boolean;
   is_archived?: boolean;
+  is_public?: boolean;
+  status?: BlueprintStatus;
+  checklist?: any[];
 }

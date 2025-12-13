@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Code, AlertCircle, Mail, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, BookmarkPlus, LogOut, Settings } from "lucide-react";
+import { CheckCircle2, Code, AlertCircle, ArrowLeft, X, Save, Copy, Download, FileText, ChevronDown, BookmarkPlus, LogOut, Settings, RefreshCw, Edit2, Plus, Trash2, GripVertical } from "lucide-react";
 import type { ProjectEstimate, QuestionOption } from "@/lib/ai/types";
 import { createClient, signInWithGoogle } from "@/lib/auth/client";
 import jsPDF from "jspdf";
@@ -13,22 +13,19 @@ export default function EstimatePage() {
   const [estimate, setEstimate] = useState<ProjectEstimate | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showEmailCapture, setShowEmailCapture] = useState(false);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [hasPaid, setHasPaid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [addedFeatures, setAddedFeatures] = useState<Set<string>>(new Set());
   const [isSavingToLibrary, setIsSavingToLibrary] = useState(false);
   const [saveToLibrarySuccess, setSaveToLibrarySuccess] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [editingProjectName, setEditingProjectName] = useState(false);
+  const [editingSummary, setEditingSummary] = useState(false);
+  const [draggedFeatureIndex, setDraggedFeatureIndex] = useState<number | null>(null);
   const hasStartedGenerating = useRef(false);
   const router = useRouter();
 
@@ -121,19 +118,6 @@ export default function EstimatePage() {
   //   checkUserStatus();
   // }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (showDropdown && !target.closest('.relative')) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [showDropdown]);
-
   const generateEstimate = async (description: string) => {
     try {
       const response = await fetch("/api/generate-estimate", {
@@ -172,30 +156,6 @@ export default function EstimatePage() {
       console.error(err);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const projectDescription = sessionStorage.getItem("projectDescription");
-
-      await fetch("/api/save-lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          projectDescription,
-          estimate,
-        }),
-      });
-
-      setEmailSubmitted(true);
-    } catch (error) {
-      console.error("Error saving lead:", error);
-      setEmailSubmitted(true);
     }
   };
 
@@ -266,7 +226,8 @@ export default function EstimatePage() {
 
     markdown += `## Core Features\n\n`;
     estimate.features.forEach(feature => {
-      markdown += `- ${feature}\n`;
+      const featureName = typeof feature === 'object' ? feature.name : feature;
+      markdown += `- ${featureName}\n`;
     });
 
     markdown += `\n## Recommended Tech Stack\n\n`;
@@ -308,22 +269,12 @@ export default function EstimatePage() {
 
     try {
       await navigator.clipboard.writeText(markdown);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-      setShowDropdown(false);
     } catch (error) {
       console.error('Failed to copy:', error);
     }
   };
 
   const handleDownloadMarkdown = () => {
-    // TODO: Re-enable auth check later
-    // if (!user) {
-    //   setShowSignUpModal(true);
-    //   setShowDropdown(false);
-    //   return;
-    // }
-
     const markdown = formatBlueprintAsMarkdown();
     const blob = new Blob([markdown], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
@@ -334,7 +285,6 @@ export default function EstimatePage() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    setShowDropdown(false);
   };
 
   const handleAddFeature = (featureTitle: string) => {
@@ -440,7 +390,8 @@ export default function EstimatePage() {
     addSpacing(6);
 
     estimate.features.forEach((feature) => {
-      addText(`• ${feature}`, 10);
+      const featureName = typeof feature === 'object' ? feature.name : feature;
+      addText(`• ${featureName}`, 10);
       addSpacing(2);
     });
     addSpacing(10);
@@ -500,6 +451,44 @@ export default function EstimatePage() {
     setShowDropdown(false);
   };
 
+  // Update estimate and save to localStorage
+  const updateEstimate = (updates: Partial<ProjectEstimate>) => {
+    if (!estimate) return;
+
+    const updatedEstimate = { ...estimate, ...updates };
+    setEstimate(updatedEstimate);
+
+    // Save to localStorage
+    localStorage.setItem("latestBlueprint", JSON.stringify(updatedEstimate));
+  };
+
+  // Handle feature drag and drop
+  const handleDragStart = (index: number) => {
+    setDraggedFeatureIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (draggedFeatureIndex === null || draggedFeatureIndex === index) return;
+
+    const newFeatures = [...estimate.features];
+    const draggedFeature = newFeatures[draggedFeatureIndex];
+
+    // Remove from old position
+    newFeatures.splice(draggedFeatureIndex, 1);
+    // Insert at new position
+    newFeatures.splice(index, 0, draggedFeature);
+
+    updateEstimate({ features: newFeatures });
+    setDraggedFeatureIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedFeatureIndex(null);
+  };
+
   const handleSaveToLibrary = async () => {
     console.log("🔷 Save to Library button clicked");
 
@@ -518,6 +507,8 @@ export default function EstimatePage() {
 
     if (!currentUser) {
       console.log("🔓 No user - showing sign up modal");
+      // Set flag to auto-save after signup
+      localStorage.setItem('autoSaveAfterSignup', 'true');
       setShowSignUpModal(true);
       return;
     }
@@ -564,6 +555,17 @@ export default function EstimatePage() {
     };
     checkAuth();
   }, []);
+
+  // Auto-save after signup if flag is set
+  useEffect(() => {
+    const shouldAutoSave = localStorage.getItem('autoSaveAfterSignup');
+
+    if (shouldAutoSave === 'true' && user && estimate) {
+      console.log("🔄 Auto-saving blueprint after signup...");
+      localStorage.removeItem('autoSaveAfterSignup');
+      handleSaveToLibrary();
+    }
+  }, [user, estimate]);
 
   if (isLoading) {
     return (
@@ -666,8 +668,37 @@ export default function EstimatePage() {
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300">Spark</span>
             </h1>
 
-            {/* User Profile */}
-            {user ? (
+            <div className="flex items-center gap-4">
+              {/* Save to Library Button */}
+              <button
+                onClick={handleSaveToLibrary}
+                disabled={isSavingToLibrary}
+                className={`px-4 py-2 rounded-lg transition-all inline-flex items-center gap-2 font-medium ${
+                  saveToLibrarySuccess
+                    ? 'bg-green-500/20 border border-green-500/50 text-green-400'
+                    : 'bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white'
+                }`}
+              >
+                {isSavingToLibrary ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : saveToLibrarySuccess ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    Saved!
+                  </>
+                ) : (
+                  <>
+                    <BookmarkPlus className="w-4 h-4" />
+                    Save to Library
+                  </>
+                )}
+              </button>
+
+              {/* User Profile */}
+              {user ? (
               <div className="relative">
                 <button
                   onClick={() => setShowProfileDropdown(!showProfileDropdown)}
@@ -738,14 +769,15 @@ export default function EstimatePage() {
                   </>
                 )}
               </div>
-            ) : (
-              <button
-                onClick={() => setShowSignUpModal(true)}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white text-sm rounded-lg transition-all"
-              >
-                Sign In
-              </button>
-            )}
+              ) : (
+                <button
+                  onClick={() => setShowSignUpModal(true)}
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white text-sm rounded-lg transition-all"
+                >
+                  Sign In
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -754,23 +786,167 @@ export default function EstimatePage() {
         <div className="max-w-5xl mx-auto">
           {/* Project Name */}
           <div className="mb-16">
-            <h1 className="text-4xl md:text-6xl font-extralight text-white mb-4 tracking-tight">
-              {estimate.projectName}
-            </h1>
-            <p className="text-xl text-white/60 font-light leading-relaxed">{estimate.summary}</p>
+            <div className="group relative">
+              {editingProjectName ? (
+                <input
+                  type="text"
+                  value={estimate.projectName}
+                  onChange={(e) => updateEstimate({ projectName: e.target.value })}
+                  onBlur={() => setEditingProjectName(false)}
+                  autoFocus
+                  className="w-full text-4xl md:text-6xl font-extralight text-white mb-4 tracking-tight bg-transparent border-b-2 border-blue-500 focus:outline-none pb-2"
+                />
+              ) : (
+                <div className="flex items-center gap-3 mb-4">
+                  <h1 className="text-4xl md:text-6xl font-extralight text-white tracking-tight">
+                    {estimate.projectName}
+                  </h1>
+                  <button
+                    onClick={() => setEditingProjectName(true)}
+                    className="opacity-0 group-hover:opacity-100 p-2 hover:bg-white/10 rounded-lg transition-all"
+                    title="Edit project name"
+                  >
+                    <Edit2 className="w-5 h-5 text-white/60" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="group relative">
+              {editingSummary ? (
+                <textarea
+                  value={estimate.summary}
+                  onChange={(e) => updateEstimate({ summary: e.target.value })}
+                  onBlur={() => setEditingSummary(false)}
+                  autoFocus
+                  rows={3}
+                  className="w-full text-xl text-white/60 font-light leading-relaxed bg-transparent border-2 border-blue-500 rounded-lg p-3 focus:outline-none resize-none"
+                />
+              ) : (
+                <div className="flex items-start gap-3">
+                  <p className="flex-1 text-xl text-white/60 font-light leading-relaxed">{estimate.summary}</p>
+                  <button
+                    onClick={() => setEditingSummary(true)}
+                    className="opacity-0 group-hover:opacity-100 p-2 hover:bg-white/10 rounded-lg transition-all flex-shrink-0"
+                    title="Edit summary"
+                  >
+                    <Edit2 className="w-5 h-5 text-white/60" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
 
           {/* Features */}
           <div className="features-section bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-8">
-            <h2 className="text-2xl font-light text-white mb-6">Core Features</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {estimate.features.map((feature, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-white/70 font-light">{feature}</span>
-                </div>
-              ))}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-light text-white">Features</h2>
+              <button
+                onClick={() => {
+                  const newFeatures = [
+                    ...estimate.features,
+                    {
+                      name: 'New Feature',
+                      description: '',
+                      tier: 'free' as const,
+                      tech: { packages: [], services: [] },
+                      resources: []
+                    }
+                  ];
+                  updateEstimate({ features: newFeatures });
+                }}
+                className="px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all flex items-center gap-2 text-sm font-medium"
+              >
+                <Plus className="w-4 h-4" />
+                Add Feature
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {estimate.features.map((feature, index) => {
+                const featureObj = typeof feature === 'object' ? feature : { name: feature, description: '', tier: 'free' as const, tech: { packages: [], services: [] }, resources: [] };
+
+                return (
+                  <div
+                    key={index}
+                    draggable
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragEnd={handleDragEnd}
+                    className={`bg-black/30 border border-white/10 rounded-lg hover:border-white/20 transition-all cursor-move ${
+                      draggedFeatureIndex === index ? 'opacity-50' : ''
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="flex items-start gap-3 mb-3">
+                        {/* Drag Handle */}
+                        <div className="flex-shrink-0 pt-1 cursor-move">
+                          <GripVertical className="w-4 h-4 text-white/30" />
+                        </div>
+
+                        {/* Feature Name */}
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            value={featureObj.name}
+                            onChange={(e) => {
+                              const newFeatures = [...estimate.features];
+                              newFeatures[index] = { ...featureObj, name: e.target.value };
+                              updateEstimate({ features: newFeatures });
+                            }}
+                            className="w-full px-2 py-1 bg-transparent text-white font-medium focus:outline-none focus:bg-white/5 rounded"
+                            placeholder="Feature name..."
+                          />
+                        </div>
+
+                        {/* Tier Badge */}
+                        <button
+                          onClick={() => {
+                            const newFeatures = [...estimate.features];
+                            const newTier = featureObj.tier === 'free' ? 'pro' as const : 'free' as const;
+                            newFeatures[index] = { ...featureObj, tier: newTier };
+                            updateEstimate({ features: newFeatures });
+                          }}
+                          className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                            featureObj.tier === 'pro'
+                              ? 'bg-purple-500/20 text-purple-400 border border-purple-500/40'
+                              : 'bg-green-500/20 text-green-400 border border-green-500/40'
+                          }`}
+                        >
+                          {featureObj.tier === 'pro' ? 'PRO' : 'FREE'}
+                        </button>
+
+                        {/* Delete */}
+                        <button
+                          onClick={() => {
+                            const newFeatures = estimate.features.filter((_, i) => i !== index);
+                            updateEstimate({ features: newFeatures });
+                          }}
+                          className="flex-shrink-0 p-1 hover:bg-red-500/20 text-red-400 rounded transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Description - Always Visible */}
+                      <div className="ml-7">
+                        <textarea
+                          value={featureObj.description || ''}
+                          onChange={(e) => {
+                            const newFeatures = [...estimate.features];
+                            newFeatures[index] = { ...featureObj, description: e.target.value };
+                            updateEstimate({ features: newFeatures });
+                          }}
+                          className="w-full px-3 py-2 bg-black/40 text-white/70 text-sm focus:outline-none focus:bg-black/60 rounded resize-none border border-white/5"
+                          rows={3}
+                          placeholder="Technical details: screens, components, database tables, integrations..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -783,243 +959,92 @@ export default function EstimatePage() {
             <div className="grid md:grid-cols-2 gap-6">
               {Object.entries(estimate.techStack).map(([category, technologies]) => (
                 <div key={category}>
-                  <h3 className="text-sm font-medium text-white/50 uppercase mb-3 tracking-wider">{category}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {technologies.map((tech, index) => (
+                  <h3 className="text-sm font-medium text-white/50 uppercase mb-3 tracking-wider">{category.replace(/_/g, ' ')}</h3>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {technologies.map((tech, techIndex) => (
                       <span
-                        key={index}
-                        className="px-3 py-1 bg-black/20 border border-white/10 rounded-full text-sm text-blue-400 font-light"
+                        key={techIndex}
+                        className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-lg text-sm text-blue-400 font-light flex items-center gap-2 group"
                       >
                         {tech}
+                        <button
+                          onClick={() => {
+                            const newTechStack = { ...estimate.techStack };
+                            newTechStack[category as keyof typeof newTechStack] = technologies.filter((_, i) => i !== techIndex);
+                            updateEstimate({ techStack: newTechStack });
+                          }}
+                          className="opacity-0 group-hover:opacity-100 text-blue-400/60 hover:text-blue-400 transition-opacity"
+                        >
+                          ×
+                        </button>
                       </span>
                     ))}
                   </div>
+                  <input
+                    type="text"
+                    placeholder={`Add ${category.replace(/_/g, ' ')}...`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                        const newTechStack = { ...estimate.techStack };
+                        newTechStack[category as keyof typeof newTechStack] = [...technologies, e.currentTarget.value.trim()];
+                        updateEstimate({ techStack: newTechStack });
+                        e.currentTarget.value = '';
+                      }
+                    }}
+                    className="w-full px-3 py-1.5 bg-black/30 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500/50"
+                  />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Risks */}
-          {estimate.risks.length > 0 && (
-            <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <AlertCircle className="w-6 h-6 text-blue-400" />
-                <h2 className="text-2xl font-light text-white">Potential Risks</h2>
-              </div>
-              <ul className="space-y-2">
-                {estimate.risks.map((risk, index) => (
-                  <li key={index} className="text-white/60 flex items-start gap-2 font-light">
-                    <span className="text-white/40 mt-1">•</span>
-                    <span>{risk}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
           {/* Next Steps */}
           <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
-            <h2 className="text-2xl font-light text-white mb-6">Next Steps</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-light text-white">Next Steps</h2>
+              <button
+                onClick={() => {
+                  const newNextSteps = [...estimate.nextSteps, ''];
+                  updateEstimate({ nextSteps: newNextSteps });
+                }}
+                className="px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all flex items-center gap-2 text-sm font-medium"
+              >
+                <Plus className="w-4 h-4" />
+                Add Step
+              </button>
+            </div>
             <ol className="space-y-4">
               {estimate.nextSteps.map((step, index) => (
-                <li key={index} className="text-white/70 flex items-start gap-3 font-light">
+                <li key={index} className="text-white/70 flex items-start gap-3 font-light group">
                   <span className="flex-shrink-0 w-6 h-6 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-sm font-medium">
                     {index + 1}
                   </span>
-                  <span className="pt-0.5">{step}</span>
+                  <input
+                    type="text"
+                    value={step}
+                    onChange={(e) => {
+                      const newNextSteps = [...estimate.nextSteps];
+                      newNextSteps[index] = e.target.value;
+                      updateEstimate({ nextSteps: newNextSteps });
+                    }}
+                    className="flex-1 px-2 py-1 bg-transparent text-white/70 focus:outline-none focus:bg-white/5 rounded"
+                    placeholder="Describe the next step..."
+                  />
+                  <button
+                    onClick={() => {
+                      const newNextSteps = estimate.nextSteps.filter((_, i) => i !== index);
+                      updateEstimate({ nextSteps: newNextSteps });
+                    }}
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500/20 text-red-400 rounded transition-all flex-shrink-0"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </li>
               ))}
             </ol>
           </div>
-
-          {/* Export & Actions Bar */}
-          <div className="bg-black/20 border border-white/10 rounded-xl p-8 mb-8">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-center sm:text-left">
-                <h3 className="text-lg font-medium text-white mb-1">Export Your Blueprint</h3>
-                <p className="text-sm text-white/50 font-light">Download or copy your project blueprint</p>
-              </div>
-
-              <div className="flex items-center gap-3 flex-wrap relative z-0">
-                {/* Save to Library Button */}
-                <button
-                  onClick={handleSaveToLibrary}
-                  disabled={isSavingToLibrary}
-                  className={`px-6 py-3 rounded-lg transition-all inline-flex items-center gap-2 font-medium relative z-20 ${
-                    saveToLibrarySuccess
-                      ? "bg-green-500/20 text-green-400 border border-green-500/50"
-                      : "bg-white/5 hover:bg-white/10 border border-white/10 text-white"
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
-                  style={{ pointerEvents: 'auto' }}
-                >
-                  {isSavingToLibrary ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Saving...
-                    </>
-                  ) : saveToLibrarySuccess ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      Saved!
-                    </>
-                  ) : (
-                    <>
-                      <BookmarkPlus className="w-4 h-4" />
-                      Save to Library
-                    </>
-                  )}
-                </button>
-
-                {/* Export Dropdown */}
-                <div className="relative z-10">
-                  <button
-                    onClick={() => setShowDropdown(!showDropdown)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2"
-                  >
-                    <Download className="w-4 h-4" />
-                    Export
-                    <ChevronDown className={`w-4 h-4 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-black/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl overflow-hidden z-50">
-                      <button
-                        onClick={handleCopyToClipboard}
-                        className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light"
-                      >
-                        <Copy className="w-4 h-4" />
-                        {copySuccess ? 'Copied!' : 'Copy as Markdown'}
-                      </button>
-                      <button
-                        onClick={handleDownloadMarkdown}
-                        className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light border-t border-white/5"
-                      >
-                        <FileText className="w-4 h-4" />
-                        Download Markdown
-                      </button>
-                      <button
-                        onClick={handleDownloadPDF}
-                        className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center gap-3 font-light border-t border-white/5"
-                      >
-                        <Download className="w-4 h-4" />
-                        Download PDF
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Get Proposal Button */}
-                <button
-                  onClick={() => setShowEmailCapture(true)}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2 shadow-lg shadow-blue-500/20"
-                >
-                  <Mail className="w-4 h-4" />
-                  Get Proposal
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="bg-black/20 border border-white/10 rounded-xl p-12 text-center">
-            <h2 className="text-3xl font-light text-white mb-4">Ready to Start Building?</h2>
-            <p className="text-white/60 mb-8 max-w-2xl mx-auto font-light">
-              Turn your blueprint into reality with KoreLnx. Get a detailed proposal with pricing, timeline, technical specifications, and our team's availability.
-            </p>
-            <button
-              onClick={() => setShowEmailCapture(true)}
-              className="px-8 py-4 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-xl transition-all inline-flex items-center gap-2 shadow-lg shadow-blue-500/20"
-            >
-              <Mail className="w-5 h-5" />
-              Request Detailed Proposal
-            </button>
-          </div>
         </div>
       </main>
-
-      {/* Email Capture Modal */}
-      {showEmailCapture && !emailSubmitted && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-          <div className="bg-black border border-white/10 rounded-2xl p-8 max-w-md w-full">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-light text-white">Get Full Proposal</h3>
-              <button
-                onClick={() => setShowEmailCapture(false)}
-                className="text-white/50 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-white/60 mb-6 font-light">
-              Enter your details and we'll send you a comprehensive proposal.
-            </p>
-            <form onSubmit={handleEmailSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-white/70 mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 font-light"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-white/70 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 font-light"
-                  placeholder="john@example.com"
-                  required
-                />
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowEmailCapture(false)}
-                  className="flex-1 px-4 py-3 bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors font-light"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-lg transition-all"
-                >
-                  Send Proposal
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Success Modal */}
-      {emailSubmitted && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-          <div className="bg-black border border-white/10 rounded-2xl p-8 max-w-md w-full text-center">
-            <CheckCircle2 className="w-16 h-16 text-blue-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-light text-white mb-4">Proposal Sent</h3>
-            <p className="text-white/60 mb-6 font-light">
-              Check your email at <strong className="text-white">{email}</strong>. We'll be in touch soon.
-            </p>
-            <button
-              onClick={() => router.push("/")}
-              className="px-6 py-3 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg transition-all font-medium"
-            >
-              Create Another Blueprint
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Sign Up Modal */}
       {showSignUpModal && (
@@ -1070,12 +1095,6 @@ export default function EstimatePage() {
                 </>
               )}
             </button>
-
-            <div className="mt-6 pt-6 border-t border-white/10">
-              <p className="text-center text-sm text-white/40 font-light">
-                Free forever • No credit card required
-              </p>
-            </div>
           </div>
         </div>
       )}

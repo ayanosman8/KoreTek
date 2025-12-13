@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/auth/server";
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-});
+import { callOpenRouter, MODELS } from "@/lib/ai/openrouter";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,11 +12,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Check Pro status
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('subscription_status, has_paid')
       .eq('id', user.id)
       .single();
+
+    if (profileError) {
+      console.error('Profile query error:', profileError);
+      return NextResponse.json(
+        { error: "Failed to check subscription status", details: profileError.message },
+        { status: 500 }
+      );
+    }
 
     const status = profile?.subscription_status || (profile?.has_paid ? 'active' : null);
     const isPro = status === 'active';
@@ -38,10 +42,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const message = await anthropic.messages.create({
-      model: "claude-3-5-sonnet-20241022",
-      max_tokens: 1024,
-      messages: [
+    // Use GPT-3.5-turbo for cheap tech suggestions
+    const response = await callOpenRouter(
+      [
         {
           role: "user",
           content: `You are a tech stack advisor. Given a technology "${technology}" in the category "${category}", suggest 5-8 good alternative technologies that could serve the same purpose.
@@ -61,15 +64,15 @@ Category: ${category}
 Suggest alternatives:`,
         },
       ],
-    });
-
-    const content = message.content[0];
-    if (content.type !== "text") {
-      throw new Error("Unexpected response type");
-    }
+      {
+        model: MODELS.GPT_35_TURBO, // Very cheap model
+        temperature: 0.7,
+        max_tokens: 512,
+      }
+    );
 
     // Parse the JSON response
-    const alternatives = JSON.parse(content.text.trim());
+    const alternatives = JSON.parse(response.trim());
 
     return NextResponse.json({ alternatives });
   } catch (error) {

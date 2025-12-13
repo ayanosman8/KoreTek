@@ -1,20 +1,1267 @@
-[00:00:01.162] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:01.256] Server  LOG      ✓ Ready in 1037ms
-[00:00:03.429] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:03.441] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:03.951] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:09.797] Browser ERROR   unhandledRejection: Error: Failed to load chunk /_next/static/chunks/app_layout_tsx_78cdd4a3._.js from module [project]/node_modules/next/dist/compiled/react-server-dom-turbopack/cjs/react-server-dom-turbopack-client.browser.development.js [app-client] (ecmascript)
-[00:04:50.785] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:06:19.621] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:06:48.690] Server  LOG      ✓ Compiled in 105ms
-[00:17:02.481] Server  LOG      ✓ Compiled in 258ms
-[00:19:00.951] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:19:08.546] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:19:09.046] Browser ERROR   Error loading estimates: {"code":"PGRST205","details":null,"hint":null,"message":"Could not find the table 'public.user_estimates' in the schema cache"}
-[00:20:15.684] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./app/my-estimates/page.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[00:20:15.809] Server  LOG      ✓ Compiled in 125ms
-[00:20:15.811] Browser ERROR   uncaughtError: Error: Internal Next.js error: Router action dispatched before initialization.
-[00:20:16.468] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:25:42.215] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:26:47.834] Server  LOG      ✓ Compiled in 174ms
-[00:27:39.191] Server  LOG      ✓ Compiled in 28ms
+[00:00:01.073] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:01.161] Server  LOG      ✓ Ready in 941ms
+[00:00:04.203] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:19.109] Server  LOG      ✓ Compiled in 32ms
+[00:00:33.328] Server  LOG      ✓ Compiled in 64ms
+[00:00:45.605] Server  LOG      ✓ Compiled in 28ms
+[00:00:53.871] Server  LOG      ✓ Compiled in 23ms
+[00:02:10.638] Server  LOG      ✓ Compiled in 31ms
+[00:02:42.629] Server  LOG      ✓ Compiled in 136ms
+[00:06:52.887] Server  LOG      ✓ Compiled in 59ms
+[00:10:04.534] Server  LOG      ✓ Compiled in 29ms
+[00:10:15.000] Server  LOG      ✓ Compiled in 35ms
+[00:10:57.588] Server  LOG      ✓ Compiled in 87ms
+[00:11:05.003] Server  LOG      ✓ Compiled in 39ms
+[00:11:18.283] Server  LOG      ✓ Compiled in 22ms
+[00:11:26.837] Server  LOG      ✓ Compiled in 52ms
+[00:11:41.229] Server  LOG      ✓ Compiled in 39ms
+[00:11:54.481] Server  LOG      ✓ Compiled in 38ms
+[00:12:03.829] Server  LOG      ✓ Compiled in 37ms
+[00:12:38.756] Server  LOG      ✓ Compiled in 55ms
+[00:12:49.999] Server  LOG      ✓ Compiled in 59ms
+[00:12:50.161] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:1022:13
+Parsing ecmascript source code failed
+  1020 |           </div>
+  1021 |           )}
+> 1022 |           </>
+       |             ^
+  1023 |           )}
+  1024 |         </div>
+  1025 |         {/* End Tab Content */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:13:09.787] Server  LOG      ✓ Compiled in 89ms
+[00:13:09.800] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:1022:13
+Parsing ecmascript source code failed
+  1020 |           </div>
+  1021 |           )}
+> 1022 |           </>
+       |             ^
+  1023 |           )}
+  1024 |         </div>
+  1025 |         {/* End Tab Content */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:13:16.690] Server  LOG      ✓ Compiled in 59ms
+[00:13:29.161] Server  LOG      ✓ Compiled in 24ms
+[00:13:40.735] Server  LOG      ✓ Compiled in 57ms
+[00:14:21.410] Server  LOG      ✓ Compiled in 48ms
+[00:14:30.134] Server  LOG      ✓ Compiled in 37ms
+[00:14:43.087] Server  LOG      ✓ Compiled in 31ms
+[00:14:43.193] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:944:11
+Parsing ecmascript source code failed
+  942 |           </div>
+  943 |           )}
+> 944 |         </div>
+      |           ^^^
+  945 |       </div>
+  946 |
+  947 |       {/* Upgrade Modal */}
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:15:05.962] Server  LOG      ✓ Compiled in 97ms
+[00:15:19.944] Server  LOG      ✓ Compiled in 26ms
+[00:16:57.640] Server  LOG      ✓ Compiled in 52ms
+[00:17:29.481] Server  LOG      ✓ Compiled in 31ms
+[00:17:29.584] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:919:23
+Parsing ecmascript source code failed
+  917 |                         </div>
+  918 |                       </div>
+> 919 |                     ) : (
+      |                       ^
+  920 |                       // Old-style string feature
+  921 |                       <div className="flex items-start gap-2">
+  922 |                         <input
+
+Expected '</', got ':'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:17:37.396] Server  LOG      ✓ Compiled in 59ms
+[00:17:53.963] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:13.597] Server  LOG      ✓ Compiled in 69ms
+[00:19:42.220] Server  LOG      ✓ Compiled in 31ms
+[00:21:00.810] Server  LOG      ✓ Compiled in 92ms
+[00:23:33.022] Server  LOG      ✓ Compiled in 75ms
+[00:24:33.214] Server  LOG      ✓ Compiled in 98ms
+[00:24:33.317] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:1131:26
+Parsing ecmascript source code failed
+  1129 |                         </div>
+  1130 |                         </div>
+> 1131 |                         )}
+       |                          ^
+  1132 |                       </div>
+  1133 |                     ) : (
+  1134 |                       // Old-style string feature
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:25:41.404] Server  LOG      ✓ Compiled in 55ms
+[00:25:41.515] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:1141:26
+Parsing ecmascript source code failed
+  1139 |                         </div>
+  1140 |                         </div>
+> 1141 |                         )}
+       |                          ^
+  1142 |                       </div>
+  1143 |                     ) : (
+  1144 |                       // Old-style string feature
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:25:55.773] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:1167:22
+Parsing ecmascript source code failed
+  1165 |                         </button>
+  1166 |                       </div>
+> 1167 |                     )}
+       |                      ^
+  1168 |                   </div>
+  1169 |                 );
+  1170 |               })}
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:26:20.986] Server  LOG      ✓ Compiled in 97ms
+[00:26:20.992] Browser ERROR   ./app/dashboard/blueprints/[id]/page.tsx:1167:22
+Parsing ecmascript source code failed
+  1165 |                         </button>
+  1166 |                       </div>
+> 1167 |                     )}
+       |                      ^
+  1168 |                   </div>
+  1169 |                 );
+  1170 |               })}
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component Browser]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/blueprints/[id]/page.tsx [Client Component SSR]
+    ./app/dashboard/blueprints/[id]/page.tsx [Server Component]
+[00:26:47.968] Server  LOG      ✓ Compiled in 127ms
+[00:29:06.544] Server  LOG      ✓ Compiled in 64ms
+[00:29:20.695] Server  LOG      ✓ Compiled in 55ms
+[00:32:17.832] Server  LOG      ✓ Compiled in 78ms
+[00:32:30.913] Server  LOG      ✓ Compiled in 49ms
+[00:32:41.025] Server  LOG      ✓ Compiled in 53ms
+[00:32:51.786] Server  LOG      ✓ Compiled in 82ms
+[00:33:01.332] Server  LOG      ✓ Compiled in 63ms
+[00:33:11.667] Server  LOG      ✓ Compiled in 46ms
+[00:33:21.843] Server  LOG      ✓ Compiled in 39ms
+[00:34:46.216] Server  LOG      ✓ Compiled in 100ms
+[00:36:03.483] Server  LOG      ✓ Compiled in 97ms
+[00:36:29.061] Server  LOG      ✓ Compiled in 32ms
+[00:36:43.112] Server  LOG      ✓ Compiled in 38ms
+[00:36:57.933] Server  LOG      ✓ Compiled in 47ms
+[00:37:11.760] Server  LOG      ✓ Compiled in 99ms
+[00:37:23.506] Server  LOG      ✓ Compiled in 54ms
+[00:37:34.553] Server  LOG      ✓ Compiled in 45ms
+[00:37:56.474] Server  LOG      ✓ Compiled in 146ms
+[00:38:04.025] Server  LOG      ✓ Compiled in 143ms
+[00:38:22.008] Server  LOG      ✓ Compiled in 68ms
+[00:39:56.664] Server  LOG      ✓ Compiled in 398ms
+[00:42:29.267] Server  LOG      ✓ Compiled in 115ms
+[00:43:20.229] Server  LOG      ✓ Compiled in 158ms
+[00:44:53.455] Server  LOG      ✓ Compiled in 247ms
+[00:44:54.896] Server  LOG      ✓ Compiled in 137ms
+[00:48:23.755] Server  LOG      ✓ Compiled in 47ms
+[00:48:51.984] Server  LOG      ✓ Compiled in 52ms
+[00:48:56.702] Browser LOG     Form submitted, description: I want an app like github but more modern. 
+[00:48:56.702] Browser LOG     Loading state set to true
+[00:48:56.702] Browser LOG     Navigating to /estimate
+[00:48:58.296] Browser LOG     EstimatePage useEffect running
+[00:48:58.296] Browser LOG     Saved blueprint exists: false
+[00:48:58.296] Browser LOG     Saved description: null
+[00:48:58.296] Browser LOG     Session description: I want an app like github but more modern. 
+[00:48:58.296] Browser LOG     Generating new estimate
+[00:48:58.296] Browser LOG     Already started generating, skipping
+[00:49:31.618] Server  ERROR   Supabase error: {}
+[00:49:31.618] Server  ERROR   Error saving estimate: {}
+[00:49:31.749] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:49:31.749] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:49:31.749] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:49:31.749] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:49:31.749] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:49:31.749] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:49:31.749] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:49:31.749] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:49:31.749] Browser ERROR   uncaughtError: Error: Objects are not valid as a React child (found: object with keys {name, description, tier, tech, database, implementation}). If you meant to render a collection of children, use an array instead.
+[00:49:58.375] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:53:13.224] Browser LOG     Form submitted, description: I want an app like github but modern. Nicer UI
+[00:53:13.224] Browser LOG     Loading state set to true
+[00:53:13.224] Browser LOG     Navigating to /estimate
+[00:53:13.564] Browser LOG     EstimatePage useEffect running
+[00:53:13.564] Browser LOG     Saved blueprint exists: false
+[00:53:13.564] Browser LOG     Saved description: null
+[00:53:13.564] Browser LOG     Session description: I want an app like github but modern. Nicer UI
+[00:53:13.564] Browser LOG     Generating new estimate
+[00:53:13.564] Browser LOG     Already started generating, skipping
+[00:53:18.656] Server  LOG      ✓ Compiled in 176ms
+[00:53:37.495] Server  ERROR   Supabase error: {}
+[00:53:37.495] Server  ERROR   Error saving estimate: {}
+[00:53:37.637] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:53:37.637] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:53:37.637] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:53:37.637] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:53:37.637] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:53:37.637] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:53:37.637] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:53:37.638] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:53:37.638] Browser ERROR   uncaughtError: Error: Objects are not valid as a React child (found: object with keys {name, description, tier, tech, resources}). If you meant to render a collection of children, use an array instead.
+[00:53:51.095] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:29.211] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:52.809] Browser LOG     Form submitted, description: A app like github but modern.
+[00:55:52.809] Browser LOG     Loading state set to true
+[00:55:52.809] Browser LOG     Navigating to /estimate
+[00:55:53.260] Browser LOG     EstimatePage useEffect running
+[00:55:53.260] Browser LOG     Saved blueprint exists: false
+[00:55:53.260] Browser LOG     Saved description: null
+[00:55:53.260] Browser LOG     Session description: A app like github but modern.
+[00:55:53.260] Browser LOG     Generating new estimate
+[00:55:53.260] Browser LOG     Already started generating, skipping
+[00:56:18.592] Server  ERROR   Supabase error: {}
+[00:56:18.593] Server  ERROR   Error saving estimate: {}
+[00:56:18.703] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:56:18.703] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:56:18.703] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:56:18.703] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:58:59.789] Server  LOG      ✓ Compiled in 300ms
+[00:58:59.908] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:58:59.908] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:58:59.908] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:58:59.908] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:59:19.898] Server  LOG      ✓ Compiled in 87ms
+[00:59:19.986] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:59:19.986] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:59:19.986] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:59:19.986] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:59:31.932] Server  LOG      ✓ Compiled in 64ms
+[00:59:32.019] Browser LOG     EstimatePage useEffect running
+[00:59:32.019] Browser LOG     Saved blueprint exists: true
+[00:59:32.019] Browser LOG     Saved description: A app like github but modern.
+[00:59:32.019] Browser LOG     Session description: null
+[00:59:32.019] Browser LOG     Loading from localStorage
+[00:59:32.830] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:59:32.830] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:59:32.830] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:59:32.830] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:59:48.032] Server  LOG      ✓ Compiled in 33ms
+[00:59:48.137] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:59:48.138] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[00:59:48.138] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[00:59:48.138] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:30:27.844] Browser LOG     Form submitted, description: I want a app that lets users rate their nintedo switch games 
+[01:30:27.844] Browser LOG     Loading state set to true
+[01:30:27.844] Browser LOG     Navigating to /estimate
+[01:30:28.218] Browser LOG     EstimatePage useEffect running
+[01:30:28.218] Browser LOG     Saved blueprint exists: false
+[01:30:28.218] Browser LOG     Saved description: null
+[01:30:28.218] Browser LOG     Session description: I want a app that lets users rate their nintedo switch games 
+[01:30:28.218] Browser LOG     Generating new estimate
+[01:30:28.218] Browser LOG     Already started generating, skipping
+[01:30:57.639] Server  ERROR   Supabase error: {}
+[01:30:57.640] Server  ERROR   Error saving estimate: {}
+[01:30:57.752] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:30:57.752] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:30:57.752] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:30:57.752] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:31:37.493] Browser LOG     🔷 Save to Library button clicked
+[01:31:37.493] Browser LOG     ✅ Estimate exists, checking auth...
+[01:31:37.801] Browser LOG     👤 Current user: akaythe4th@gmail.com
+[01:31:37.801] Browser LOG     💾 User is logged in, saving to library...
+[01:31:37.801] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:31:37.801] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:31:37.801] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:31:37.801] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:31:38.358] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:31:38.358] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:31:38.358] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:31:38.358] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:31:41.362] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:31:41.362] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:31:41.362] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[01:31:41.362] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[01:32:31.082] Server  LOG      ✓ Compiled in 324ms
+[01:32:31.191] Browser ERROR   ./app/estimate/page.tsx:754:16
+Parsing ecmascript source code failed
+  752 |           </div>
+  753 |         </div>
+> 754 |       </header>
+      |                ^
+> 755 |
+      | ^
+> 756 |       <main className="pt-32 pb-20 px-6">
+      | ^^^^^^^
+  757 |         <div className="max-w-5xl mx-auto">
+  758 |           {/* Project Name */}
+  759 |           <div className="mb-16">
+
+Expected '</', got 'jsx text (
+
+      )'
+
+Import traces:
+  Client Component Browser:
+    ./app/estimate/page.tsx [Client Component Browser]
+    ./app/estimate/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/estimate/page.tsx [Client Component SSR]
+    ./app/estimate/page.tsx [Server Component]
+[01:32:46.931] Server  LOG      ✓ Compiled in 110ms
+[01:32:46.933] Browser ERROR   ./app/estimate/page.tsx:754:16
+Parsing ecmascript source code failed
+  752 |           </div>
+  753 |         </div>
+> 754 |       </header>
+      |                ^
+> 755 |
+      | ^
+> 756 |       <main className="pt-32 pb-20 px-6">
+      | ^^^^^^^
+  757 |         <div className="max-w-5xl mx-auto">
+  758 |           {/* Project Name */}
+  759 |           <div className="mb-16">
+
+Expected '</', got 'jsx text (
+
+      )'
+
+Import traces:
+  Client Component Browser:
+    ./app/estimate/page.tsx [Client Component Browser]
+    ./app/estimate/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/estimate/page.tsx [Client Component SSR]
+    ./app/estimate/page.tsx [Server Component]
+[01:33:28.590] Server  LOG      ✓ Compiled in 213ms
+[01:33:35.856] Server  LOG      ✓ Compiled in 113ms
+[01:33:49.753] Server  LOG      ✓ Compiled in 66ms
+[01:34:02.332] Server  LOG      ✓ Compiled in 283ms
+[01:34:17.059] Server  LOG      ✓ Compiled in 67ms
+[01:37:11.558] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:23.729] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:45.716] Server  ERROR   Error updating blueprint: {}
+[01:37:45.824] Browser ERROR   Error updating status: {}
+[01:43:23.470] Server  LOG      ✓ Compiled in 83ms
+[01:43:30.744] Server  LOG      ✓ Compiled in 32ms
+[01:43:42.192] Server  LOG      ✓ Compiled in 28ms
+[01:44:13.954] Server  LOG      ✓ Compiled in 133ms
+[01:47:01.616] Server  LOG      ✓ Compiled in 111ms
+[01:47:17.409] Server  LOG      ✓ Compiled in 149ms
+[01:47:29.814] Server  LOG      ✓ Compiled in 45ms
+[01:48:07.807] Server  LOG      ✓ Compiled in 67ms
+[01:48:16.971] Server  LOG      ✓ Compiled in 54ms
+[01:48:24.998] Server  LOG      ✓ Compiled in 391ms
+[01:48:25.274] Browser ERROR   ./app/dashboard/settings/page.tsx:650:1
+Parsing ecmascript source code failed
+  648 |     </div>
+  649 |   );
+> 650 | }
+      | ^
+  651 |
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:25.645] Browser ERROR   ./app/dashboard/settings/page.tsx:650:1
+Parsing ecmascript source code failed
+  648 |     </div>
+  649 |   );
+> 650 | }
+      | ^
+  651 |
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:25.651] Browser ERROR   ./app/dashboard/settings/page.tsx:650:1
+Parsing ecmascript source code failed
+  648 |     </div>
+  649 |   );
+> 650 | }
+      | ^
+  651 |
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:31.799] Server  LOG      ✓ Compiled in 104ms
+[01:48:31.907] Browser ERROR   ./app/dashboard/settings/page.tsx:220:9
+Parsing ecmascript source code failed
+  218 |         </div>
+  219 |
+> 220 |         {/* Tech Stack Preferences */}
+      |         ^
+  221 |         <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-6">
+  222 |           <div className="flex items-start justify-between mb-6">
+  223 |             <div>
+
+Expected '</', got '{'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:32.645] Browser ERROR   ./app/dashboard/settings/page.tsx:220:9
+Parsing ecmascript source code failed
+  218 |         </div>
+  219 |
+> 220 |         {/* Tech Stack Preferences */}
+      |         ^
+  221 |         <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-6">
+  222 |           <div className="flex items-start justify-between mb-6">
+  223 |             <div>
+
+Expected '</', got '{'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:32.646] Browser ERROR   ./app/dashboard/settings/page.tsx:220:9
+Parsing ecmascript source code failed
+  218 |         </div>
+  219 |
+> 220 |         {/* Tech Stack Preferences */}
+      |         ^
+  221 |         <div className="bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-6">
+  222 |           <div className="flex items-start justify-between mb-6">
+  223 |             <div>
+
+Expected '</', got '{'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:37.573] Browser ERROR   ./app/dashboard/settings/page.tsx:496:9
+Parsing ecmascript source code failed
+  494 |         </div>
+  495 |
+> 496 |         {/* Success Message */}
+      |         ^
+  497 |         {showSuccess && (
+  498 |           <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-4 mb-6 flex items-center gap-3">
+  499 |             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+
+Expected '</', got '{'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:37.638] Browser ERROR   ./app/dashboard/settings/page.tsx:496:9
+Parsing ecmascript source code failed
+  494 |         </div>
+  495 |
+> 496 |         {/* Success Message */}
+      |         ^
+  497 |         {showSuccess && (
+  498 |           <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-4 mb-6 flex items-center gap-3">
+  499 |             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+
+Expected '</', got '{'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:37.639] Browser ERROR   ./app/dashboard/settings/page.tsx:496:9
+Parsing ecmascript source code failed
+  494 |         </div>
+  495 |
+> 496 |         {/* Success Message */}
+      |         ^
+  497 |         {showSuccess && (
+  498 |           <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-4 mb-6 flex items-center gap-3">
+  499 |             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+
+Expected '</', got '{'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:43.802] Server  LOG      ✓ Compiled in 30ms
+[01:48:43.904] Browser ERROR   ./app/dashboard/settings/page.tsx:654:9
+Parsing ecmascript source code failed
+  652 |           </div>
+  653 |         </div>
+> 654 |       </div>
+      |         ^^^
+  655 |     </div>
+  656 |   );
+  657 | }
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:44.639] Browser ERROR   ./app/dashboard/settings/page.tsx:654:9
+Parsing ecmascript source code failed
+  652 |           </div>
+  653 |         </div>
+> 654 |       </div>
+      |         ^^^
+  655 |     </div>
+  656 |   );
+  657 | }
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:44.639] Browser ERROR   ./app/dashboard/settings/page.tsx:654:9
+Parsing ecmascript source code failed
+  652 |           </div>
+  653 |         </div>
+> 654 |       </div>
+      |         ^^^
+  655 |     </div>
+  656 |   );
+  657 | }
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:50.496] Server  LOG      ✓ Compiled in 65ms
+[01:48:50.638] Browser ERROR   ./app/dashboard/settings/page.tsx:654:9
+Parsing ecmascript source code failed
+  652 |           </div>
+  653 |         </div>
+> 654 |       </div>
+      |         ^^^
+  655 |     </div>
+  656 |   );
+  657 | }
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:50.639] Browser ERROR   ./app/dashboard/settings/page.tsx:657:8
+Parsing ecmascript source code failed
+  655 |           </div>
+  656 |         </div>
+> 657 |       </div>
+      |        ^^^^^
+  658 |     </div>
+  659 |   );
+  660 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:50.639] Browser ERROR   ./app/dashboard/settings/page.tsx:654:9
+Parsing ecmascript source code failed
+  652 |           </div>
+  653 |         </div>
+> 654 |       </div>
+      |         ^^^
+  655 |     </div>
+  656 |   );
+  657 | }
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:50.639] Browser ERROR   ./app/dashboard/settings/page.tsx:657:8
+Parsing ecmascript source code failed
+  655 |           </div>
+  656 |         </div>
+> 657 |       </div>
+      |        ^^^^^
+  658 |     </div>
+  659 |   );
+  660 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:50.639] Browser ERROR   ./app/dashboard/settings/page.tsx:654:9
+Parsing ecmascript source code failed
+  652 |           </div>
+  653 |         </div>
+> 654 |       </div>
+      |         ^^^
+  655 |     </div>
+  656 |   );
+  657 | }
+
+Expected '</', got 'div'
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:48:50.639] Browser ERROR   ./app/dashboard/settings/page.tsx:657:8
+Parsing ecmascript source code failed
+  655 |           </div>
+  656 |         </div>
+> 657 |       </div>
+      |        ^^^^^
+  658 |     </div>
+  659 |   );
+  660 | }
+
+Unterminated regexp literal
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:49:01.730] Server  LOG      ✓ Compiled in 112ms
+[01:50:23.893] Server  LOG      ✓ Compiled in 238ms
+[01:50:36.462] Server  LOG      ✓ Compiled in 127ms
+[01:50:43.985] Server  LOG      ✓ Compiled in 57ms
+[01:50:49.300] Server  LOG      ✓ Compiled in 36ms
+[01:50:55.870] Server  LOG      ✓ Compiled in 60ms
+[01:50:55.976] Browser ERROR   ./app/dashboard/settings/page.tsx:654:11
+Parsing ecmascript source code failed
+  652 |           )}
+  653 |         </div>
+> 654 |         </>
+      |           ^
+  655 |         )}
+  656 |
+  657 |         {/* Danger Zone */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:50:56.644] Browser ERROR   ./app/dashboard/settings/page.tsx:654:11
+Parsing ecmascript source code failed
+  652 |           )}
+  653 |         </div>
+> 654 |         </>
+      |           ^
+  655 |         )}
+  656 |
+  657 |         {/* Danger Zone */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:50:56.645] Browser ERROR   ./app/dashboard/settings/page.tsx:654:11
+Parsing ecmascript source code failed
+  652 |           )}
+  653 |         </div>
+> 654 |         </>
+      |           ^
+  655 |         )}
+  656 |
+  657 |         {/* Danger Zone */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:51:04.642] Server  LOG      ✓ Compiled in 85ms
+[01:51:04.656] Browser ERROR   ./app/dashboard/settings/page.tsx:654:11
+Parsing ecmascript source code failed
+  652 |           )}
+  653 |         </div>
+> 654 |         </>
+      |           ^
+  655 |         )}
+  656 |
+  657 |         {/* Danger Zone */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:51:04.657] Browser ERROR   ./app/dashboard/settings/page.tsx:654:11
+Parsing ecmascript source code failed
+  652 |           )}
+  653 |         </div>
+> 654 |         </>
+      |           ^
+  655 |         )}
+  656 |
+  657 |         {/* Danger Zone */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:51:04.657] Browser ERROR   ./app/dashboard/settings/page.tsx:654:11
+Parsing ecmascript source code failed
+  652 |           )}
+  653 |         </div>
+> 654 |         </>
+      |           ^
+  655 |         )}
+  656 |
+  657 |         {/* Danger Zone */}
+
+Expression expected
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/settings/page.tsx [Client Component Browser]
+    ./app/dashboard/settings/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/settings/page.tsx [Client Component SSR]
+    ./app/dashboard/settings/page.tsx [Server Component]
+[01:51:32.964] Server  LOG      ✓ Compiled in 382ms
+[01:52:25.761] Server  LOG      ✓ Compiled in 82ms
+[01:52:45.422] Server  LOG      ✓ Compiled in 77ms
+[01:53:25.485] Server  LOG      ✓ Compiled in 84ms
+[01:53:33.404] Server  LOG      ✓ Compiled in 47ms
+[01:55:34.233] Server  LOG      ✓ Compiled in 238ms
+[03:31:16.064] Server  LOG      ✓ Compiled in 69ms
+[03:31:23.164] Server  LOG      ✓ Compiled in 166ms
+[03:31:37.257] Server  LOG      ✓ Compiled in 645ms
+[03:31:57.051] Server  LOG      ✓ Compiled in 106ms
+[03:32:19.624] Server  LOG      ✓ Compiled in 122ms
+[03:32:49.216] Server  LOG      ✓ Compiled in 88ms
+[03:33:04.661] Server  LOG      ✓ Compiled in 25ms
+[03:33:17.298] Server  LOG      ✓ Compiled in 45ms
+[03:36:20.777] Server  LOG      ✓ Compiled in 83ms
+[03:36:32.849] Server  LOG      ✓ Compiled in 78ms
+[03:39:36.244] Browser LOG     Form submitted, description: I want an app to help me quickly save links and classify them. A mobile app. 
+[03:39:36.244] Browser LOG     Loading state set to true
+[03:39:36.244] Browser LOG     Navigating to /estimate
+[03:39:36.730] Browser LOG     EstimatePage useEffect running
+[03:39:36.730] Browser LOG     Saved blueprint exists: false
+[03:39:36.730] Browser LOG     Saved description: null
+[03:39:36.730] Browser LOG     Session description: I want an app to help me quickly save links and classify them. A mobile app. 
+[03:39:36.730] Browser LOG     Generating new estimate
+[03:39:36.730] Browser LOG     Already started generating, skipping
+[03:39:37.233] Server  LOG     Using user tech preferences: {}
+[03:40:07.315] Server  ERROR   Supabase error: {}
+[03:40:07.316] Server  ERROR   Error saving estimate: {}
+[03:40:07.427] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:07.427] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:07.427] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:07.427] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:18.001] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:18.001] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:18.001] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:18.001] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:21.132] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:21.132] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:21.132] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:21.132] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:22.882] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:22.882] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:22.882] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:22.882] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:24.413] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:24.413] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:40:24.413] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:40:24.413] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:04.037] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:04.037] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:04.037] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:04.037] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.360] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.360] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.360] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.360] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.527] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.527] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.527] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.527] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.671] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.671] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.671] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.671] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.839] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.839] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:07.839] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:07.839] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:10.967] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:10.967] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:10.967] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:10.967] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:11.201] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:11.201] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:11.201] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:11.201] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:11.528] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:11.528] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:11.528] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:11.528] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:11.753] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:11.753] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:11.753] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:11.753] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:12.087] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:12.087] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:12.087] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:12.087] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:12.955] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:12.955] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:12.955] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:12.955] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:21.025] Browser LOG     🔷 Save to Library button clicked
+[03:41:21.025] Browser LOG     ✅ Estimate exists, checking auth...
+[03:41:21.321] Browser LOG     👤 Current user: akaythe4th@gmail.com
+[03:41:21.321] Browser LOG     💾 User is logged in, saving to library...
+[03:41:21.321] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:21.321] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:21.321] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:21.321] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:21.792] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:21.792] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:41:21.792] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[03:41:21.792] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[03:42:30.920] Browser LOG     Form submitted, description: I want an app where users message their followers.  A direct message app with ai features
+[03:42:30.920] Browser LOG     Loading state set to true
+[03:42:30.920] Browser LOG     Navigating to /estimate
+[03:42:30.920] Browser LOG     EstimatePage useEffect running
+[03:42:30.920] Browser LOG     Saved blueprint exists: false
+[03:42:30.920] Browser LOG     Saved description: null
+[03:42:30.920] Browser LOG     Session description: I want an app where users message their followers.  A direct message app with ai features
+[03:42:30.920] Browser LOG     Generating new estimate
+[03:42:30.920] Browser LOG     Already started generating, skipping
+[03:42:59.384] Server  ERROR   Supabase error: {}
+[03:42:59.385] Server  ERROR   Error saving estimate: {}
+[03:54:07.536] Browser LOG     🔷 Save to Library button clicked
+[03:54:07.538] Browser LOG     ✅ Estimate exists, checking auth...
+[03:54:07.538] Browser LOG     👤 Current user: Not logged in
+[03:54:07.538] Browser LOG     🔓 No user - showing sign up modal
+[03:54:33.117] Server  LOG      ✓ Compiled in 156ms
+[03:55:25.608] Browser LOG     Form submitted, description: I want an app that tracks my mood a mobile app
+[03:55:25.608] Browser LOG     Loading state set to true
+[03:55:25.608] Browser LOG     Navigating to /estimate
+[03:55:25.734] Browser LOG     EstimatePage useEffect running
+[03:55:25.734] Browser LOG     Saved blueprint exists: false
+[03:55:25.734] Browser LOG     Saved description: null
+[03:55:25.734] Browser LOG     Session description: I want an app that tracks my mood a mobile app
+[03:55:25.734] Browser LOG     Generating new estimate
+[03:55:25.734] Browser LOG     Already started generating, skipping
+[03:56:02.506] Server  ERROR   Supabase error: {}
+[03:56:02.507] Server  ERROR   Error saving estimate: {}
+[03:57:24.813] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:01:48.276] Server  LOG      ✓ Compiled in 172ms
+[04:01:54.353] Server  LOG      ✓ Compiled in 45ms
+[04:02:02.030] Server  LOG      ✓ Compiled in 54ms
+[04:02:10.107] Server  LOG      ✓ Compiled in 78ms
+[04:02:18.863] Server  LOG      ✓ Compiled in 104ms
+[04:02:31.393] Server  LOG      ✓ Compiled in 246ms
+[04:04:32.616] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:05:39.828] Server  LOG      ✓ Compiled in 51ms
+[04:05:55.812] Server  LOG      ✓ Compiled in 68ms
+[04:06:03.439] Server  LOG      ✓ Compiled in 36ms
+[04:06:12.109] Server  LOG      ✓ Compiled in 160ms
+[04:07:51.298] Server  LOG      ✓ Compiled in 139ms
+[04:07:58.298] Server  LOG      ✓ Compiled in 52ms
+[04:08:05.953] Server  LOG      ✓ Compiled in 66ms
+[04:08:11.868] Server  LOG      ✓ Compiled in 40ms
+[04:08:19.918] Server  LOG      ✓ Compiled in 49ms
+[04:08:27.060] Server  LOG      ✓ Compiled in 51ms
+[04:09:08.701] Server  LOG      ✓ Compiled in 128ms
+[04:09:15.098] Server  LOG      ✓ Compiled in 38ms
+[04:09:23.695] Server  LOG      ✓ Compiled in 108ms
+[04:09:30.257] Server  LOG      ✓ Compiled in 43ms
+[04:15:40.907] Browser LOG     Form submitted, description: A app to track alcohol consumption throughout month 
+[04:15:40.908] Browser LOG     Loading state set to true
+[04:15:40.908] Browser LOG     Navigating to /estimate
+[04:15:41.275] Browser LOG     EstimatePage useEffect running
+[04:15:41.275] Browser LOG     Saved blueprint exists: false
+[04:15:41.275] Browser LOG     Saved description: null
+[04:15:41.275] Browser LOG     Session description: A app to track alcohol consumption throughout month 
+[04:15:41.275] Browser LOG     Generating new estimate
+[04:15:41.275] Browser LOG     Already started generating, skipping
+[04:15:41.541] Server  LOG     Using user tech preferences: {}
+[04:16:17.092] Browser LOG     🔄 Auto-saving blueprint after signup...
+[04:16:17.092] Browser LOG     🔷 Save to Library button clicked
+[04:16:17.092] Browser LOG     ✅ Estimate exists, checking auth...
+[04:16:17.223] Browser LOG     👤 Current user: akaythe4th@gmail.com
+[04:16:17.223] Browser LOG     💾 User is logged in, saving to library...
+[04:16:17.400] Server  ERROR   Supabase error: {}
+[04:16:17.400] Server  ERROR   Error saving estimate: {}
+[04:16:17.509] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:17.509] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:17.509] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:17.509] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:17.679] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:17.679] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:17.679] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:17.679] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:20.679] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:20.679] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:20.679] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:20.679] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:34.828] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:34.828] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:34.828] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:34.828] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:41.305] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:41.305] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:41.305] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:41.305] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:44.779] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:44.779] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:44.779] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:44.779] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:45.295] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:45.295] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:16:45.295] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:16:45.295] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:04.766] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:04.766] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:04.766] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:04.766] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:05.399] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:05.399] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:05.399] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:05.399] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:06.227] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:06.227] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:06.227] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:06.227] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:06.764] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:06.764] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:06.764] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:06.764] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:08.044] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:08.044] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:08.044] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:08.044] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:08.580] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:08.580] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:17:08.580] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:17:08.580] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:18:58.414] Server  LOG      ✓ Compiled in 71ms
+[04:18:58.541] Browser LOG     EstimatePage useEffect running
+[04:18:58.541] Browser LOG     Saved blueprint exists: true
+[04:18:58.541] Browser LOG     Saved description: A app to track alcohol consumption throughout month 
+[04:18:58.541] Browser LOG     Session description: null
+[04:18:58.541] Browser LOG     Loading from localStorage
+[04:18:58.541] Browser ERROR   uncaughtError: ReferenceError: expandedFeatures is not defined
+[04:19:20.553] Server  LOG      ✓ Compiled in 30ms
+[04:19:20.805] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[04:19:20.811] Browser LOG     EstimatePage useEffect running
+[04:19:20.811] Browser LOG     Saved blueprint exists: true
+[04:19:20.811] Browser LOG     Saved description: A app to track alcohol consumption throughout month 
+[04:19:20.811] Browser LOG     Session description: null
+[04:19:20.811] Browser LOG     Loading from localStorage
+[04:19:20.857] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:19:20.857] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:19:20.857] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:19:20.857] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:19:21.591] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:19:21.728] Browser LOG     EstimatePage useEffect running
+[04:19:21.729] Browser LOG     Saved blueprint exists: true
+[04:19:21.729] Browser LOG     Saved description: A app to track alcohol consumption throughout month 
+[04:19:21.729] Browser LOG     Session description: null
+[04:19:21.729] Browser LOG     Loading from localStorage
+[04:19:22.496] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:19:22.496] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:19:22.496] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:19:22.496] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:19:37.159] Server  LOG      ✓ Compiled in 116ms
+[04:19:37.265] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:19:37.265] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:19:37.271] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:19:37.271] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:15.656] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:20:15.794] Browser LOG     EstimatePage useEffect running
+[04:20:15.794] Browser LOG     Saved blueprint exists: true
+[04:20:15.794] Browser LOG     Saved description: A app to track alcohol consumption throughout month 
+[04:20:15.794] Browser LOG     Session description: null
+[04:20:15.794] Browser LOG     Loading from localStorage
+[04:20:15.968] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:15.968] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:15.968] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:15.968] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:17.843] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:17.843] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:17.844] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:17.844] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:18.105] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:18.105] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:18.105] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:18.105] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:30.982] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:30.982] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:30.982] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:30.983] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:31.566] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:31.566] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:31.566] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:31.566] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:32.492] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:32.492] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:32.492] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:32.492] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:32.492] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:32.492] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:32.492] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:32.492] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:33.231] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:33.231] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:33.231] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:33.231] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:33.394] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:33.394] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:33.394] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:33.394] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:36.763] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:36.763] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:36.763] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:36.763] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:37.198] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:37.199] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:20:37.199] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:20:37.199] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:23:45.568] Browser LOG     Form submitted, description: An app that helps mobile and web developers find each other and share ideas and collaborate on projects
+[04:23:45.568] Browser LOG     Loading state set to true
+[04:23:45.568] Browser LOG     Navigating to /estimate
+[04:23:45.883] Browser LOG     EstimatePage useEffect running
+[04:23:45.883] Browser LOG     Saved blueprint exists: false
+[04:23:45.883] Browser LOG     Saved description: null
+[04:23:45.883] Browser LOG     Session description: An app that helps mobile and web developers find each other and share ideas and collaborate on projects
+[04:23:45.883] Browser LOG     Generating new estimate
+[04:23:45.883] Browser LOG     Already started generating, skipping
+[04:23:46.190] Server  LOG     Using user tech preferences: {}
+[04:24:18.486] Server  ERROR   Supabase error: {}
+[04:24:18.487] Server  ERROR   Error saving estimate: {}
+[04:24:18.606] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:24:18.606] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:24:18.606] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:24:18.606] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:24:37.752] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:24:37.752] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:24:37.752] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:24:37.752] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:05.588] Browser LOG     🔷 Save to Library button clicked
+[04:25:05.589] Browser LOG     ✅ Estimate exists, checking auth...
+[04:25:05.882] Browser LOG     👤 Current user: akaythe4th@gmail.com
+[04:25:05.882] Browser LOG     💾 User is logged in, saving to library...
+[04:25:05.882] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:25:05.882] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:05.882] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:25:05.882] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:06.360] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:25:06.360] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:06.360] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:25:06.360] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:09.366] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:25:09.366] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:09.366] Browser LOG     Generating avatar for: akaythe4th@gmail.com name: akaythe4th
+[04:25:09.366] Browser LOG     Avatar URL: https://ui-avatars.com/api/?name=akaythe4th&background=3b82f6&color=fff&size=128&bold=true
+[04:25:23.990] Server  ERROR   Error updating blueprint: {}
+[04:25:24.094] Browser ERROR   Error updating status: {}
+[04:26:09.053] Server  LOG      ✓ Compiled in 202ms
+[04:29:41.273] Server  ERROR   Error updating blueprint: {}
+[04:29:47.016] Browser ERROR   Update failed: {"error":"Failed to update blueprint"}
+[04:29:47.016] Browser ERROR   Error updating status: {}
+[04:31:12.412] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:31:15.099] Server  LOG     Updating blueprint with data: {}
+[04:36:04.833] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:36:05.385] Server  ERROR   Error fetching blueprints: {}
+[04:36:05.490] Browser ERROR   Error fetching blueprints: {}
+[04:36:07.837] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:36:08.231] Server  ERROR   Error fetching blueprints: {}
+[04:36:08.334] Browser ERROR   Error fetching blueprints: {}
+[04:37:45.943] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:37:46.422] Server  ERROR   Error fetching blueprints: {}
+[04:37:46.528] Browser ERROR   Error fetching blueprints: {}
+[04:37:48.762] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:37:49.211] Server  ERROR   Error fetching blueprints: {}
+[04:37:49.315] Browser ERROR   Error fetching blueprints: {}
+[04:38:47.547] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:02:21.400] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:02:36.302] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:02:38.048] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:10:05.508] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

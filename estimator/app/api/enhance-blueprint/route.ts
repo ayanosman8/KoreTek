@@ -3,120 +3,101 @@ import { callOpenRouter, MODELS } from "@/lib/ai/openrouter";
 
 const enhancementPrompts: Record<string, { system: string; user: string }> = {
   "target-audience": {
-    system: `You are a product strategist helping identify target users. Be practical and insightful. Use markdown formatting for clear structure.`,
+    system: `You are a product strategist. Be VERY concise - use short bullets, max 8 words each.`,
     user: `Project: {description}
 
 Blueprint Summary: {summary}
 Key Features: {features}
 
-Analyze the target audience for this project. Use structured markdown with headings and bullet points.
+Identify target users. Use this EXACT format:
 
-Format your response like this:
+## 👥 Primary Users
+**[Persona 1 Name]** - [Job/role], age XX-XX
+• [Key trait]
+• [Key trait]
+• [Pain point this solves]
 
-## Primary User Personas
-Create 2-3 specific user personas with names and characteristics
+**[Persona 2 Name]** - [Job/role], age XX-XX
+• [Key trait]
+• [Key trait]
+• [Pain point this solves]
 
-## Demographics & Characteristics
-- List key demographic details
-- User behaviors and preferences
-- Technical proficiency levels
+## 🎯 Why They'll Use This
+• [Benefit] - [Why it matters]
+• [Benefit] - [Why it matters]
+• [Benefit] - [Why it matters]
 
-## Pain Points & Solutions
-Detail the main problems this app solves for each persona
-
-## Why They'd Choose This
-- Key differentiators from alternatives
-- Unique value propositions
-- Specific benefits for each persona
-
-Be detailed and specific. Use "you" and "your" when addressing the user.`
+Max 8 words per bullet. Ultra brief.`
   },
 
   "monetization": {
-    system: `You are a business advisor specializing in SaaS and app monetization. Be strategic and practical. Use markdown formatting for clear structure.`,
+    system: `You are a business advisor. Be EXTREMELY concise - use bullet points, no long paragraphs. Get straight to numbers and specifics.`,
     user: `Project: {description}
 
 Blueprint Summary: {summary}
 Key Features: {features}
 
-Suggest monetization strategies for this app. Use structured markdown with clear headings and lists.
+Create a concise monetization strategy. Use this EXACT format with short bullets:
 
-Format your response like this:
+## 💰 Recommended Model
+[Model name] - [One sentence why]
 
-## Revenue Model Options
+## 💵 Pricing
+• Monthly: $X - [Brief reason]
+• Annual: $XX/year - [Brief reason]
 
-### 1. [Model Name]
-**Description:** Brief explanation
-**Pros:**
-- List specific advantages for this app
-**Cons:**
-- List potential challenges
-**Best for:** When to choose this model
+## 🆓 Free Features
+• [Feature] - [Why free]
+• [Feature] - [Why free]
+• [Feature] - [Why free]
 
-### 2. [Model Name]
-(same format)
+## ⭐ Pro Features ($X/mo)
+• [Feature] - [Why paid]
+• [Feature] - [Why paid]
+• [Feature] - [Why paid]
 
-### 3. [Model Name]
-(same format)
+## 📈 Revenue Goals
+• Month 1-3: X users → $X MRR
+• Growth tactic: [One specific action]
 
-## Recommended Pricing Strategy
-Detail your recommended approach with specific price points if applicable
-
-## Feature Gating Strategy
-**Free Tier:**
-- Features to keep free
-
-**Premium Tier:**
-- Features to gate behind payment
-
-**Reasoning:** Explain the strategy
-
-Be specific with actual price ranges and concrete examples. Use "you" and "your".`
+Keep everything under 10 words per bullet. No paragraphs.`
   },
 
   "mvp-comparison": {
-    system: `You are a startup advisor helping someone decide on launch strategy. Be practical and encouraging. Use markdown formatting for clear structure.`,
+    system: `You are a startup advisor. Be ULTRA concise - short bullets only, no long text.`,
     user: `Project: {description}
 
 Blueprint Summary: {summary}
 Key Features: {features}
 
-Compare two launch approaches using structured markdown.
+Compare MVP vs Full launch. Use this EXACT format:
 
-Format your response like this:
+## 🚀 Quick Launch (MVP)
+**Timeline:** X months
+**Include:**
+• [Feature]
+• [Feature]
+• [Feature]
 
-## Quick Launch (MVP) 🚀
+**Skip for now:**
+• [Feature]
+• [Feature]
 
-**Timeline:** Estimated time to launch
-**Core Features:**
-- List 4-6 essential features only
-**Features to Skip (For Now):**
-- List nice-to-have features to defer
+**Best if:** [One sentence scenario]
 
-**Benefits of This Approach:**
-1. Numbered list of advantages
-2. Why this works for validation
+## ✨ Full Launch
+**Timeline:** X months
+**Everything in MVP plus:**
+• [Feature]
+• [Feature]
+• [Feature]
 
-**Best For:** When to choose this strategy
+**Best if:** [One sentence scenario]
 
-## Perfect Launch (Full Build) ✨
+## 💡 Our Pick
+[MVP or Full] - [One sentence why]
 
-**Timeline:** Estimated time to launch
-**Complete Feature Set:**
-- List all features including polish and extras
-**Additional Investments:**
-- Design refinement
-- Advanced features
-- Additional integrations
-
-**Benefits of This Approach:**
-1. Numbered list of advantages
-2. When the investment pays off
-
-**Best For:** When to choose this strategy
-
-## Our Recommendation
-Give a clear recommendation based on the project type. Use "you" and "your".`
+Max 6 words per bullet. Ultra brief.`
   },
 
   "cool-features": {
@@ -186,7 +167,7 @@ export async function POST(request: NextRequest) {
       {
         model: MODELS.GPT_35_TURBO, // Much cheaper than Claude Sonnet (~10x less)
         temperature: 0.8,
-        max_tokens: 800,
+        max_tokens: 1000, // Increased for better monetization details
       }
     );
 

@@ -1,12 +1,15 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/blueprints/[id]/route": "app/api/blueprints/[id]/route.js",
   "/api/blueprints/route": "app/api/blueprints/route.js",
+  "/api/generate-estimate/route": "app/api/generate-estimate/route.js",
+  "/api/save-estimate/route": "app/api/save-estimate/route.js",
+  "/api/suggest-project-name/route": "app/api/suggest-project-name/route.js",
   "/auth/callback/route": "app/auth/callback/route.js",
   "/auth/login/page": "app/auth/login/page.js",
   "/dashboard/blueprints/[id]/page": "app/dashboard/blueprints/[id]/page.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/dashboard/settings/page": "app/dashboard/settings/page.js",
+  "/estimate/page": "app/estimate/page.js",
   "/my-estimates/page": "app/my-estimates/page.js",
   "/page": "app/page.js"
 }

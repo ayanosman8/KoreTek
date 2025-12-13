@@ -209,10 +209,37 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/suggest-project-name/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/suggest-project-name">> = Specific
+  const handler = {} as typeof import("../../../app/api/suggest-project-name/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/suggest-project-summary/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/suggest-project-summary">> = Specific
+  const handler = {} as typeof import("../../../app/api/suggest-project-summary/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/suggest-tech-alternatives/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/suggest-tech-alternatives">> = Specific
   const handler = {} as typeof import("../../../app/api/suggest-tech-alternatives/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/suggest-tech-items/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/suggest-tech-items">> = Specific
+  const handler = {} as typeof import("../../../app/api/suggest-tech-items/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

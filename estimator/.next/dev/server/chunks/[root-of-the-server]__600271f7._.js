@@ -136,45 +136,47 @@ Detail the main problems this app solves for each persona
 Be detailed and specific. Use "you" and "your" when addressing the user.`
     },
     "monetization": {
-        system: `You are a business advisor specializing in SaaS and app monetization. Be strategic and practical. Use markdown formatting for clear structure.`,
+        system: `You are a business advisor specializing in SaaS monetization. Skip generic explanations - users already know what freemium, subscription, etc. mean. Jump straight to specific, actionable recommendations for THIS project. Be direct and concise.`,
         user: `Project: {description}
 
 Blueprint Summary: {summary}
 Key Features: {features}
 
-Suggest monetization strategies for this app. Use structured markdown with clear headings and lists.
+Create a monetization strategy for THIS specific app. Skip generic model explanations. Be direct and actionable.
 
 Format your response like this:
 
-## Revenue Model Options
+## Recommended Revenue Model
+State the best model for this app (1-2 sentences explaining why this model fits)
 
-### 1. [Model Name]
-**Description:** Brief explanation
-**Pros:**
-- List specific advantages for this app
-**Cons:**
-- List potential challenges
-**Best for:** When to choose this model
+## Pricing Strategy
+**Monthly:** $X.XX (explain reasoning)
+**Annual:** $XX.XX (explain discount strategy)
+**Or:** One-time purchase of $XX if that makes more sense
 
-### 2. [Model Name]
-(same format)
+## Feature Split
 
-### 3. [Model Name]
-(same format)
+**Free Version:**
+- Feature 1 (why this should be free)
+- Feature 2 (why this hooks users)
+- Feature 3 (creates habit/value)
 
-## Recommended Pricing Strategy
-Detail your recommended approach with specific price points if applicable
+**Premium Version ($X/month):**
+- Feature 1 (why users will pay for this)
+- Feature 2 (high-value add-on)
+- Feature 3 (differentiation)
 
-## Feature Gating Strategy
-**Free Tier:**
-- Features to keep free
+## Revenue Potential
+- Target: X paid users in month 1-3
+- Projected MRR: $X,XXX
+- Key growth lever: [specific strategy]
 
-**Premium Tier:**
-- Features to gate behind payment
+## Quick Wins
+1. Specific tactic to get first 10 paying users
+2. Simple upsell strategy
+3. Retention hook
 
-**Reasoning:** Explain the strategy
-
-Be specific with actual price ranges and concrete examples. Use "you" and "your".`
+Skip theory. Be specific to THIS app. Use numbers. Use "you/your".`
     },
     "mvp-comparison": {
         system: `You are a startup advisor helping someone decide on launch strategy. Be practical and encouraging. Use markdown formatting for clear structure.`,
@@ -283,7 +285,7 @@ async function POST(request) {
         ], {
             model: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$openrouter$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["MODELS"].GPT_35_TURBO,
             temperature: 0.8,
-            max_tokens: 800
+            max_tokens: 1000
         });
         let processedResponse = response.trim();
         // For cool-features (JSON), strip markdown code blocks

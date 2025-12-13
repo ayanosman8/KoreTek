@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Sparkles, Settings, LogOut, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/auth/client";
 
@@ -13,6 +13,7 @@ export default function DashboardLayout({
   const [user, setUser] = useState<any>(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     checkAuth();
@@ -64,14 +65,16 @@ export default function DashboardLayout({
             <div className="flex-1"></div>
 
             {/* Navigation */}
-            <nav className="hidden md:flex items-center gap-1 mr-4">
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="px-4 py-2 rounded-lg transition-colors text-white/60 hover:text-white hover:bg-white/5"
-              >
-                Blueprints
-              </button>
-            </nav>
+            {pathname !== '/dashboard' && (
+              <nav className="hidden md:flex items-center gap-1 mr-4">
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg transition-all font-medium text-sm"
+                >
+                  Dashboard
+                </button>
+              </nav>
+            )}
 
             {/* User Profile */}
             {user && (

@@ -195,11 +195,18 @@ async function PATCH(request, { params }) {
         if (body.tags !== undefined) updateData.tags = body.tags;
         if (body.is_starred !== undefined) updateData.is_starred = body.is_starred;
         if (body.is_archived !== undefined) updateData.is_archived = body.is_archived;
+        if (body.is_public !== undefined) updateData.is_public = body.is_public;
+        if (body.status !== undefined) updateData.status = body.status;
+        if (body.checklist !== undefined) updateData.checklist = body.checklist;
+        console.log("Updating blueprint with data:", updateData);
         const { data: blueprint, error } = await supabase.from("blueprints").update(updateData).eq("id", id).eq("user_id", user.id).select().single();
         if (error || !blueprint) {
             console.error("Error updating blueprint:", error);
+            console.error("Update data was:", updateData);
+            console.error("Blueprint ID:", id);
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: "Failed to update blueprint"
+                error: "Failed to update blueprint",
+                details: error?.message
             }, {
                 status: 500
             });
