@@ -44,13 +44,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate estimate using OpenRouter + Claude with user preferences
+    console.log('Generating estimate for:', projectDescription.substring(0, 100));
     const estimate = await generateProjectEstimate(projectDescription, userPreferences);
+    console.log('Successfully generated estimate');
 
     return NextResponse.json({ estimate });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating estimate:", error);
+    console.error("Error message:", error?.message);
+    console.error("Error stack:", error?.stack);
     return NextResponse.json(
-      { error: "Failed to generate estimate. Please try again." },
+      { error: error?.message || "Failed to generate estimate. Please try again." },
       { status: 500 }
     );
   }

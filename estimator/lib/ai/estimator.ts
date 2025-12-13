@@ -214,7 +214,7 @@ Please analyze this project and provide a comprehensive estimate in JSON format.
       {
         model: MODELS.CLAUDE_35_SONNET,
         temperature: 0.7,
-        max_tokens: 1200,
+        max_tokens: 8000,
       }
     );
 
