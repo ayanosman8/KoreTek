@@ -19,6 +19,8 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
   // Pricing
   const [featurePrices, setFeaturePrices] = useState<{ [key: number]: number }>({});
   const [totalPrice, setTotalPrice] = useState(0);
+  const [projectPrice, setProjectPrice] = useState(0);
+  const [distributingPayments, setDistributingPayments] = useState(false);
   const [estimatedTimeline, setEstimatedTimeline] = useState('');
 
   // Milestones
@@ -72,6 +74,49 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
     setTotalPrice(total);
   }, [featurePrices]);
 
+  const handleDistributePayments = async () => {
+    if (!projectPrice || projectPrice <= 0) {
+      alert('Please enter a valid project price first');
+      return;
+    }
+
+    setDistributingPayments(true);
+
+    try {
+      const response = await fetch('/api/pricing/milestones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          totalPrice: projectPrice,
+          milestones: milestones.map(m => ({
+            name: m.name,
+            duration: m.duration,
+            deliverables: m.deliverables,
+          })),
+        }),
+      });
+
+      if (response.ok) {
+        const { payments } = await response.json();
+
+        // Update milestones with AI-suggested payments
+        const updatedMilestones = milestones.map((m, i) => ({
+          ...m,
+          payment: payments[i] || 0,
+        }));
+        setMilestones(updatedMilestones);
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Failed to distribute payments');
+      }
+    } catch (error) {
+      console.error('Error distributing payments:', error);
+      alert('Failed to distribute payments. Please try again.');
+    } finally {
+      setDistributingPayments(false);
+    }
+  };
+
   const handleGenerateProposal = async () => {
     if (!clientName) {
       alert('Please enter client name');
@@ -81,6 +126,9 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
     setGenerating(true);
 
     try {
+      // Use projectPrice if set, otherwise use feature-based totalPrice
+      const finalPrice = projectPrice > 0 ? projectPrice : totalPrice;
+
       const response = await fetch('/api/proposals/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,7 +141,7 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
           },
           pricing: {
             featurePrices,
-            totalPrice,
+            totalPrice: finalPrice,
             estimatedTimeline,
             milestones,
           },
@@ -240,9 +288,56 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
           </div>
         </div>
 
+        {/* Project Pricing */}
+        <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4">Project Pricing</h2>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/70 mb-2">Total Project Price</label>
+              <div className="flex gap-3">
+                <div className="flex-1 flex items-center gap-2 px-4 py-3 bg-black/30 border border-white/20 rounded-lg">
+                  <span className="text-white/60 text-lg">$</span>
+                  <input
+                    type="number"
+                    value={projectPrice || ''}
+                    onChange={(e) => setProjectPrice(parseFloat(e.target.value) || 0)}
+                    className="flex-1 bg-transparent text-white text-lg focus:outline-none"
+                    placeholder="25000"
+                    min="0"
+                    step="1000"
+                  />
+                </div>
+                <button
+                  onClick={handleDistributePayments}
+                  disabled={distributingPayments || !projectPrice || projectPrice <= 0}
+                  className="px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 disabled:from-emerald-500/50 disabled:to-teal-500/50 disabled:cursor-not-allowed text-white rounded-lg transition-all font-medium flex items-center gap-2 whitespace-nowrap"
+                >
+                  {distributingPayments ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Calculating...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      Auto-distribute
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-xs text-white/40 mt-2">
+                AI will intelligently distribute this amount across your milestones based on their complexity
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Timeline */}
         <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Timeline</h2>
+          <h2 className="text-xl font-semibold mb-4">Timeline & Milestones</h2>
 
           <div className="mb-4">
             <label className="block text-sm text-white/70 mb-2">Estimated Duration</label>
@@ -314,6 +409,24 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
                 </div>
               </div>
             ))}
+
+            {/* Milestone Payment Summary */}
+            {milestones.some(m => m.payment && m.payment > 0) && (
+              <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-white/70">Total Milestone Payments:</span>
+                  <span className="text-lg font-bold text-blue-300">
+                    ${milestones.reduce((sum, m) => sum + (m.payment || 0), 0).toLocaleString()}
+                  </span>
+                </div>
+                {projectPrice > 0 && (
+                  <div className="flex items-center justify-between text-xs mt-2 pt-2 border-t border-blue-500/20">
+                    <span className="text-white/50">Project Price:</span>
+                    <span className="text-white/70">${projectPrice.toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
