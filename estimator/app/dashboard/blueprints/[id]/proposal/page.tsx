@@ -23,9 +23,9 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
 
   // Milestones
   const [milestones, setMilestones] = useState([
-    { name: 'Discovery & Planning', duration: '1-2 weeks', deliverables: 'Requirements document, wireframes' },
-    { name: 'Design & Development', duration: '4-6 weeks', deliverables: 'Functional application with core features' },
-    { name: 'Testing & Deployment', duration: '1-2 weeks', deliverables: 'Deployed application, documentation' },
+    { name: 'Discovery & Planning', duration: '1-2 weeks', deliverables: 'Requirements document, wireframes', payment: 0 },
+    { name: 'Design & Development', duration: '4-6 weeks', deliverables: 'Functional application with core features', payment: 0 },
+    { name: 'Testing & Deployment', duration: '1-2 weeks', deliverables: 'Deployed application, documentation', payment: 0 },
   ]);
 
   // Load params and blueprint
@@ -259,17 +259,35 @@ export default function ProposalGenerator({ params }: { params: Promise<{ id: st
             <label className="block text-sm text-white/70 mb-2">Milestones</label>
             {milestones.map((milestone, index) => (
               <div key={index} className="p-3 bg-black/30 rounded-lg">
-                <input
-                  type="text"
-                  value={milestone.name}
-                  onChange={(e) => {
-                    const updated = [...milestones];
-                    updated[index].name = e.target.value;
-                    setMilestones(updated);
-                  }}
-                  className="w-full px-3 py-2 mb-2 bg-black/50 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Milestone name"
-                />
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={milestone.name}
+                    onChange={(e) => {
+                      const updated = [...milestones];
+                      updated[index].name = e.target.value;
+                      setMilestones(updated);
+                    }}
+                    className="flex-1 px-3 py-2 bg-black/50 border border-white/20 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Milestone name"
+                  />
+                  <div className="flex items-center gap-1 bg-black/50 border border-white/20 rounded-lg px-3">
+                    <span className="text-white/60 text-sm">$</span>
+                    <input
+                      type="number"
+                      value={milestone.payment || 0}
+                      onChange={(e) => {
+                        const updated = [...milestones];
+                        updated[index].payment = parseFloat(e.target.value) || 0;
+                        setMilestones(updated);
+                      }}
+                      className="w-24 py-2 bg-transparent text-white text-sm focus:outline-none"
+                      placeholder="0"
+                      min="0"
+                      step="100"
+                    />
+                  </div>
+                </div>
                 <div className="flex gap-2">
                   <input
                     type="text"

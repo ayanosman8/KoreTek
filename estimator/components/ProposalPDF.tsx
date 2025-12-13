@@ -47,6 +47,7 @@ export interface ProposalData {
     name: string;
     duration: string;
     deliverables: string;
+    payment?: number;
   }>;
 
   // Terms
@@ -370,11 +371,39 @@ export const ProposalPDF: React.FC<{ data: ProposalData }> = ({ data }) => {
 
             {data.milestones.map((milestone, index) => (
               <View key={index} style={styles.milestone}>
-                <Text style={styles.milestoneName}>{milestone.name}</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 3 }}>
+                  <Text style={styles.milestoneName}>{milestone.name}</Text>
+                  {milestone.payment && milestone.payment > 0 && (
+                    <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#333' }}>
+                      ${milestone.payment.toLocaleString()}
+                    </Text>
+                  )}
+                </View>
                 <Text style={styles.milestoneDuration}>{milestone.duration}</Text>
                 <Text style={styles.milestoneDeliverables}>{milestone.deliverables}</Text>
               </View>
             ))}
+
+            {/* Milestone Payment Schedule */}
+            {data.milestones.some(m => m.payment && m.payment > 0) && (
+              <View style={{ marginTop: 20, paddingTop: 15, borderTop: `1px solid ${data.primaryColor || '#3b82f6'}20` }}>
+                <Text style={[styles.techCategoryTitle, { marginBottom: 8 }]}>Payment Schedule:</Text>
+                {data.milestones.filter(m => m.payment && m.payment > 0).map((milestone, index) => (
+                  <View key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}>
+                    <Text style={{ fontSize: 10, color: '#666' }}>{milestone.name}</Text>
+                    <Text style={{ fontSize: 10, color: '#333', fontWeight: 'bold' }}>
+                      ${milestone.payment?.toLocaleString()}
+                    </Text>
+                  </View>
+                ))}
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, marginTop: 5, borderTop: '1px solid #eee' }}>
+                  <Text style={{ fontSize: 11, fontWeight: 'bold', color: '#333' }}>Total Milestone Payments</Text>
+                  <Text style={{ fontSize: 11, fontWeight: 'bold', color: data.primaryColor || '#3b82f6' }}>
+                    ${data.milestones.reduce((sum, m) => sum + (m.payment || 0), 0).toLocaleString()}
+                  </Text>
+                </View>
+              </View>
+            )}
           </View>
 
           <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} fixed />
