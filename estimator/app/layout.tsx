@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Spark | AI-Powered Project Blueprints by KoreLnx",
-  description: "Get instant AI-powered project blueprints with features, tech stack recommendations, and next steps. Free, no commitment required.",
+  title: "Spark | Smart Project Blueprints by KoreLnx",
+  description: "Get instant project blueprints with features, tech stack recommendations, and next steps. Free, no commitment required.",
 };
 
 export default function RootLayout({

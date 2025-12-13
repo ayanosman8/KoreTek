@@ -1,10 +1,10 @@
 # Scope AI
 
-AI-powered project estimation tool that generates instant estimates for web and app development projects.
+Smart project estimation tool that generates instant estimates for web and app development projects.
 
 ## Features
 
-- **AI-Powered Analysis**: Uses OpenRouter + Claude 3.5 Sonnet to analyze project descriptions
+- **Smart Analysis**: Uses OpenRouter + Claude 3.5 Sonnet to analyze project descriptions
 - **Instant Estimates**: Get pricing, timeline, tech stack, and feature breakdowns in seconds
 - **Lead Capture**: Collects emails for detailed proposals
 - **Beautiful UI**: Modern, responsive design with Tailwind CSS

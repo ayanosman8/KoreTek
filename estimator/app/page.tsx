@@ -130,7 +130,7 @@ export default function Home() {
               <div className="w-px h-12 bg-white/10"></div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-extralight text-blue-500">
-                  AI-Powered
+                  Smart
                 </div>
                 <div className="text-sm text-white/60 font-light uppercase tracking-wider">Analysis</div>
               </div>
