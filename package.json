@@ -6,7 +6,8 @@
     "dev:estimator": "cd estimator && npm run dev",
     "dev:portfolio": "cd portfolio && npm run dev",
     "build:estimator": "cd estimator && npm run build",
-    "build:portfolio": "cd portfolio && npm run build"
+    "build:portfolio": "cd portfolio && npm run build",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=18"
