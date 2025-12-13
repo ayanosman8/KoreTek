@@ -18,10 +18,11 @@ export default function BlueprintDetailPage() {
   const [editedData, setEditedData] = useState<any>({});
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'features' | 'checklist'>('features');
-  const [expandedFeatures, setExpandedFeatures] = useState<Set<number>>(new Set());
+  const [expandedFeatures, setExpandedFeatures] = useState<Set<number | string>>(new Set());
   const [draggedFeatureIndex, setDraggedFeatureIndex] = useState<number | null>(null);
   const [generatingName, setGeneratingName] = useState(false);
   const [generatingSummary, setGeneratingSummary] = useState(false);
+  const [loadingEnhancement, setLoadingEnhancement] = useState<string | null>(null);
   const router = useRouter();
   const params = useParams();
   const blueprintId = params.id as string;
@@ -317,6 +318,8 @@ export default function BlueprintDetailPage() {
       return;
     }
 
+    if (!blueprint) return;
+
     setGeneratingName(true);
     try {
       // Extract feature names for context
@@ -351,6 +354,8 @@ export default function BlueprintDetailPage() {
       setShowUpgradeModal(true);
       return;
     }
+
+    if (!blueprint) return;
 
     setGeneratingSummary(true);
     try {
@@ -394,6 +399,9 @@ export default function BlueprintDetailPage() {
     return null;
   }
 
+  if (!blueprint) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">

@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Build context for suggestions
-    const context = [];
+    const context: string[] = [];
     if (featureName) context.push(`Feature: ${featureName}`);
     if (featureDescription) context.push(`Description: ${featureDescription}`);
     if (projectDescription) context.push(`Project: ${projectDescription}`);
@@ -85,7 +85,7 @@ ${fieldPrompts[fieldType] || 'Suggest relevant items for this field.'}`;
           // If still fails, split by comma and clean up
           suggestions = match[1]
             .split(',')
-            .map(s => s.trim().replace(/['"]/g, ''))
+            .map((s: string) => s.trim().replace(/['"]/g, ''))
             .filter(Boolean);
         }
       }
