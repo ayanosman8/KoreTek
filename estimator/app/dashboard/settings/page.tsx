@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { CreditCard, UserX, LogOut, Trash2, Code2, Save, ChevronDown } from "lucide-react";
+import { CreditCard, UserX, LogOut, Trash2, Code2, Save, ChevronDown, Building2, Upload } from "lucide-react";
 import { createClient } from "@/lib/auth/client";
 
 // Popular tech options for dropdowns
@@ -54,7 +54,17 @@ export default function SettingsPage() {
   });
   const [isSavingPreferences, setIsSavingPreferences] = useState(false);
   const [preferencesSuccess, setPreferencesSuccess] = useState(false);
-  const [activeSection, setActiveSection] = useState<'account' | 'tech-stack' | 'subscription' | 'danger'>('account');
+  const [activeSection, setActiveSection] = useState<'account' | 'tech-stack' | 'company' | 'subscription' | 'danger'>('account');
+  const [companyInfo, setCompanyInfo] = useState({
+    company_name: '',
+    company_logo: '',
+    company_email: '',
+    company_phone: '',
+    company_address: '',
+    company_website: '',
+  });
+  const [isSavingCompany, setIsSavingCompany] = useState(false);
+  const [companySuccess, setCompanySuccess] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -84,7 +94,7 @@ export default function SettingsPage() {
     // Fetch subscription status and tech preferences from profiles
     const { data: profile } = await supabase
       .from('profiles')
-      .select('subscription_status, has_paid, tech_preferences')
+      .select('subscription_status, has_paid, tech_preferences, company_name, company_logo, company_email, company_phone, company_address, company_website')
       .eq('id', user.id)
       .single();
 
@@ -96,6 +106,16 @@ export default function SettingsPage() {
       if (profile.tech_preferences) {
         setTechPreferences(profile.tech_preferences);
       }
+
+      // Load company info
+      setCompanyInfo({
+        company_name: profile.company_name || '',
+        company_logo: profile.company_logo || '',
+        company_email: profile.company_email || '',
+        company_phone: profile.company_phone || '',
+        company_address: profile.company_address || '',
+        company_website: profile.company_website || '',
+      });
     }
 
     setIsLoading(false);
@@ -178,6 +198,27 @@ export default function SettingsPage() {
     });
   };
 
+  const handleSaveCompanyInfo = async () => {
+    setIsSavingCompany(true);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from('profiles')
+        .update(companyInfo)
+        .eq('id', user.id);
+
+      if (error) throw error;
+
+      setCompanySuccess(true);
+      setTimeout(() => setCompanySuccess(false), 3000);
+    } catch (error) {
+      console.error('Error saving company info:', error);
+      alert('Failed to save company information. Please try again.');
+    } finally {
+      setIsSavingCompany(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
@@ -219,6 +260,16 @@ export default function SettingsPage() {
                   }`}
                 >
                   <span className="text-sm font-medium">Tech Stack</span>
+                </button>
+                <button
+                  onClick={() => setActiveSection('company')}
+                  className={`w-full px-4 py-2.5 rounded-lg text-left transition-all ${
+                    activeSection === 'company'
+                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span className="text-sm font-medium">Company Info</span>
                 </button>
                 <button
                   onClick={() => setActiveSection('subscription')}
@@ -535,6 +586,134 @@ export default function SettingsPage() {
                 <>
                   <Save className="w-4 h-4" />
                   Save Tech Preferences
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+        )}
+
+        {/* Company Info */}
+        {activeSection === 'company' && (
+        <div className="animate-fadeIn bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-8 mb-6">
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-light text-white mb-2">Company Information</h2>
+              <p className="text-white/60 text-sm">Configure your company details for client proposals</p>
+            </div>
+            <Building2 className="w-6 h-6 text-blue-400" />
+          </div>
+
+          <div className="space-y-5">
+            {/* Company Name */}
+            <div>
+              <label className="text-sm font-medium text-white/70 mb-2 block">Company Name</label>
+              <input
+                type="text"
+                value={companyInfo.company_name}
+                onChange={(e) => setCompanyInfo({ ...companyInfo, company_name: e.target.value })}
+                className="w-full px-4 py-2.5 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50"
+                placeholder="Acme Inc."
+              />
+            </div>
+
+            {/* Company Logo URL */}
+            <div>
+              <label className="text-sm font-medium text-white/70 mb-2 block">Company Logo URL</label>
+              <input
+                type="url"
+                value={companyInfo.company_logo}
+                onChange={(e) => setCompanyInfo({ ...companyInfo, company_logo: e.target.value })}
+                className="w-full px-4 py-2.5 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50"
+                placeholder="https://example.com/logo.png"
+              />
+              <p className="text-xs text-white/40 mt-1">Enter the URL to your company logo (will appear on proposals)</p>
+              {companyInfo.company_logo && (
+                <div className="mt-3 p-4 bg-black/30 rounded-lg">
+                  <p className="text-xs text-white/60 mb-2">Preview:</p>
+                  <img
+                    src={companyInfo.company_logo}
+                    alt="Company logo preview"
+                    className="h-16 w-auto object-contain"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Company Email */}
+            <div>
+              <label className="text-sm font-medium text-white/70 mb-2 block">Company Email</label>
+              <input
+                type="email"
+                value={companyInfo.company_email}
+                onChange={(e) => setCompanyInfo({ ...companyInfo, company_email: e.target.value })}
+                className="w-full px-4 py-2.5 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50"
+                placeholder="contact@example.com"
+              />
+            </div>
+
+            {/* Company Phone */}
+            <div>
+              <label className="text-sm font-medium text-white/70 mb-2 block">Company Phone</label>
+              <input
+                type="tel"
+                value={companyInfo.company_phone}
+                onChange={(e) => setCompanyInfo({ ...companyInfo, company_phone: e.target.value })}
+                className="w-full px-4 py-2.5 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50"
+                placeholder="+1 (555) 123-4567"
+              />
+            </div>
+
+            {/* Company Address */}
+            <div>
+              <label className="text-sm font-medium text-white/70 mb-2 block">Company Address</label>
+              <textarea
+                value={companyInfo.company_address}
+                onChange={(e) => setCompanyInfo({ ...companyInfo, company_address: e.target.value })}
+                rows={2}
+                className="w-full px-4 py-2.5 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50"
+                placeholder="123 Main St, City, State 12345"
+              />
+            </div>
+
+            {/* Company Website */}
+            <div>
+              <label className="text-sm font-medium text-white/70 mb-2 block">Company Website</label>
+              <input
+                type="url"
+                value={companyInfo.company_website}
+                onChange={(e) => setCompanyInfo({ ...companyInfo, company_website: e.target.value })}
+                className="w-full px-4 py-2.5 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500/50"
+                placeholder="https://example.com"
+              />
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div className="mt-6 pt-6 border-t border-white/10">
+            {companySuccess && (
+              <div className="mb-4 bg-green-500/20 border border-green-500/50 rounded-lg p-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full" />
+                <p className="text-green-400 text-sm">Company information saved successfully!</p>
+              </div>
+            )}
+            <button
+              onClick={handleSaveCompanyInfo}
+              disabled={isSavingCompany}
+              className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isSavingCompany ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Save Company Information
                 </>
               )}
             </button>

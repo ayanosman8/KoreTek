@@ -579,29 +579,40 @@ export default function BlueprintDetailPage() {
           )}
         </div>
 
-        {/* Tab Navigation */}
-        <div className="mb-6 sm:mb-8 bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex gap-2">
+        {/* Tab Navigation & Actions */}
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl p-2 flex gap-2">
+            <button
+              onClick={() => setActiveTab('features')}
+              className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${
+                activeTab === 'features'
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              <span>Features</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('checklist')}
+              className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${
+                activeTab === 'checklist'
+                  ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'text-white/60 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <CheckSquare className="w-4 h-4" />
+              <span>Checklist</span>
+            </button>
+          </div>
+
+          {/* Generate Proposal Button */}
           <button
-            onClick={() => setActiveTab('features')}
-            className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${
-              activeTab === 'features'
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20'
-                : 'text-white/60 hover:text-white hover:bg-white/5'
-            }`}
+            onClick={() => router.push(`/dashboard/blueprints/${blueprintId}/proposal`)}
+            className="px-4 sm:px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 text-sm sm:text-base whitespace-nowrap"
           >
-            <Layers className="w-4 h-4" />
-            <span>Features</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('checklist')}
-            className={`flex-1 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${
-              activeTab === 'checklist'
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20'
-                : 'text-white/60 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <CheckSquare className="w-4 h-4" />
-            <span>Checklist</span>
+            <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span>Generate Proposal</span>
           </button>
         </div>
 
